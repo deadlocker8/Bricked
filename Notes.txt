@@ -1,0 +1,35 @@
+Balls
+=====
+
+-Normal
+-Explode on Collision
+-Through Balls (no collision)
+
+
+Bricks
+======
+
+-different hit counters (some vricks need to be hitted multiple times)
+-invisible blocks
+-falling bricks
+
+
+Power-Ups
+=========
+
+-slower
+-faster
+-larger paddle
+-smaller paddle
+-extra life (additional ball)
+-extra points (coins?)
+-secure wall at bottom (ball can not leave)
+-sticky paddle
+-random bouncing ball
+-split blocks
+-split ball
+-freeze paddle
+-explode ball
+-through ball
+
+--> only available for certain time
