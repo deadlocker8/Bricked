@@ -33,5 +33,8 @@ Power-Ups
 -freeze paddle
 -explode ball
 -through ball
+-random power-up
 
 --> only available for certain time
+
+--> clear if life lost
