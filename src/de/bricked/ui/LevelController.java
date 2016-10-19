@@ -139,13 +139,14 @@ public class LevelController
 		grid.setHgap(0);
 		grid.setVgap(0);
 
-		Board b = new Board(game.getLevelPack().getLevels().get(0));
+		Board board = new Board(game.getLevelPack().getLevels().get(0));
+        System.out.print(board.getRemainingBricks().size());
 
 		for(int i = 0; i < Board.HEIGHT; i++)
 		{
 			for(int k = 0; k < Board.WIDTH; k++)
 			{
-				Brick currentBrick = b.getBricks().get(i).get(k);
+				Brick currentBrick = board.getBricks().get(i).get(k);
 
 				StackPane pane = new StackPane();
 

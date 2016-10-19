@@ -101,6 +101,22 @@ public class Board
 		print();
 	}
 
+	public ArrayList<Brick> getRemainingBricks()
+    {
+        ArrayList<Brick> remainingBricks = new ArrayList<>();
+        for(ArrayList<Brick> row : bricks)
+        {
+            for(Brick currentBrick : row)
+            {
+                if(!(currentBrick instanceof AirBrick) && !(currentBrick instanceof SolidBrick))
+                {
+                    remainingBricks.add(currentBrick);
+                }
+            }
+        }
+        return remainingBricks;
+    }
+
 	private void init()
 	{
 		bricks = new ArrayList<ArrayList<Brick>>();
