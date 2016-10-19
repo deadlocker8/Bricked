@@ -46,8 +46,11 @@
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
+               <HBox.margin>
+                  <Insets right="3.0" />
+               </HBox.margin>
             </Label>
-            <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="64.0" text="Points">
+            <Label alignment="CENTER" prefHeight="30.0" prefWidth="71.0" text="Points">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
