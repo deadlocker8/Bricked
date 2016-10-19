@@ -2,13 +2,13 @@ package de.bricked.game.config;
 
 public enum BrickTypes
 {
-	NORMAL("N", new String[]{"#00FF00"}, 1),
-	AIR("A", new String[]{""}, -1),
-	SOLID("S", new String[]{"#0000FF"}, -1),
-	HARD("H", new String[]{"#212121"}, 2),
-	EXTRA_HARD("E", new String[]{""}, 3),
-	INVISIBLE("I", new String[]{""}, 2),
-	TNT("T", new String[]{"#FF0000"}, 1);	
+	NORMAL("N", new String[]{"green"}, 1),
+	AIR("A", new String[]{"empty"}, -1),
+	SOLID("S", new String[]{"blue"}, -1),
+	HARD("H", new String[]{"yellow", "dark_yellow"}, 2),
+	EXTRA_HARD("E", new String[]{"grey", "medium_grey", "dark_grey"}, 3),
+	INVISIBLE("I", new String[]{"empty", "green"}, 2),
+	TNT("T", new String[]{"red"}, 1);	
 
 	private String ID;
 	private String[] textureIDs;	

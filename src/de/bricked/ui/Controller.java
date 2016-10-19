@@ -4,8 +4,8 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import de.bricked.game.board.Board;
-import de.bricked.game.bricks.AirBrick;
 import de.bricked.game.bricks.Brick;
+import de.bricked.game.levels.Level;
 import de.bricked.game.levels.LevelPack;
 import de.bricked.game.levels.LevelPackReader;
 import javafx.event.EventHandler;
@@ -16,11 +16,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -41,15 +41,20 @@ public class Controller
 	public Stage stage;
 	public Image icon = new Image("de/bricked/resources/icon.png");
 	public final ResourceBundle bundle = ResourceBundle.getBundle("de/bricked/main/", Locale.GERMANY);
+	private LevelPack levelPack;
+	private Level level;
 
-	public void init(Stage stage)
+	public void init(Stage stage, LevelPack levelPack, Level level)
 	{
 		this.stage = stage;
+		this.level = level;
+		this.levelPack = levelPack;
 
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>()
 		{
 			public void handle(WindowEvent event)
 			{
+				//TODO
 				Worker.shutdown();
 				System.exit(0);
 			}
@@ -58,7 +63,17 @@ public class Controller
 		vboxPowerUps.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
 		anchorPaneGame.setStyle("-fx-border-color: #ff0000; -fx-border-width: 2px;");
 
-		anchorPaneGame.setPadding(new Insets(0));
+		anchorPaneGame.setPadding(new Insets(0));	
+
+		// DEBUG
+		LevelPackReader reader = new LevelPackReader("default.json");
+		this.levelPack = reader.read();
+		this.level = this.levelPack.getLevels().get(0);			
+	
+		labelLevelPack.setText(this.levelPack.getPackageName());
+		labelAuthor.setText("by " + this.level.getAuthor());
+		labelLevelName.setText(this.level.getName() + " (" + this.level.getPosition() + "/" + this.levelPack.getLevels().size() + ")");
+		labelLives.setText(this.level.getStartLives() + " Lives");
 
 		redraw();
 
@@ -109,11 +124,8 @@ public class Controller
 		grid.setGridLinesVisible(true);
 		grid.setHgap(0);
 		grid.setVgap(0);
-		
-		//DEBUG
-		LevelPackReader reader = new LevelPackReader("default.json");
-		LevelPack pack = reader.read();
-		Board b = new Board(pack.getLevels().get(0));
+
+		Board b = new Board(levelPack.getLevels().get(0));
 
 		for(int i = 0; i < Board.HEIGHT; i++)
 		{
@@ -123,24 +135,15 @@ public class Controller
 
 				StackPane pane = new StackPane();
 
-				Rectangle r = new Rectangle(brickWidth, brickHeight);			
+				Rectangle r = new Rectangle(brickWidth, brickHeight);				
 
-				if(!(currentBrick instanceof AirBrick))
-				{
-					r.setFill(Color.web(currentBrick.getCurrentTextureID()));
-				}
-				else
-				{
-					r.setFill(Color.TRANSPARENT);
-				}
-
-				// ImageView iv = new ImageView(icon);
-				// iv.setFitWidth(brickWidth);
-				// iv.setFitHeight(brickHeight);
+				ImageView iv = new ImageView(new Image("de/bricked/resources/textures/bricks/" + currentBrick.getCurrentTextureID() + ".png"));
+				iv.setFitWidth(brickWidth);
+				iv.setFitHeight(brickHeight);
 
 				Label l = new Label(currentBrick.getID());
 
-				pane.getChildren().addAll(r, l);
+				pane.getChildren().addAll(r, iv, l);
 
 				grid.add(pane, k, i);
 			}

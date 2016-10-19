@@ -31,7 +31,8 @@ public class Main extends Application
 
 			Scene scene = new Scene(root, 800, 800);		
 
-			((Controller)loader.getController()).init(stage);
+			//DEBUG replace null with LevelPack and Level
+			((Controller)loader.getController()).init(stage, null, null);
 			
 			stage.getIcons().add(new Image("/de/bricked/resources/icon.png"));
 			stage.setTitle(bundle.getString("app.name"));
