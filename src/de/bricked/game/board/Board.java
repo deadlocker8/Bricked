@@ -13,8 +13,8 @@ public class Board
 {
 	//first = row, second = column
 	private ArrayList<ArrayList<Brick>> bricks;
-	private final int WIDTH = 18;
-	private final int HEIGHT = 26;
+	public static final int WIDTH = 18;
+	public static final int HEIGHT = 26;
 	
 	public Board()
 	{		

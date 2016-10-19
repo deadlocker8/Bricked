@@ -1,5 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.bricked.ui.Controller" />
+<AnchorPane fx:id="anchorPane" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.bricked.ui.Controller">
+   <children>
+      <AnchorPane fx:id="anchorPaneGame" layoutX="22.0" layoutY="125.0" maxHeight="650.0" maxWidth="700.0" minHeight="650.0" minWidth="700.0" prefHeight="650.0" prefWidth="700.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="78.0" AnchorPane.topAnchor="125.0" />
+      <VBox fx:id="vboxPowerUps" layoutX="745.0" layoutY="125.0" minHeight="650.0" minWidth="40.0" prefHeight="650.0" prefWidth="40.0" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="125.0" />
+      <HBox alignment="CENTER" layoutX="34.0" layoutY="23.0" prefHeight="100.0" prefWidth="275.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+         <children>
+            <Button fx:id="buttonBack" mnemonicParsing="false" onAction="#redraw" text="Back" />
+            <Label fx:id="labelLives" text="3 Lives">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="50.0" />
+               </HBox.margin>
+            </Label>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label fx:id="labelLevelPack" alignment="CENTER" prefHeight="25.0" prefWidth="277.0" text="Package">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="labelLevelName" alignment="CENTER" prefHeight="30.0" prefWidth="403.0" text="LevelName (1/10)">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="labelAuthor" alignment="CENTER" prefHeight="20.0" prefWidth="212.0" text="by Author">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <Label fx:id="labelPoints" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="123.0" text="300000">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="64.0" text="Points">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
