@@ -1,11 +1,16 @@
 package de.bricked.game.board;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
-import de.bricked.game.bricks.AirBrick;
-import de.bricked.game.bricks.Brick;
-import de.bricked.game.bricks.TNTBrick;
+import de.bricked.game.bricks.*;
+import de.bricked.game.config.BrickTypes;
 import de.bricked.game.levels.Level;
+import de.bricked.game.levels.LevelPack;
+import de.bricked.game.levels.LevelPackReader;
+import logger.LogLevel;
+import logger.Logger;
 
 public class Board
 {
@@ -17,10 +22,78 @@ public class Board
 	public Board(Level level)
 	{
 		init();
-		
-		level.getBoard();
-		
-		
+		String boardString = level.getBoard();
+        //parse board -> create bricks
+        String[] bricksAndPowerArray = boardString.split(" ");
+        ArrayList<Brick> loadedBricks = new ArrayList<>();
+        for(String bricksAndPower : bricksAndPowerArray)
+        {
+            String brickValue = bricksAndPower.substring(0,1);
+            int powerUp = Integer.parseInt(bricksAndPower.substring(1));
+            Brick currentBrick = null;
+            //PowerUp currentPowerUp = null;
+            //TODO IMPLEMENT POWERUP
+            switch (powerUp)
+            {
+                case 0:    // powerUp = new ExplosiveMegaPowerUp() :D
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                default: //
+                    break;
+            }
+
+            switch (brickValue)
+            {
+                case "N":
+                    currentBrick = new NormalBrick(null);
+                    break;
+                case "A":
+                    currentBrick = new AirBrick();
+                    break;
+                case "S":
+                    currentBrick = new SolidBrick(null);
+                    break;
+                case "H":
+                    currentBrick = new HardBrick(null);
+                    break;
+                case "E":
+                    currentBrick = new ExtraHardBrick(null);
+                    break;
+                case "I":
+                    currentBrick = new InvisibleBlock(null);
+                    break;
+                case "T":
+                    currentBrick = new TNTBrick(null);
+                    break;
+            }
+
+            loadedBricks.add(currentBrick);
+        }
+
+        int currentRowNumber = 0;
+        ArrayList<Brick> currentRow = new ArrayList<>();
+        for(int i=0; i < loadedBricks.size(); i++)
+        {
+            currentRow.add(loadedBricks.get(i));
+            if(currentRow.size() == WIDTH)
+            {
+                bricks.set(currentRowNumber, currentRow);
+                currentRow = new ArrayList<>();
+                currentRowNumber++;
+            }
+        }
+        print();
 	}
 	
 	private void init()
@@ -109,7 +182,7 @@ public class Board
 		StringBuilder b = new StringBuilder();
 		for(int i = 0; i < HEIGHT; i++)
 		{			
-			for(int k = 0; k < HEIGHT; k++)
+			for(int k = 0; k < WIDTH; k++)
 			{
 				b.append(bricks.get(i).get(k).getID());
 				b.append(" ");				
@@ -118,7 +191,15 @@ public class Board
 		}	
 		
 		return b.toString();
-	}	
+	}
+
+	public static void main(String[] args)
+    {
+        LevelPackReader levelPackReader = new LevelPackReader("default.json");
+        LevelPack levelPack = levelPackReader.read();
+        Board board = new Board(levelPack.getLevels().get(0));
+        System.out.println(board.print());
+    }
 
 	@Override
 	public String toString()

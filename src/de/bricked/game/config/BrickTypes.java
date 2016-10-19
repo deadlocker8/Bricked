@@ -12,7 +12,7 @@ public enum BrickTypes
 
 	private String ID;
 	private String[] textureIDs;	
-	private int numberOfHitsRequired;	
+	private int numberOfHitsRequired;
 		
 	private BrickTypes(String ID, String[] textureIDs, int numberOfHitsRequired)
 	{		
