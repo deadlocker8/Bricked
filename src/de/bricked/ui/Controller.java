@@ -6,6 +6,8 @@ import java.util.ResourceBundle;
 import de.bricked.game.board.Board;
 import de.bricked.game.bricks.AirBrick;
 import de.bricked.game.bricks.Brick;
+import de.bricked.game.levels.LevelPack;
+import de.bricked.game.levels.LevelPackReader;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -107,8 +109,11 @@ public class Controller
 		grid.setGridLinesVisible(true);
 		grid.setHgap(0);
 		grid.setVgap(0);
-
-		Board b = new Board();
+		
+		//DEBUG
+		LevelPackReader reader = new LevelPackReader("default.json");
+		LevelPack pack = reader.read();
+		Board b = new Board(pack.getLevels().get(0));
 
 		for(int i = 0; i < Board.HEIGHT; i++)
 		{

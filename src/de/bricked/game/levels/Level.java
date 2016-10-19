@@ -21,4 +21,39 @@ public class Level
         this.initPadSize = initPadSize;
         this.board = board;
     }
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public String getAuthor()
+	{
+		return author;
+	}
+
+	public int getPosition()
+	{
+		return position;
+	}
+
+	public int getDifficulty()
+	{
+		return difficulty;
+	}
+
+	public int getStartLives()
+	{
+		return startLives;
+	}
+
+	public int getInitPadSize()
+	{
+		return initPadSize;
+	}
+
+	public String getBoard()
+	{
+		return board;
+	}
 }

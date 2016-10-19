@@ -32,4 +32,9 @@ public class LevelPack
     {
         return version;
     }
+
+	public ArrayList<Level> getLevels()
+	{
+		return levels;
+	}      
 }

@@ -4,10 +4,8 @@ import java.util.ArrayList;
 
 import de.bricked.game.bricks.AirBrick;
 import de.bricked.game.bricks.Brick;
-import de.bricked.game.bricks.HardBrick;
-import de.bricked.game.bricks.NormalBrick;
-import de.bricked.game.bricks.SolidBrick;
 import de.bricked.game.bricks.TNTBrick;
+import de.bricked.game.levels.Level;
 
 public class Board
 {
@@ -15,9 +13,18 @@ public class Board
 	private ArrayList<ArrayList<Brick>> bricks;
 	public static final int WIDTH = 18;
 	public static final int HEIGHT = 26;
+		
+	public Board(Level level)
+	{
+		init();
+		
+		level.getBoard();
+		
+		
+	}
 	
-	public Board()
-	{		
+	private void init()
+	{
 		bricks = new ArrayList<ArrayList<Brick>>();
 		
 		for(int i = 0; i < HEIGHT; i++)
@@ -29,18 +36,6 @@ public class Board
 			}
 			bricks.add(currentRow);
 		}	
-		
-		//DEBUG
-		bricks.get(2).set(0, new NormalBrick(null));
-		bricks.get(2).set(1, new TNTBrick(null));
-		bricks.get(2).set(2, new HardBrick(null));
-		
-	
-		bricks.get(3).set(1, new TNTBrick(null));
-		
-		bricks.get(4).set(0, new NormalBrick(null));
-		bricks.get(4).set(1, new SolidBrick(null));
-		bricks.get(4).set(2, new HardBrick(null));
 	}
 
 	public ArrayList<ArrayList<Brick>> getBricks()
@@ -129,16 +124,5 @@ public class Board
 	public String toString()
 	{
 		return "Board [WIDTH=" + WIDTH + ", HEIGHT=" + HEIGHT + ", bricks=" + bricks + "]";
-	}
-	
-	public static void main(String[] args)
-	{
-		Board b = new Board();
-		System.out.println(b.print());	
-		
-		b.hitBrick(2, 1, false);
-		
-		System.out.println(b.print());	
-	}
-	
+	}	
 }
