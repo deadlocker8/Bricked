@@ -51,20 +51,20 @@ public class LevelController
 	public void init(Stage stage, LevelSelectController levelSelectController, Game game)
 	{
 		this.stage = stage;
-		this.levelSelectController = levelSelectController;		
+		this.levelSelectController = levelSelectController;
 		this.game = game;
-		
+
 		anchorPane.setOnKeyReleased(new EventHandler<KeyEvent>()
 		{
 			@Override
 			public void handle(KeyEvent event)
-			{				
-				if(event.getCode().toString().equals(bundle.getString("shortcut.debug.console")))	
-				{					
+			{
+				if(event.getCode().toString().equals(bundle.getString("shortcut.debug.console")))
+				{
 					showCommandLine();
 					Logger.log(LogLevel.INFO, "openend debug console");
 					event.consume();
-				}				
+				}
 			}
 		});
 
@@ -72,7 +72,7 @@ public class LevelController
 		{
 			public void handle(WindowEvent event)
 			{
-				//TODO
+				// TODO
 				Worker.shutdown();
 				Platform.exit();
 				System.exit(0);
@@ -82,11 +82,11 @@ public class LevelController
 		vboxPowerUps.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
 		anchorPaneGame.setStyle("-fx-border-color: #ff0000; -fx-border-width: 2px;");
 
-		anchorPaneGame.setPadding(new Insets(0));	
-			
+		anchorPaneGame.setPadding(new Insets(0));
+
 		labelLevelPack.setText(game.getLevelPack().getPackageName());
 		labelAuthor.setText("by " + game.getLevel().getAuthor());
-		labelLevelName.setText(game.getLevel().getName() + " (" + game.getLevel().getPosition() + "/" +  game.getLevelPack().getLevels().size() + ")");
+		labelLevelName.setText(game.getLevel().getName() + " (" + game.getLevel().getPosition() + "/" + game.getLevelPack().getLevels().size() + ")");
 		labelLives.setText(game.getLevel().getStartLives() + " Lives");
 
 		redraw();
@@ -149,10 +149,10 @@ public class LevelController
 
 				StackPane pane = new StackPane();
 
-				Rectangle r = new Rectangle(brickWidth, brickHeight);			
+				Rectangle r = new Rectangle(brickWidth, brickHeight);
 				r.setFill(Color.TRANSPARENT);
 
-				ImageView iv = new ImageView(new Image("de/bricked/resources/textures/bricks/" + currentBrick.getCurrentTextureID() + ".png"));							
+				ImageView iv = new ImageView(new Image("de/bricked/resources/textures/bricks/" + currentBrick.getCurrentTextureID() + ".png"));
 				iv.setFitWidth(brickWidth);
 				iv.setFitHeight(brickHeight);
 
@@ -170,17 +170,17 @@ public class LevelController
 		AnchorPane.setBottomAnchor(grid, 0.0);
 		AnchorPane.setLeftAnchor(grid, 0.0);
 	}
-	
+
 	public void showCommandLine()
-	{	
+	{
 		try
-		{			
-			levelSelectController.controller.getCommandLine().showCommandLine("Debug Console", 400, 250, 400, 200, -1, -1, true);
+		{
+			levelSelectController.controller.getCommandLine().showCommandLine("Debug Console", 400, 250, 400, 200, - 1, - 1, true);
 		}
 		catch(IOException e)
 		{
-	        //TODO: errorhandling
-	        e.printStackTrace();
+			// TODO: errorhandling
+			Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
 		}
 	}
 

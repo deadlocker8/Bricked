@@ -162,11 +162,11 @@ public class LevelSelectController
 
 			gridPane.add(stack, i % 4, rowCounter);
 
-			stack.setOnMouseReleased(event -> {				
+			stack.setOnMouseReleased(event -> {
 				try
 				{
 					game.setLevel(currentLevel);
-					
+
 					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/bricked/ui/LevelGUI.fxml"));
 
 					Parent root = (Parent)fxmlLoader.load();
@@ -187,7 +187,7 @@ public class LevelSelectController
 				catch(IOException e1)
 				{
 					e1.printStackTrace();
-				}				
+				}
 			});
 		}
 
@@ -209,7 +209,7 @@ public class LevelSelectController
 		catch(IOException e)
 		{
 			// TODO: errorhandling
-			e.printStackTrace();
+			Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
 		}
 	}
 }
