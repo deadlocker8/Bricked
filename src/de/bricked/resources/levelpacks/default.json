@@ -2,9 +2,10 @@
   "name": "default",
   "author": "System",
   "version": "1.0",
-  "package":
+  "levelPack":
     [{
         "name": "1-1",
+        "author": "System",
         "position": 1,
         "difficulty": 1,
         "startLives": 5,
