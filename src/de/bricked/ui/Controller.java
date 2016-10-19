@@ -1,167 +1,127 @@
 package de.bricked.ui;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import de.bricked.game.board.Board;
-import de.bricked.game.bricks.Brick;
-import de.bricked.game.levels.Level;
-import de.bricked.game.levels.LevelPack;
-import de.bricked.game.levels.LevelPackReader;
+import de.bricked.commandLine.CommandLine;
+import de.bricked.commandLine.commands.CommandBundle;
+import de.bricked.game.Game;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import tools.Worker;
+import logger.LogLevel;
+import logger.Logger;
 
 public class Controller
 {
-	@FXML private AnchorPane anchorPane;
-	@FXML private Label labelLevelName;
-	@FXML private Label labelAuthor;
-	@FXML private Label labelLevelPack;
-	@FXML private Label labelPoints;
-	@FXML private Label labelLives;
-	@FXML private AnchorPane anchorPaneGame;
-	@FXML private Button buttonBack;
-	@FXML private VBox vboxPowerUps;
+	@FXML private AnchorPane mainPane;
+	@FXML private Button buttonLevelSelect;
+	@FXML private Button buttonSettings;
+	@FXML private Button buttonAchievements;
 
 	public Stage stage;
 	public Image icon = new Image("de/bricked/resources/icon.png");
 	public final ResourceBundle bundle = ResourceBundle.getBundle("de/bricked/main/", Locale.GERMANY);
-	private LevelPack levelPack;
-	private Level level;
+	private Game game;
+	private CommandLine cmd;
 
-	public void init(Stage stage, LevelPack levelPack, Level level)
+	public void init(Stage stage)
 	{
-		this.stage = stage;
-		this.level = level;
-		this.levelPack = levelPack;
-
-		stage.setOnCloseRequest(new EventHandler<WindowEvent>()
+		this.stage = stage;		
+		game = new Game();
+		
+		cmd = new CommandLine(null, icon, ResourceBundle.getBundle("de/bricked/commandLine/", Locale.ENGLISH), new CommandBundle(game));
+		
+		mainPane.setOnKeyReleased(new EventHandler<KeyEvent>()
 		{
-			public void handle(WindowEvent event)
-			{
-				//TODO
-				Worker.shutdown();
-				System.exit(0);
+			@Override
+			public void handle(KeyEvent event)
+			{				
+				if(event.getCode().toString().equals(bundle.getObject("shortcut.debug.console")))				
+				{					
+					showCommandLine();
+					Logger.log(LogLevel.INFO, "openend debug console");
+					event.consume();
+				}				
 			}
 		});
-
-		vboxPowerUps.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
-		anchorPaneGame.setStyle("-fx-border-color: #ff0000; -fx-border-width: 2px;");
-
-		anchorPaneGame.setPadding(new Insets(0));	
-
-		// DEBUG
-		LevelPackReader reader = new LevelPackReader("default.json");
-		this.levelPack = reader.read();
-		this.level = this.levelPack.getLevels().get(0);			
+		
+		Logger.log(LogLevel.INFO, "successfully started");
+	}	
 	
-		labelLevelPack.setText(this.levelPack.getPackageName());
-		labelAuthor.setText("by " + this.level.getAuthor());
-		labelLevelName.setText(this.level.getName() + " (" + this.level.getPosition() + "/" + this.levelPack.getLevels().size() + ")");
-		labelLives.setText(this.level.getStartLives() + " Lives");
-
-		redraw();
-
-		// Collision detection:
-
-		// StackPane pane = new StackPane();
-		// Rectangle r = new Rectangle(44, 20);
-		// r.setFill(Color.RED);
-		//
-		// ImageView iv = new ImageView(icon);
-		// iv.setFitWidth(44);
-		// iv.setFitHeight(20);
-		//
-		// pane.getChildren().addAll(r, iv);
-		//
-		// Circle c = new Circle(10);
-		// c.setFill(Color.GREEN);
-		// c.setTranslateX(59);
-		// c.setTranslateY(30);
-		// anchorPane.getChildren().add(c);
-		//
-		// anchorPane.getChildren().add(pane);
-		//
-		// if(Shape.intersect(r, c).getBoundsInLocal().getWidth() != - 1)
-		// {
-		// System.out.println("collision");
-		// }
-	}
-
-	public void redraw()
+	public void showLevelSelect()
 	{
-		anchorPaneGame.getChildren().clear();
-		double brickWidth;
-		double brickHeight;
-		if(anchorPaneGame.getWidth() <= 0)
+		try
 		{
-			brickWidth = anchorPaneGame.getPrefWidth() / Board.WIDTH;
-			brickHeight = anchorPaneGame.getPrefHeight() / Board.HEIGHT;
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/bricked/ui/LevelSelectGUI.fxml"));
+
+			Parent root = (Parent)fxmlLoader.load();
+			Stage newStage = new Stage();
+			newStage.setScene(new Scene(root, 650, 800));
+			newStage.setTitle("Level Select");
+			newStage.initOwner(stage);
+
+			newStage.getIcons().add(icon);			
+			LevelSelectController newController = fxmlLoader.getController();
+			newController.init(newStage, this, game);
+			cmd.getBundle().setLevelSelectController(newController);
+
+			newStage.initModality(Modality.NONE);
+			newStage.setResizable(false);
+			stage.hide();
+			newStage.show();
 		}
-		else
+		catch(IOException e1)
 		{
-			brickWidth = anchorPaneGame.getWidth() / Board.WIDTH;
-			brickHeight = anchorPaneGame.getHeight() / Board.HEIGHT;
+			e1.printStackTrace();
 		}
+	}
+	
+	public void showSettings()
+	{
 
-		GridPane grid = new GridPane();
-		grid.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
-		grid.setGridLinesVisible(true);
-		grid.setHgap(0);
-		grid.setVgap(0);
+	}
+	
+	public void showAchievements()
+	{
 
-		Board b = new Board(levelPack.getLevels().get(0));
-
-		for(int i = 0; i < Board.HEIGHT; i++)
+	}	
+	
+	public void showCommandLine()
+	{		
+		try
+		{				
+	        cmd.showCommandLine("Debug Console", 400, 250, 400, 200, -1, -1, true);
+		}
+		catch(IOException e)
 		{
-			for(int k = 0; k < Board.WIDTH; k++)
-			{
-				Brick currentBrick = b.getBricks().get(i).get(k);
-
-				StackPane pane = new StackPane();
-
-				Rectangle r = new Rectangle(brickWidth, brickHeight);				
-
-				ImageView iv = new ImageView(new Image("de/bricked/resources/textures/bricks/" + currentBrick.getCurrentTextureID() + ".png"));
-				iv.setFitWidth(brickWidth);
-				iv.setFitHeight(brickHeight);
-
-				Label l = new Label(currentBrick.getID());
-
-				pane.getChildren().addAll(r, iv, l);
-
-				grid.add(pane, k, i);
-			}
+	        //TODO: errorhandling
+	       Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
 		}
-
-		anchorPaneGame.getChildren().add(grid);
-		AnchorPane.setTopAnchor(grid, 0.0);
-		AnchorPane.setRightAnchor(grid, 0.0);
-		AnchorPane.setBottomAnchor(grid, 0.0);
-		AnchorPane.setLeftAnchor(grid, 0.0);
+	}
+	
+	public CommandLine getCommandLine()
+	{
+		return cmd;
 	}
 
 	public void about()
 	{
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("About " + bundle.getString("app.name"));
+		alert.setTitle("Über " + bundle.getString("app.name"));
 		alert.setHeaderText(bundle.getString("app.name"));
-		alert.setContentText("Version:     " + bundle.getString("version.name") + "\r\nDate:      " + bundle.getString("version.date") + "\r\nAuthors:    " + bundle.getString("author") + "\r\n");
+		alert.setContentText("Version:     " + bundle.getString("version.name") + "\r\nDatum:      " + bundle.getString("version.date") + "\r\nAutor:        Robert Goldmann\r\n");
 		Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
 		dialogStage.getIcons().add(icon);
 		dialogStage.centerOnScreen();

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="mainPane" prefHeight="800.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.bricked.ui.Controller">
+   <children>
+      <ImageView fitHeight="250.0" fitWidth="250.0" layoutX="192.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/icon.png" />
+         </image>
+      </ImageView>
+      <VBox alignment="CENTER" layoutX="200.0" layoutY="394.0" prefHeight="200.0" prefWidth="222.0">
+         <children>
+            <Button fx:id="buttonLevelSelect" minHeight="60.0" minWidth="250.0" mnemonicParsing="false" onAction="#showLevelSelect" prefHeight="46.0" prefWidth="250.0" text="Level Select">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="buttonSettings" minHeight="60.0" minWidth="250.0" mnemonicParsing="false" onAction="#showSettings" text="Settings">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="50.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="buttonAchievements" minHeight="60.0" minWidth="250.0" mnemonicParsing="false" onAction="#showAchievements" text="Achievements">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="50.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+      <Button fx:id="buttonAbout" layoutX="568.0" layoutY="754.0" mnemonicParsing="false" onAction="#about" text="About">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

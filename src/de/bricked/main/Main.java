@@ -26,13 +26,12 @@ public class Main extends Application
 	{
 		try
 		{
-			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("de/bricked/ui/GUI.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("de/bricked/ui/MainGUI.fxml"));
 			Parent root = (Parent)loader.load();
 
-			Scene scene = new Scene(root, 800, 800);		
+			Scene scene = new Scene(root, 650, 800);		
 
-			//DEBUG replace null with LevelPack and Level
-			((Controller)loader.getController()).init(stage, null, null);
+			((Controller)loader.getController()).init(stage);
 			
 			stage.getIcons().add(new Image("/de/bricked/resources/icon.png"));
 			stage.setTitle(bundle.getString("app.name"));
