@@ -57,19 +57,7 @@ public class LevelPackSelectController
 
 		pane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		pane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		
-		Set<Node> set = pane.lookupAll("VirtualScrollBar");
-
-        for (Node n : set)
-        {
-            ScrollBar bar = (ScrollBar) n;
-            if (bar.getOrientation() == Orientation.HORIZONTAL)
-            {               
-                bar.setVisible(false);
-                bar.setDisable(true);
-                bar.setStyle("-fx-opacity: 0%");                
-            }
-        }
+	
 		pane.setStyle("-fx-background-color:transparent;");
 
 		mainPane.setOnKeyReleased(new EventHandler<KeyEvent>()
@@ -117,7 +105,19 @@ public class LevelPackSelectController
 			}
 		});
 		listView.setStyle("-fx-background-color: transparent");
-	
+		
+		Set<Node> set = listView.lookupAll("VirtualScrollBar");
+
+        for (Node n : set)
+        {
+            ScrollBar bar = (ScrollBar) n;
+            if (bar.getOrientation() == Orientation.HORIZONTAL)
+            {               
+                bar.setVisible(false);
+                bar.setDisable(true);
+                bar.setStyle("-fx-opacity: 0%");                
+            }
+        }
 
 		listView.prefWidthProperty().bind(pane.maxWidthProperty());
 		listView.prefHeightProperty().bind(pane.maxHeightProperty().subtract(10));
