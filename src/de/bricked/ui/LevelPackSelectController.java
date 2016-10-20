@@ -3,6 +3,7 @@ package de.bricked.ui;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import de.bricked.game.Game;
 import de.bricked.game.levels.LevelPack;
@@ -13,11 +14,14 @@ import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
@@ -53,6 +57,19 @@ public class LevelPackSelectController
 
 		pane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		pane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		
+		Set<Node> set = pane.lookupAll("VirtualScrollBar");
+
+        for (Node n : set)
+        {
+            ScrollBar bar = (ScrollBar) n;
+            if (bar.getOrientation() == Orientation.HORIZONTAL)
+            {               
+                bar.setVisible(false);
+                bar.setDisable(true);
+                bar.setStyle("-fx-opacity: 0%");                
+            }
+        }
 		pane.setStyle("-fx-background-color:transparent;");
 
 		mainPane.setOnKeyReleased(new EventHandler<KeyEvent>()
