@@ -66,6 +66,12 @@ public class LevelPackSelectController
 					Logger.log(LogLevel.INFO, "openend debug console");
 					event.consume();
 				}
+				
+				if(event.getCode().toString().equals("ESCAPE"))
+				{
+					back();
+					event.consume();
+				}
 			}
 		});
 
@@ -90,7 +96,7 @@ public class LevelPackSelectController
 			@Override
 			public ListCell<LevelPack> call(ListView<LevelPack> param)
 			{
-				return new LevelPackCell(pane.getMaxWidth() - 25);
+				return new LevelPackCell(pane.getMaxWidth() - 8);
 			}
 		});
 		listView.setStyle("-fx-background-color: transparent");

@@ -8,7 +8,7 @@
 
 <AnchorPane fx:id="mainPane" prefHeight="800.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.bricked.ui.LevelPackSelectController">
    <children>
-      <Label layoutX="153.0" layoutY="22.0" text="Select A Levelpack">
+      <Label layoutX="152.0" layoutY="23.0" text="Select A Levelpack">
          <font>
             <Font name="System Bold" size="40.0" />
          </font>

@@ -164,9 +164,9 @@ public class LevelController
 				iv.setFitHeight(brickHeight);
 
 				//DEBUG
-//				Label l = new Label(currentBrick.getID());
+				Label l = new Label(currentBrick.getID());
 
-				pane.getChildren().addAll(r, iv);
+				pane.getChildren().addAll(r, iv, l);
 
 				grid.add(pane, k, i);
 			}

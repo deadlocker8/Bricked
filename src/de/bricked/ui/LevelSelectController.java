@@ -68,6 +68,12 @@ public class LevelSelectController
 					showCommandLine();
 					Logger.log(LogLevel.INFO, "openend debug console");
 					event.consume();
+				}				
+				
+				if(event.getCode().toString().equals("ESCAPE"))
+				{
+					back();
+					event.consume();
 				}
 			}
 		});
@@ -93,7 +99,7 @@ public class LevelSelectController
 			@Override
 			public ListCell<Level> call(ListView<Level> param)
 			{
-				return new LevelCell(pane.getMaxWidth());
+				return new LevelCell(pane.getMaxWidth() - 8);
 			}
 		});
 		listView.setStyle("-fx-background-color: transparent");		
@@ -118,10 +124,10 @@ public class LevelSelectController
 						Parent root = (Parent)fxmlLoader.load();
 						Stage newStage = new Stage();
 
-						//set stage size
+						//set stage size					
 						if(game.getSettings().getGameSize().equals(GameSize.FULL_SCREEN))
 						{						
-							newStage.setScene(new Scene(root, GameSize.FULL_SCREEN.getWidth(), GameSize.FULL_SCREEN.getHeight()));							
+							newStage.setScene(new Scene(root));							
 							newStage.setFullScreen(true);
 							newStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 						}
