@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import de.bricked.game.sound.SoundHandler;
 import de.bricked.ui.Controller;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -66,8 +67,8 @@ public class Main extends Application
 		else
 		{
 			Logger.setLevel(LogLevel.ERROR);
-		}	
-
+		}
+		
 		launch(args);
 	}
 }
