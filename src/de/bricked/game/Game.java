@@ -9,12 +9,14 @@ public class Game
 	private Settings settings;
 	private LevelPack levelPack;
 	private Level level;
+	private int livesRemaining;
 
 	public Game()
 	{		
 		this.settings = new Settings();				
 		this.levelPack = null;
-		this.level = null;
+		this.level = null;	
+		this.livesRemaining = 0;
 	}
 	
 	public Settings getSettings()
@@ -45,5 +47,15 @@ public class Game
 	public Level getLevel()
 	{
 		return level;
+	}
+
+	public int getLivesRemaining()
+	{
+		return livesRemaining;
+	}
+
+	public void setLivesRemaining(int livesRemaining)
+	{
+		this.livesRemaining = livesRemaining;
 	}
 }

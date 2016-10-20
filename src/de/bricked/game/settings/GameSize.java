@@ -1,8 +1,6 @@
 package de.bricked.game.settings;
-import de.bricked.main.Main;
-import javafx.stage.Screen;
-
-import java.awt.*;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 
 public enum GameSize
 {

@@ -50,7 +50,8 @@ public class LevelController
 	public final ResourceBundle bundle = ResourceBundle.getBundle("de/bricked/main/", Locale.GERMANY);
 	private LevelSelectController levelSelectController;
 	private Game game;
-	private Board board;
+	private Board board;	
+	private final int MAX_LIVES = 7;
 
 	public void init(Stage stage, LevelSelectController levelSelectController, Game game)
 	{
@@ -91,6 +92,7 @@ public class LevelController
 		
 		vboxPowerUps.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");		
 		vboxLives.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
+		vboxLives.setPadding(new Insets(3));
 		
 		anchorPaneGame.setPadding(new Insets(0));
 
@@ -98,6 +100,10 @@ public class LevelController
 		labelAuthor.setText("by " + game.getLevel().getAuthor());
 		labelLevelName.setText(game.getLevel().getName() + " (" + game.getLevel().getPosition() + "/" + game.getLevelPack().getLevels().size() + ")");
 		labelBlocksRemaining.setText(board.getNumberOfRemainingBricks() + " Bricks remaining");
+		
+		game.setLivesRemaining(game.getLevel().getStartLives());
+		
+		refreshLiveCounter();
 
 		redraw();
 
@@ -186,6 +192,43 @@ public class LevelController
 		AnchorPane.setRightAnchor(grid, 0.0);
 		AnchorPane.setBottomAnchor(grid, 0.0);
 		AnchorPane.setLeftAnchor(grid, 0.0);
+	}
+	
+	private void refreshLiveCounter()
+	{
+		vboxLives.getChildren().clear();
+		
+		for(int i = 0; i < MAX_LIVES - game.getLivesRemaining(); i++)
+		{
+			ImageView iv = new ImageView(new Image("de/bricked/resources/textures/bricks/empty.png"));
+			iv.setFitWidth(30);
+			iv.setFitHeight(148 / MAX_LIVES);
+			vboxLives.getChildren().add(iv);
+			if(i > 0)
+			{
+				VBox.setMargin(iv, new Insets(4,0,0,0));
+			}
+		}	
+		
+		for(int i = 0; i < game.getLivesRemaining(); i++)
+		{
+			ImageView iv = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle.png"));
+			iv.setFitWidth(30);
+			iv.setFitHeight(148 / MAX_LIVES);
+			vboxLives.getChildren().add(iv);	
+			
+			if(game.getLivesRemaining() == MAX_LIVES)
+			{
+				if(i > 0)
+				{
+					VBox.setMargin(iv, new Insets(4,0,0,0));
+				}
+			}
+			else
+			{
+				VBox.setMargin(iv, new Insets(4,0,0,0));
+			}
+		}	
 	}
 
 	public void showCommandLine()

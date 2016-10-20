@@ -11,7 +11,7 @@
 <AnchorPane fx:id="anchorPane" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.bricked.ui.LevelController">
    <children>
       <AnchorPane fx:id="anchorPaneGame" layoutX="22.0" layoutY="125.0" minHeight="650.0" minWidth="700.0" prefHeight="650.0" prefWidth="700.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="78.0" AnchorPane.topAnchor="125.0" />
-      <VBox fx:id="vboxPowerUps" layoutX="745.0" layoutY="125.0" minHeight="469.0" minWidth="40.0" prefHeight="469.0" prefWidth="40.0" AnchorPane.bottomAnchor="206.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="125.0" />
+      <VBox fx:id="vboxPowerUps" layoutX="745.0" layoutY="125.0" minHeight="454.0" minWidth="40.0" prefHeight="454.0" prefWidth="40.0" AnchorPane.bottomAnchor="221.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="125.0" />
       <HBox alignment="CENTER" layoutX="34.0" layoutY="23.0" prefHeight="100.0" prefWidth="275.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
          <children>
             <Button fx:id="buttonBack" mnemonicParsing="false" onAction="#back" text="Back" />
@@ -57,6 +57,6 @@
             </Label>
          </children>
       </HBox>
-      <VBox fx:id="vboxLives" layoutX="745.0" layoutY="603.0" minHeight="71.0" minWidth="40.0" prefHeight="173.0" prefWidth="40.0" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="603.0" />
+      <VBox fx:id="vboxLives" layoutX="745.0" layoutY="603.0" minHeight="71.0" minWidth="40.0" prefHeight="183.0" prefWidth="40.0" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="15.0" />
    </children>
 </AnchorPane>
