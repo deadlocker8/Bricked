@@ -8,7 +8,7 @@
 
 <AnchorPane fx:id="mainPane" prefHeight="800.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.bricked.ui.LevelSelectController">
    <children>
-      <Label layoutX="196.0" layoutY="38.0" text="Select A Level">
+      <Label layoutX="196.0" layoutY="22.0" text="Select A Level">
          <font>
             <Font name="System Bold" size="40.0" />
          </font>
@@ -18,6 +18,11 @@
             <Font name="System Bold" size="20.0" />
          </font>
       </Button>
-      <ScrollPane fx:id="pane" layoutX="118.0" layoutY="126.0" prefHeight="549.0" prefWidth="415.0" />
+      <ScrollPane fx:id="pane" layoutX="75.0" layoutY="126.0" maxHeight="549.0" maxWidth="500.0" prefHeight="549.0" prefWidth="500.0" />
+      <Label fx:id="labelLevelPack" alignment="CENTER" layoutX="119.0" layoutY="80.0" prefHeight="30.0" prefWidth="415.0" text="Levelpack: ">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

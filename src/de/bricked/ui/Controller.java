@@ -64,18 +64,17 @@ public class Controller
 	{
 		try
 		{
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/bricked/ui/LevelSelectGUI.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/bricked/ui/LevelPackSelectGUI.fxml"));
 
 			Parent root = (Parent)fxmlLoader.load();
 			Stage newStage = new Stage();
 			newStage.setScene(new Scene(root, 650, 800));
-			newStage.setTitle("Level Select");
+			newStage.setTitle("Levelpack Select");
 			newStage.initOwner(stage);
 
 			newStage.getIcons().add(icon);			
-			LevelSelectController newController = fxmlLoader.getController();
-			newController.init(newStage, this, game);
-			cmd.getBundle().setLevelSelectController(newController);
+			LevelPackSelectController newController = fxmlLoader.getController();
+			newController.init(newStage, this, game);		
 
 			newStage.initModality(Modality.NONE);
 			newStage.setResizable(false);
@@ -119,9 +118,9 @@ public class Controller
 	public void about()
 	{
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Über " + bundle.getString("app.name"));
-		alert.setHeaderText(bundle.getString("app.name"));
-		alert.setContentText("Version:     " + bundle.getString("version.name") + "\r\nDatum:      " + bundle.getString("version.date") + "\r\nAutor:        Robert Goldmann\r\n");
+		alert.setTitle("About " + bundle.getString("app.name"));
+		alert.setHeaderText(bundle.getString("app.name")); 
+		alert.setContentText("Version:     " + bundle.getString("version.name") + "\r\nDate:         " + bundle.getString("version.date") + "\r\nAuthors:     "+ bundle.getString("author") +"\r\n");
 		Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
 		dialogStage.getIcons().add(icon);
 		dialogStage.centerOnScreen();

@@ -18,8 +18,7 @@ public class CommandBundle
 	private CommandLineController controller;
 	private ResourceBundle languageBundle;	
 	private Game game;
-	private Level currentLevel;
-	private LevelSelectController levelSelectController;
+	private Level currentLevel;	
 
 	public CommandBundle(Game game)
 	{
@@ -64,15 +63,5 @@ public class CommandBundle
 	public void setCurrentLevel(Level currentLevel)
 	{
 		this.currentLevel = currentLevel;
-	}
-
-	public LevelSelectController getLevelSelectController()
-	{
-		return levelSelectController;
-	}
-
-	public void setLevelSelectController(LevelSelectController levelSelectController)
-	{
-		this.levelSelectController = levelSelectController;
 	}
 }
