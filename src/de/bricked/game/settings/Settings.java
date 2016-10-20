@@ -20,7 +20,6 @@ public class Settings
 
     public Settings()
     {
-
         gson = new Gson();
         PathUtils.checkFolder(new File(PathUtils.getOSindependentPath() + directory));
         file = new File(PathUtils.getOSindependentPath() + directory + filename);
