@@ -104,21 +104,7 @@ public class LevelPackSelectController
 				return new LevelPackCell(pane.getMaxWidth() - 8);
 			}
 		});
-		listView.setStyle("-fx-background-color: transparent");
-		
-		//makes horizontal scrollbar invisible
-		Set<Node> set = listView.lookupAll("VirtualScrollBar");
-
-        for (Node n : set)
-        {
-            ScrollBar bar = (ScrollBar) n;
-            if (bar.getOrientation() == Orientation.HORIZONTAL)
-            {               
-                bar.setVisible(false);
-                bar.setDisable(true);
-                bar.setStyle("-fx-opacity: 0%");                
-            }
-        }
+		listView.setStyle("-fx-background-color: transparent");		
 
 		listView.prefWidthProperty().bind(pane.maxWidthProperty());
 		listView.prefHeightProperty().bind(pane.maxHeightProperty().subtract(10));
