@@ -3,7 +3,6 @@ package de.bricked.ui;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 import de.bricked.game.Game;
 import de.bricked.game.levels.LevelPack;
@@ -14,14 +13,11 @@ import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Orientation;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
@@ -94,7 +90,7 @@ public class LevelPackSelectController
 
 	public void reload()
 	{
-		ListView<LevelPack> listView = new ListView<LevelPack>(FXCollections.observableList(LevelPackHandler.getAllLevelPacks()));
+		CustomListView<LevelPack> listView = new CustomListView<LevelPack>(FXCollections.observableList(LevelPackHandler.getAllLevelPacks()));
 
 		listView.setCellFactory(new Callback<ListView<LevelPack>, ListCell<LevelPack>>()
 		{
@@ -106,19 +102,7 @@ public class LevelPackSelectController
 		});
 		listView.setStyle("-fx-background-color: transparent");
 		
-		//makes horizontal scrollbar invisible
-		Set<Node> set = listView.lookupAll("VirtualScrollBar");
-
-        for (Node n : set)
-        {
-            ScrollBar bar = (ScrollBar) n;
-            if (bar.getOrientation() == Orientation.HORIZONTAL)
-            {               
-                bar.setVisible(false);
-                bar.setDisable(true);
-                bar.setStyle("-fx-opacity: 0%");                
-            }
-        }
+		listView.setHScrollBarEnabled(false);
 
 		listView.prefWidthProperty().bind(pane.maxWidthProperty());
 		listView.prefHeightProperty().bind(pane.maxHeightProperty().subtract(10));
