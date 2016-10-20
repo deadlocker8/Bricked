@@ -23,30 +23,7 @@ public class Settings
         gson = new Gson();
         PathUtils.checkFolder(new File(PathUtils.getOSindependentPath() + directory));
         file = new File(PathUtils.getOSindependentPath() + directory + filename);
-
-        if(!file.exists())
-        {
-            try
-            {
-                initDefaultSettings();
-                save();
-            }
-            catch(Exception e)
-            {
-                Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
-            }
-        }
-        else
-        {
-            try
-            {
-                load();
-            }
-            catch(Exception e)
-            {
-            	 Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
-            }
-        }
+        initDefaultSettings();
     }
 
     private void initDefaultSettings()
@@ -60,8 +37,8 @@ public class Settings
         try
         {
             FileWriter fileWriter = new FileWriter(file);
-            System.out.println(gson.toJson(this));
-            fileWriter.write(gson.toJson(this));
+            String json = gson.toJson(this);
+            fileWriter.write(json);
             fileWriter.flush();
             fileWriter.close();
         }
@@ -71,13 +48,23 @@ public class Settings
         }
     }
 
-    private void load() throws Exception
+    public void load()
     {
-        String jsonContent = new String(Files.readAllBytes(FileSystems.getDefault().getPath(PathUtils.getOSindependentPath().toAbsolutePath() + directory + filename)));       
-        Settings loadedSettings = gson.fromJson(jsonContent, Settings.class);
-        this.gameSize = loadedSettings.gameSize;
-        this.language = loadedSettings.language;
-       // MORE settings go here
+        try
+        {
+            String jsonContent = new String(Files.readAllBytes(FileSystems.getDefault().getPath(PathUtils.getOSindependentPath().toAbsolutePath() + directory + filename)));
+            System.out.println(jsonContent);
+            Settings loadedSettings = gson.fromJson(jsonContent, Settings.class);
+            this.gameSize = loadedSettings.gameSize;
+            this.language = loadedSettings.language;
+            // MORE settings go here
+
+        }
+        catch (Exception e)
+        {
+            Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+        }
+
     }
 
 	public GameSize getGameSize()
