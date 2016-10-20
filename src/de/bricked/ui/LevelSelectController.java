@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import de.bricked.game.Game;
 import de.bricked.game.levels.Level;
+import de.bricked.game.settings.GameSize;
 import de.bricked.ui.cells.LevelCell;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -20,6 +21,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -115,7 +117,19 @@ public class LevelSelectController
 
 						Parent root = (Parent)fxmlLoader.load();
 						Stage newStage = new Stage();
-						newStage.setScene(new Scene(root, game.getSettings().getGameSize().getWidth(), game.getSettings().getGameSize().getHeight()));
+
+						//set stage size
+						if(game.getSettings().getGameSize().equals(GameSize.FULL_SCREEN))
+						{						
+							newStage.setScene(new Scene(root, GameSize.FULL_SCREEN.getWidth(), GameSize.FULL_SCREEN.getHeight()));							
+							newStage.setFullScreen(true);
+							newStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+						}
+						else
+						{
+							newStage.setScene(new Scene(root, game.getSettings().getGameSize().getWidth(), game.getSettings().getGameSize().getHeight()));
+						}
+						
 						newStage.setTitle(game.getLevel().getName());
 						newStage.initOwner(stage);
 
