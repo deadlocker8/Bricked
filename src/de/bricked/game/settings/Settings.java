@@ -71,7 +71,7 @@ public class Settings
         }
     }
 
-    public void load() throws Exception
+    private void load() throws Exception
     {
         String jsonContent = new String(Files.readAllBytes(FileSystems.getDefault().getPath(PathUtils.getOSindependentPath().toAbsolutePath() + directory + filename)));       
         Settings loadedSettings = gson.fromJson(jsonContent, Settings.class);

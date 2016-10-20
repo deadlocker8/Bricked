@@ -1,5 +1,8 @@
 package de.bricked.game.settings;
+import de.bricked.main.Main;
 import javafx.stage.Screen;
+
+import java.awt.*;
 
 public enum GameSize
 {
@@ -21,8 +24,9 @@ public enum GameSize
 
     GameSize()
     {
-        this.width = (int)(Screen.getPrimary().getVisualBounds().getWidth());
-        this.height = (int)(Screen.getPrimary().getVisualBounds().getHeight());
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        this.width = gd.getDisplayMode().getWidth();
+        this.height = gd.getDisplayMode().getHeight();
     }
 
     public int getWidth()
