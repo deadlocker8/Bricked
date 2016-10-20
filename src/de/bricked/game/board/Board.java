@@ -101,7 +101,7 @@ public class Board
 		print();
 	}
 
-	public ArrayList<Brick> getRemainingBricks()
+	private ArrayList<Brick> getRemainingBricks()
     {
         ArrayList<Brick> remainingBricks = new ArrayList<>();
         for(ArrayList<Brick> row : bricks)
@@ -116,6 +116,11 @@ public class Board
         }
         return remainingBricks;
     }
+	
+	public int getNumberOfRemainingBricks()
+	{
+		return getRemainingBricks().size();
+	}
 
 	private void init()
 	{

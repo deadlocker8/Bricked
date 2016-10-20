@@ -2,7 +2,6 @@ package de.bricked.game;
 
 import de.bricked.game.levels.Level;
 import de.bricked.game.levels.LevelPack;
-import de.bricked.game.levels.LevelPackReader;
 import de.bricked.game.settings.Settings;
 
 public class Game
@@ -13,10 +12,8 @@ public class Game
 
 	public Game()
 	{		
-		this.settings = new Settings();		
-		// DEBUG
-		LevelPackReader reader = new LevelPackReader("default.json");
-		this.levelPack = reader.read();
+		this.settings = new Settings();				
+		this.levelPack = null;
 		this.level = null;
 	}
 	

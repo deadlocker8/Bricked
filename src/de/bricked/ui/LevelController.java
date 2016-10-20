@@ -7,6 +7,8 @@ import java.util.ResourceBundle;
 import de.bricked.game.Game;
 import de.bricked.game.board.Board;
 import de.bricked.game.bricks.Brick;
+import fontAwesome.FontIcon;
+import fontAwesome.FontIconType;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -37,22 +39,25 @@ public class LevelController
 	@FXML private Label labelAuthor;
 	@FXML private Label labelLevelPack;
 	@FXML private Label labelPoints;
-	@FXML private Label labelLives;
+	@FXML private Label labelBlocksRemaining;
 	@FXML private AnchorPane anchorPaneGame;
 	@FXML private Button buttonBack;
 	@FXML private VBox vboxPowerUps;
+	@FXML private VBox vboxLives;
 
 	public Stage stage;
 	public Image icon = new Image("de/bricked/resources/icon.png");
 	public final ResourceBundle bundle = ResourceBundle.getBundle("de/bricked/main/", Locale.GERMANY);
 	private LevelSelectController levelSelectController;
 	private Game game;
+	private Board board;
 
 	public void init(Stage stage, LevelSelectController levelSelectController, Game game)
 	{
 		this.stage = stage;
 		this.levelSelectController = levelSelectController;
 		this.game = game;
+		this.board = new Board(game.getLevel());
 
 		anchorPane.setOnKeyReleased(new EventHandler<KeyEvent>()
 		{
@@ -78,15 +83,21 @@ public class LevelController
 				System.exit(0);
 			}
 		});
-
+		
+		FontIcon iconBack = new FontIcon(FontIconType.ARROW_LEFT);
+		iconBack.setSize(18);
+		buttonBack.setText("");
+		buttonBack.setGraphic(iconBack);
+		
 		vboxPowerUps.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");		
-
+		vboxLives.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
+		
 		anchorPaneGame.setPadding(new Insets(0));
 
 		labelLevelPack.setText(game.getLevelPack().getPackageName());
 		labelAuthor.setText("by " + game.getLevel().getAuthor());
 		labelLevelName.setText(game.getLevel().getName() + " (" + game.getLevel().getPosition() + "/" + game.getLevelPack().getLevels().size() + ")");
-		labelLives.setText(game.getLevel().getStartLives() + " Lives");
+		labelBlocksRemaining.setText(board.getNumberOfRemainingBricks() + " Bricks remaining");
 
 		redraw();
 
@@ -144,14 +155,12 @@ public class LevelController
 			RowConstraints c = new RowConstraints();
 			c.setPercentHeight(yPercentage * 100);
 			grid.getRowConstraints().add(c);
-		}
-
-		Board board = new Board(game.getLevelPack().getLevels().get(0));
+		}		
 
 		for(int i = 0; i < Board.HEIGHT; i++)
 		{
 			for(int k = 0; k < Board.WIDTH; k++)
-			{
+			{				
 				Brick currentBrick = board.getBricks().get(i).get(k);
 
 				StackPane pane = new StackPane();
