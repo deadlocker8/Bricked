@@ -97,7 +97,7 @@ public class LevelPackSelectController
 			@Override
 			public ListCell<LevelPack> call(ListView<LevelPack> param)
 			{
-				return new LevelPackCell(pane.getMaxWidth() - 8);
+				return new LevelPackCell(pane.getMaxWidth() - 14);
 			}
 		});
 		listView.setStyle("-fx-background-color: transparent");
