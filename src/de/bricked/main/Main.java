@@ -29,7 +29,7 @@ public class Main extends Application
 			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("de/bricked/ui/MainGUI.fxml"));
 			Parent root = (Parent)loader.load();
 
-			Scene scene = new Scene(root, 650, 800);		
+			Scene scene = new Scene(root, 650, 800);			
 
 			((Controller)loader.getController()).init(stage);
 			

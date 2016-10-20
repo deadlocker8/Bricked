@@ -19,7 +19,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -139,8 +141,25 @@ public class LevelController
 		grid.setHgap(0);
 		grid.setVgap(0);
 
+		grid.getColumnConstraints().clear();
+		double xPercentage = 1.0 / Board.WIDTH;
+		for(int i = 0; i < Board.WIDTH; i++)
+		{
+			ColumnConstraints c = new ColumnConstraints();
+			c.setPercentWidth(xPercentage * 100);
+			grid.getColumnConstraints().add(c);
+		}
+
+		grid.getRowConstraints().clear();
+		double yPercentage = 1.0 / Board.HEIGHT;
+		for(int i = 0; i < Board.HEIGHT; i++)
+		{
+			RowConstraints c = new RowConstraints();
+			c.setPercentHeight(yPercentage * 100);
+			grid.getRowConstraints().add(c);
+		}
+
 		Board board = new Board(game.getLevelPack().getLevels().get(0));
-        System.out.print(board.getRemainingBricks().size());
 
 		for(int i = 0; i < Board.HEIGHT; i++)
 		{
@@ -176,7 +195,7 @@ public class LevelController
 	{
 		try
 		{
-			levelSelectController.controller.getCommandLine().showCommandLine("Debug Console", 400, 250, 400, 200, - 1, - 1, true);
+			levelSelectController.controller.controller.getCommandLine().showCommandLine("Debug Console", 400, 250, 400, 200, - 1, - 1, true);
 		}
 		catch(IOException e)
 		{

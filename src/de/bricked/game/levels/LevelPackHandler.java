@@ -22,9 +22,4 @@ public class LevelPackHandler
         File folder = new File(directory);
         return folder.listFiles();
     }
-
-    public static void main(String[] args)
-    {
-        LevelPackHandler.getAllLevelPacks();
-    }
 }

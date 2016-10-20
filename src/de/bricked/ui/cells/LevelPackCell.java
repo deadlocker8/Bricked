@@ -1,4 +1,4 @@
-package de.bricked.ui;
+package de.bricked.ui.cells;
 
 import de.bricked.game.levels.LevelPack;
 import javafx.geometry.Insets;
@@ -30,13 +30,16 @@ public class LevelPackCell extends ListCell<LevelPack>
 			Label labelLevelName = new Label(item.getPackageName());
 			labelLevelName.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");	
 			labelLevelName.setMaxWidth(maxWidth * 0.4);
+			labelLevelName.getStyleClass().add("greylabel");
 
 			Label labelAuthor = new Label("(by " + item.getPackageAuthor() + ")");
 			labelAuthor.setStyle("-fx-font-size: 12px;");
 			labelAuthor.setMaxWidth(maxWidth * 0.35);
+			labelAuthor.getStyleClass().add("greylabel");
 			
 			Label labelVersion = new Label("Version " + item.getVersion());
-			labelVersion.setStyle("-fx-font-size: 12px;");			
+			labelVersion.setStyle("-fx-font-size: 12px;");
+			labelVersion.getStyleClass().add("greylabel");
 					
 			hbox.getChildren().add(labelLevelName);			
 			hbox.getChildren().add(labelAuthor);			
@@ -55,7 +58,8 @@ public class LevelPackCell extends ListCell<LevelPack>
 			
 			hbox.setMaxWidth(maxWidth);
 
-			setGraphic(hbox);
+			setGraphic(hbox);			
+			
 			setPadding(new Insets(10));			
 		}
 		else

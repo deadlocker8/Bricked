@@ -6,10 +6,14 @@ import java.util.ResourceBundle;
 
 import de.bricked.game.Game;
 import de.bricked.game.levels.Level;
+import de.bricked.ui.cells.LevelCell;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -17,7 +21,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
@@ -77,14 +83,8 @@ public class LevelSelectController
 	}
 
 	public void reload()
-	{
-		
-		
-		
-		
-		
-		
-		CustomListView<Level> listView = new CustomListView<Level>(FXCollections.observableList(game.getLevelPack().getLevels()));		
+	{		
+		ListView<Level> listView = new ListView<Level>(FXCollections.observableList(game.getLevelPack().getLevels()));		
 		
 		listView.setCellFactory(new Callback<ListView<Level>, ListCell<Level>>()
 		{			
@@ -95,120 +95,54 @@ public class LevelSelectController
 			}
 		});
 		listView.setStyle("-fx-background-color: transparent");		
-	
-		listView.setSelectable(false);
 		
-		listView.prefWidthProperty().bind(pane.widthProperty());
-		listView.prefHeightProperty().bind(pane.heightProperty().subtract(10));
+		listView.prefWidthProperty().bind(pane.maxWidthProperty());
+		listView.prefHeightProperty().bind(pane.maxHeightProperty().subtract(10));
 		
-//		GridPane gridPane = new GridPane();
-//		gridPane.setAlignment(Pos.TOP_CENTER);
-//		gridPane.setVgap(30);
-//		gridPane.setHgap(30);
-//
-//		int rowCounter = 0;
-//
-//		for(int i = 0; i < game.getLevelPack().getLevels().size(); i++)
-//		{
-//			Level currentLevel = game.getLevelPack().getLevels().get(i);
-//
-//			StackPane stack = new StackPane();
-//			stack.setAlignment(Pos.TOP_CENTER);
-//
-//			HBox hbox = new HBox();
-//			hbox.setPrefHeight(102);
-//			hbox.setStyle("-fx-background-radius: 10; -fx-background-color: #00000066;");
-//			hbox.setAlignment(Pos.BOTTOM_CENTER);
-//			hbox.setPadding(new Insets(0, 0, 2, 0));
-//
-//			Rectangle rectangle = new Rectangle(75, 75);
-//
-//			int stars = currentLevel.getDifficulty();
-//
-//			FontIcon iconStarOne = new FontIcon(FontIconType.STAR);
-//			iconStarOne.setSize(20);
-//			iconStarOne.setTextFill(Color.YELLOW);
-//			Label labelStarOne = new Label();
-//			labelStarOne.setGraphic(iconStarOne);
-//			hbox.getChildren().add(labelStarOne);
-//
-//			FontIcon iconStarTwo = new FontIcon(FontIconType.STAR);
-//			iconStarTwo.setSize(20);
-//			if(stars > 1)
-//			{
-//				iconStarTwo.setTextFill(Color.YELLOW);
-//			}
-//			else
-//			{
-//				iconStarTwo.setTextFill(Color.TRANSPARENT);
-//			}
-//			Label labelStarTwo = new Label();
-//			labelStarTwo.setGraphic(iconStarTwo);
-//			hbox.getChildren().add(labelStarTwo);
-//
-//			FontIcon iconStarThree = new FontIcon(FontIconType.STAR);
-//			iconStarThree.setSize(20);
-//			if(stars > 2)
-//			{
-//				iconStarThree.setTextFill(Color.YELLOW);
-//			}
-//			else
-//			{
-//				iconStarThree.setTextFill(Color.TRANSPARENT);
-//			}
-//			Label labelStarThree = new Label();
-//			labelStarThree.setGraphic(iconStarThree);
-//			hbox.getChildren().add(labelStarThree);
-//
-//			rectangle.setFill(Color.web("#CBE581"));
-//
-//			stack.getChildren().add(hbox);
-//
-//			rectangle.setStyle("-fx-stroke: black; -fx-stroke-width: 2; -fx-arc-height: 10; -fx-arc-width: 10;");
-//			stack.getChildren().add(rectangle);
-//
-//			Label label = new Label(String.valueOf(currentLevel.getName()));
-//			label.setStyle("-fx-font-size: 15; -fx-font-weight: bold; -fx-text-fill: white;");
-//			label.setPadding(new Insets(17, 0, 0, 0));
-//			stack.getChildren().add(label);
-//
-//			if(i % 2 == 0)
-//			{
-//				rowCounter++;
-//			}
-//
-//			gridPane.add(stack, i % 2, rowCounter);
-//
-//			stack.setOnMouseReleased(event -> {
-//				try
-//				{
-//					game.setLevel(currentLevel);
-//
-//					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/bricked/ui/LevelGUI.fxml"));
-//
-//					Parent root = (Parent)fxmlLoader.load();
-//					Stage newStage = new Stage();
-//					newStage.setScene(new Scene(root, 800, 800));
-//					newStage.setTitle("Level " + currentLevel.getName());
-//					newStage.initOwner(stage);
-//
-//					newStage.getIcons().add(controller.icon);
-//					LevelController newController = fxmlLoader.getController();
-//					newController.init(newStage, this, game);
-//
-//					newStage.initModality(Modality.NONE);
-//					newStage.setResizable(false);
-//					stage.hide();
-//					newStage.show();
-//				}
-//				catch(IOException e1)
-//				{
-//					e1.printStackTrace();
-//				}
-//			});
-//		}
+		listView.setOnMouseClicked(new EventHandler<MouseEvent>()
+		{
+			@Override
+			public void handle(MouseEvent event)
+			{				
+				Level selectedLevel = listView.getSelectionModel().getSelectedItem();			
+				if(selectedLevel != null)
+				{
+					game.setLevel(selectedLevel);
+
+					try
+					{
+						FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/bricked/ui/LevelGUI.fxml"));
+
+						Parent root = (Parent)fxmlLoader.load();
+						Stage newStage = new Stage();
+						newStage.setScene(new Scene(root, 1000, 800));
+						newStage.setTitle(game.getLevel().getName());
+						newStage.initOwner(stage);
+
+						newStage.getIcons().add(icon);
+						LevelController newController = fxmlLoader.getController();
+						newController.init(newStage, getController(), game);
+
+						newStage.initModality(Modality.NONE);
+						newStage.setResizable(true);
+						stage.hide();
+						newStage.show();
+					}
+					catch(IOException e1)
+					{
+						Logger.log(LogLevel.ERROR, Logger.exceptionToString(e1));
+					}
+				}
+			}
+		});
+
 
 		pane.setContent(listView);
+	}
+	
+	private LevelSelectController getController()
+	{
+		return this;
 	}
 
 	public void back()

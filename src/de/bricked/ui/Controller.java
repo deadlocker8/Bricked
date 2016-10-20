@@ -69,6 +69,7 @@ public class Controller
 			Parent root = (Parent)fxmlLoader.load();
 			Stage newStage = new Stage();
 			newStage.setScene(new Scene(root, 650, 800));
+			newStage.getScene().getStylesheets().add("de/bricked/ui/style.css");
 			newStage.setTitle("Levelpack Select");
 			newStage.initOwner(stage);
 

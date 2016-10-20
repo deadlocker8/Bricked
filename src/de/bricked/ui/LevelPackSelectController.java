@@ -7,6 +7,8 @@ import java.util.ResourceBundle;
 
 import de.bricked.game.Game;
 import de.bricked.game.levels.LevelPack;
+import de.bricked.game.levels.LevelPackHandler;
+import de.bricked.ui.cells.LevelPackCell;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
@@ -82,13 +84,7 @@ public class LevelPackSelectController
 
 	public void reload()
 	{
-		// DEBUG
-		ArrayList<LevelPack> packs = new ArrayList<>();
-		packs.add(game.getLevelPack());
-
-		//
-
-		CustomListView<LevelPack> listView = new CustomListView<LevelPack>(FXCollections.observableList(packs));
+		ListView<LevelPack> listView = new ListView<LevelPack>(FXCollections.observableList(LevelPackHandler.getAllLevelPacks()));
 
 		listView.setCellFactory(new Callback<ListView<LevelPack>, ListCell<LevelPack>>()
 		{
@@ -99,8 +95,7 @@ public class LevelPackSelectController
 			}
 		});
 		listView.setStyle("-fx-background-color: transparent");
-
-		listView.setSelectable(false);
+	
 
 		listView.prefWidthProperty().bind(pane.maxWidthProperty());
 		listView.prefHeightProperty().bind(pane.maxHeightProperty().subtract(10));
@@ -109,8 +104,8 @@ public class LevelPackSelectController
 		{
 			@Override
 			public void handle(MouseEvent event)
-			{
-				LevelPack selectedPack = listView.getSelectionModel().getSelectedItem();
+			{				
+				LevelPack selectedPack = listView.getSelectionModel().getSelectedItem();			
 				if(selectedPack != null)
 				{
 					game.setLevelPack(selectedPack);
@@ -122,6 +117,7 @@ public class LevelPackSelectController
 						Parent root = (Parent)fxmlLoader.load();
 						Stage newStage = new Stage();
 						newStage.setScene(new Scene(root, 650, 800));
+						newStage.getScene().getStylesheets().add("de/bricked/ui/style.css");
 						newStage.setTitle("Level Select");
 						newStage.initOwner(stage);
 
