@@ -115,7 +115,7 @@ public class LevelSelectController
 
 						Parent root = (Parent)fxmlLoader.load();
 						Stage newStage = new Stage();
-						newStage.setScene(new Scene(root, 1000, 800));
+						newStage.setScene(new Scene(root, game.getSettings().getGameSize().getWidth(), game.getSettings().getGameSize().getHeight()));
 						newStage.setTitle(game.getLevel().getName());
 						newStage.initOwner(stage);
 

@@ -33,7 +33,7 @@ public class Settings
             }
             catch(Exception e)
             {
-                e.printStackTrace();
+                Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
             }
         }
         else
@@ -44,7 +44,7 @@ public class Settings
             }
             catch(Exception e)
             {
-                e.printStackTrace();
+            	 Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
             }
         }
     }
@@ -73,10 +73,30 @@ public class Settings
 
     public void load() throws Exception
     {
-        String jsonContent = new String(Files.readAllBytes(FileSystems.getDefault().getPath(directory + filename)));
+        String jsonContent = new String(Files.readAllBytes(FileSystems.getDefault().getPath(PathUtils.getOSindependentPath().toAbsolutePath() + directory + filename)));       
         Settings loadedSettings = gson.fromJson(jsonContent, Settings.class);
         this.gameSize = loadedSettings.gameSize;
         this.language = loadedSettings.language;
-        //MORE settings go here
+       // MORE settings go here
     }
+
+	public GameSize getGameSize()
+	{
+		return gameSize;
+	}
+
+	public void setGameSize(GameSize gameSize)
+	{
+		this.gameSize = gameSize;
+	}
+
+	public String getLanguage()
+	{
+		return language;
+	}
+
+	public void setLanguage(String language)
+	{
+		this.language = language;
+	}
 }
