@@ -106,6 +106,7 @@ public class LevelPackSelectController
 		});
 		listView.setStyle("-fx-background-color: transparent");
 		
+		//makes horizontal scrollbar invisible
 		Set<Node> set = listView.lookupAll("VirtualScrollBar");
 
         for (Node n : set)

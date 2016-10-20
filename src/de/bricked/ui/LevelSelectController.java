@@ -3,6 +3,7 @@ package de.bricked.ui;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import de.bricked.game.Game;
 import de.bricked.game.levels.Level;
@@ -13,11 +14,14 @@ import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
@@ -49,7 +53,7 @@ public class LevelSelectController
 		this.stage = stage;
 		this.controller = controller;
 		this.game = game;
-		
+
 		labelLevelPack.setText("Levelpack: " + game.getLevelPack().getPackageName());
 
 		reload();
@@ -68,8 +72,8 @@ public class LevelSelectController
 					showCommandLine();
 					Logger.log(LogLevel.INFO, "openend debug console");
 					event.consume();
-				}				
-				
+				}
+
 				if(event.getCode().toString().equals("ESCAPE"))
 				{
 					back();
@@ -91,28 +95,42 @@ public class LevelSelectController
 	}
 
 	public void reload()
-	{		
-		ListView<Level> listView = new ListView<Level>(FXCollections.observableList(game.getLevelPack().getLevels()));		
-		
+	{
+		ListView<Level> listView = new ListView<Level>(FXCollections.observableList(game.getLevelPack().getLevels()));
+
 		listView.setCellFactory(new Callback<ListView<Level>, ListCell<Level>>()
-		{			
+		{
 			@Override
 			public ListCell<Level> call(ListView<Level> param)
 			{
 				return new LevelCell(pane.getMaxWidth() - 8);
 			}
 		});
-		listView.setStyle("-fx-background-color: transparent");		
-		
+		listView.setStyle("-fx-background-color: transparent");
+
+		// makes horizontal scrollbar invisible
+		Set<Node> set = listView.lookupAll("VirtualScrollBar");
+
+		for(Node n : set)
+		{
+			ScrollBar bar = (ScrollBar)n;
+			if(bar.getOrientation() == Orientation.HORIZONTAL)
+			{
+				bar.setVisible(false);
+				bar.setDisable(true);
+				bar.setStyle("-fx-opacity: 0%");
+			}
+		}
+
 		listView.prefWidthProperty().bind(pane.maxWidthProperty());
 		listView.prefHeightProperty().bind(pane.maxHeightProperty().subtract(10));
-		
+
 		listView.setOnMouseClicked(new EventHandler<MouseEvent>()
 		{
 			@Override
 			public void handle(MouseEvent event)
-			{				
-				Level selectedLevel = listView.getSelectionModel().getSelectedItem();			
+			{
+				Level selectedLevel = listView.getSelectionModel().getSelectedItem();
 				if(selectedLevel != null)
 				{
 					game.setLevel(selectedLevel);
@@ -124,10 +142,10 @@ public class LevelSelectController
 						Parent root = (Parent)fxmlLoader.load();
 						Stage newStage = new Stage();
 
-						//set stage size					
+						// set stage size
 						if(game.getSettings().getGameSize().equals(GameSize.FULL_SCREEN))
-						{						
-							newStage.setScene(new Scene(root));							
+						{
+							newStage.setScene(new Scene(root));
 							newStage.setFullScreen(true);
 							newStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 						}
@@ -135,7 +153,7 @@ public class LevelSelectController
 						{
 							newStage.setScene(new Scene(root, game.getSettings().getGameSize().getWidth(), game.getSettings().getGameSize().getHeight()));
 						}
-						
+
 						newStage.setTitle(game.getLevel().getName());
 						newStage.initOwner(stage);
 
@@ -158,7 +176,7 @@ public class LevelSelectController
 
 		pane.setContent(listView);
 	}
-	
+
 	private LevelSelectController getController()
 	{
 		return this;
