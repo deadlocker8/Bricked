@@ -14,7 +14,7 @@
       <VBox fx:id="vboxPowerUps" layoutX="745.0" layoutY="125.0" minHeight="650.0" minWidth="40.0" prefHeight="650.0" prefWidth="40.0" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="125.0" />
       <HBox alignment="CENTER" layoutX="34.0" layoutY="23.0" prefHeight="100.0" prefWidth="275.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
          <children>
-            <Button fx:id="buttonBack" mnemonicParsing="false" onAction="#redraw" text="Back" />
+            <Button fx:id="buttonBack" mnemonicParsing="false" onAction="#back" text="Back" />
             <Label fx:id="labelLives" text="3 Lives">
                <font>
                   <Font name="System Bold" size="20.0" />

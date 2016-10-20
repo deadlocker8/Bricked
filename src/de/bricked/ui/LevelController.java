@@ -11,8 +11,6 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -81,8 +79,7 @@ public class LevelController
 			}
 		});
 
-		vboxPowerUps.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
-		anchorPaneGame.setStyle("-fx-border-color: #ff0000; -fx-border-width: 2px;");
+		vboxPowerUps.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");		
 
 		anchorPaneGame.setPadding(new Insets(0));
 
@@ -122,22 +119,12 @@ public class LevelController
 	public void redraw()
 	{
 		anchorPaneGame.getChildren().clear();
-		double brickWidth;
-		double brickHeight;
-		if(anchorPaneGame.getWidth() <= 0)
-		{
-			brickWidth = anchorPaneGame.getPrefWidth() / Board.WIDTH;
-			brickHeight = anchorPaneGame.getPrefHeight() / Board.HEIGHT;
-		}
-		else
-		{
-			brickWidth = anchorPaneGame.getWidth() / Board.WIDTH;
-			brickHeight = anchorPaneGame.getHeight() / Board.HEIGHT;
-		}
+		double brickWidth = (game.getSettings().getGameSize().getWidth() - 100) / Board.WIDTH;
+		double brickHeight = (game.getSettings().getGameSize().getHeight() - 150) / Board.HEIGHT;		
 
 		GridPane grid = new GridPane();
 		grid.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
-		grid.setGridLinesVisible(true);
+		grid.setGridLinesVisible(false);
 		grid.setHgap(0);
 		grid.setVgap(0);
 
@@ -176,9 +163,10 @@ public class LevelController
 				iv.setFitWidth(brickWidth);
 				iv.setFitHeight(brickHeight);
 
-				Label l = new Label(currentBrick.getID());
+				//DEBUG
+//				Label l = new Label(currentBrick.getID());
 
-				pane.getChildren().addAll(r, iv, l);
+				pane.getChildren().addAll(r, iv);
 
 				grid.add(pane, k, i);
 			}
@@ -203,16 +191,10 @@ public class LevelController
 			Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
 		}
 	}
-
-	public void about()
+	
+	public void back()
 	{
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("About " + bundle.getString("app.name"));
-		alert.setHeaderText(bundle.getString("app.name"));
-		alert.setContentText("Version:     " + bundle.getString("version.name") + "\r\nDate:      " + bundle.getString("version.date") + "\r\nAuthors:    " + bundle.getString("author") + "\r\n");
-		Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-		dialogStage.getIcons().add(icon);
-		dialogStage.centerOnScreen();
-		alert.showAndWait();
+		stage.close();
+		levelSelectController.stage.show();
 	}
 }

@@ -138,7 +138,7 @@ public class LevelSelectController
 						newController.init(newStage, getController(), game);
 
 						newStage.initModality(Modality.NONE);
-						newStage.setResizable(true);
+						newStage.setResizable(false);
 						stage.hide();
 						newStage.show();
 					}
@@ -149,7 +149,6 @@ public class LevelSelectController
 				}
 			}
 		});
-
 
 		pane.setContent(listView);
 	}

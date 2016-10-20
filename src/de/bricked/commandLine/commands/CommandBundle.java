@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 import de.bricked.commandLine.CommandLineController;
 import de.bricked.game.Game;
 import de.bricked.game.levels.Level;
-import de.bricked.ui.LevelSelectController;
 
 /**
  * holds important objects that are needed by the commands
