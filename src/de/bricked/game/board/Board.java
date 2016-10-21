@@ -6,7 +6,7 @@ import de.bricked.game.bricks.AirBrick;
 import de.bricked.game.bricks.Brick;
 import de.bricked.game.bricks.ExtraHardBrick;
 import de.bricked.game.bricks.HardBrick;
-import de.bricked.game.bricks.InvisibleBlock;
+import de.bricked.game.bricks.InvisibleBrick;
 import de.bricked.game.bricks.NormalBrick;
 import de.bricked.game.bricks.SolidBrick;
 import de.bricked.game.bricks.TNTBrick;
@@ -73,7 +73,7 @@ public class Board
 					currentBrick = new ExtraHardBrick(null);
 					break;
 				case "I":
-					currentBrick = new InvisibleBlock(null);
+					currentBrick = new InvisibleBrick(null);
 					break;
 				case "T":
 					currentBrick = new TNTBrick(null);

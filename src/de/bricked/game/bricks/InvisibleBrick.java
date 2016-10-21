@@ -3,9 +3,9 @@ package de.bricked.game.bricks;
 import de.bricked.game.config.BrickTypes;
 import de.bricked.game.powerups.PowerUp;
 
-public class InvisibleBlock extends Brick
+public class InvisibleBrick extends Brick
 {
-	public InvisibleBlock(PowerUp powerUp)
+	public InvisibleBrick(PowerUp powerUp)
 	{		
 		super(BrickTypes.INVISIBLE.getID(), BrickTypes.INVISIBLE.getTextureIDs(), BrickTypes.INVISIBLE.getNumberOfHitsRequired(), powerUp);		
 	}
