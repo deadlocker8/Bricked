@@ -1,6 +1,6 @@
 package de.bricked.game.config;
 
-public enum BrickTypes
+public enum BrickType
 {
 	NORMAL("N", new String[]{"green"}, 1),
 	AIR("A", new String[]{"empty"}, -1),
@@ -14,7 +14,7 @@ public enum BrickTypes
 	private String[] textureIDs;	
 	private int numberOfHitsRequired;
 		
-	private BrickTypes(String ID, String[] textureIDs, int numberOfHitsRequired)
+	private BrickType(String ID, String[] textureIDs, int numberOfHitsRequired)
 	{		
 		this.ID = ID;
 		this.textureIDs = textureIDs;

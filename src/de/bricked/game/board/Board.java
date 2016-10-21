@@ -2,14 +2,8 @@ package de.bricked.game.board;
 
 import java.util.ArrayList;
 
-import de.bricked.game.bricks.AirBrick;
 import de.bricked.game.bricks.Brick;
-import de.bricked.game.bricks.ExtraHardBrick;
-import de.bricked.game.bricks.HardBrick;
-import de.bricked.game.bricks.InvisibleBrick;
-import de.bricked.game.bricks.NormalBrick;
-import de.bricked.game.bricks.SolidBrick;
-import de.bricked.game.bricks.TNTBrick;
+import de.bricked.game.config.BrickType;
 import de.bricked.game.levels.Level;
 import de.bricked.game.levels.LevelPack;
 import de.bricked.game.levels.LevelPackReader;
@@ -58,28 +52,28 @@ public class Board
 			switch(brickValue)
 			{
 				case "N":
-					currentBrick = new NormalBrick(null);
+					currentBrick = new Brick(BrickType.NORMAL);
 					break;
 				case "A":
-					currentBrick = new AirBrick();
+					currentBrick = new Brick(BrickType.AIR);
 					break;
 				case "S":
-					currentBrick = new SolidBrick(null);
+					currentBrick = new Brick(BrickType.SOLID);
 					break;
 				case "H":
-					currentBrick = new HardBrick(null);
+					currentBrick = new Brick(BrickType.HARD);
 					break;
 				case "E":
-					currentBrick = new ExtraHardBrick(null);
+					currentBrick = new Brick(BrickType.EXTRA_HARD);
 					break;
 				case "I":
-					currentBrick = new InvisibleBrick(null);
+					currentBrick = new Brick(BrickType.INVISIBLE);
 					break;
 				case "T":
-					currentBrick = new TNTBrick(null);
+					currentBrick = new Brick(BrickType.TNT);
 					break;
 				default:
-					currentBrick = new AirBrick();
+					currentBrick = new Brick(BrickType.AIR);
 					break;
 			}
 
@@ -108,7 +102,7 @@ public class Board
         {
             for(Brick currentBrick : row)
             {
-                if(!(currentBrick instanceof AirBrick) && !(currentBrick instanceof SolidBrick))
+                if(!(currentBrick.getType().equals(BrickType.AIR)) && !(currentBrick.getType().equals(BrickType.SOLID)))
                 {
                     remainingBricks.add(currentBrick);
                 }
@@ -131,7 +125,7 @@ public class Board
 			ArrayList<Brick> currentRow = new ArrayList<>();
 			for(int k = 0; k < HEIGHT; k++)
 			{
-				currentRow.add(new AirBrick());
+				currentRow.add(new Brick(BrickType.AIR));
 			}
 			bricks.add(currentRow);
 		}
@@ -161,7 +155,7 @@ public class Board
 	{
 		Brick hittedBrick = bricks.get(row).get(col);
 
-		if(hittedBrick instanceof AirBrick)
+		if(hittedBrick.getType().equals(BrickType.AIR))
 		{
 			return;
 		}
@@ -169,16 +163,16 @@ public class Board
 		// block was destroyed
 		if(hittedBrick.hit(instantDestroy))
 		{
-			bricks.get(row).set(col, new AirBrick());
+			bricks.get(row).set(col, new Brick(BrickType.AIR));
 
-			if(hittedBrick instanceof TNTBrick)
+			if(hittedBrick.getType().equals(BrickType.TNT))
 			{
 				explodeBrick(row, col);
 			}
 
 			if(hittedBrick.getPowerUp() != null)
 			{
-				// deploy PowerUp
+				//TODO deploy PowerUp
 			}
 		}
 	}
@@ -210,7 +204,7 @@ public class Board
 		{
 			for(int k = 0; k < WIDTH; k++)
 			{
-				b.append(bricks.get(i).get(k).getID());
+				b.append(bricks.get(i).get(k).getType().getID());
 				b.append(" ");
 			}
 			b.append("\n");

@@ -127,6 +127,7 @@ public class LevelSelectController
 						Stage newStage = new Stage();
 
 						// set stage size
+						game.getSettings().setGameSize(GameSize.FULL_SCREEN);
 						if(game.getSettings().getGameSize().equals(GameSize.FULL_SCREEN))
 						{
 							newStage.setScene(new Scene(root));

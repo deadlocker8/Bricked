@@ -106,31 +106,6 @@ public class LevelController
 		refreshLiveCounter();
 
 		redraw();
-
-		// Collision detection:
-
-		// StackPane pane = new StackPane();
-		// Rectangle r = new Rectangle(44, 20);
-		// r.setFill(Color.RED);
-		//
-		// ImageView iv = new ImageView(icon);
-		// iv.setFitWidth(44);
-		// iv.setFitHeight(20);
-		//
-		// pane.getChildren().addAll(r, iv);
-		//
-		// Circle c = new Circle(10);
-		// c.setFill(Color.GREEN);
-		// c.setTranslateX(59);
-		// c.setTranslateY(30);
-		// anchorPane.getChildren().add(c);
-		//
-		// anchorPane.getChildren().add(pane);
-		//
-		// if(Shape.intersect(r, c).getBoundsInLocal().getWidth() != - 1)
-		// {
-		// System.out.println("collision");
-		// }
 	}
 
 	public void redraw()
@@ -150,16 +125,16 @@ public class LevelController
 		for(int i = 0; i < Board.WIDTH; i++)
 		{
 			ColumnConstraints c = new ColumnConstraints();
-			c.setPercentWidth(xPercentage * 100);
+			c.setPercentWidth(xPercentage * 100);			
 			grid.getColumnConstraints().add(c);
-		}
+		}	
 
 		grid.getRowConstraints().clear();
 		double yPercentage = 1.0 / Board.HEIGHT;
 		for(int i = 0; i < Board.HEIGHT; i++)
 		{
 			RowConstraints c = new RowConstraints();
-			c.setPercentHeight(yPercentage * 100);
+			c.setPercentHeight(yPercentage * 100);			
 			grid.getRowConstraints().add(c);
 		}		
 
@@ -179,7 +154,7 @@ public class LevelController
 				iv.setFitHeight(brickHeight);
 
 				//DEBUG
-				Label l = new Label(currentBrick.getID());
+				Label l = new Label(currentBrick.getType().getID());			
 
 				pane.getChildren().addAll(r, iv, l);
 
