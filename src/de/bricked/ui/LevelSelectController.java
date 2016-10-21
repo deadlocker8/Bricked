@@ -126,8 +126,7 @@ public class LevelSelectController
 						Parent root = (Parent)fxmlLoader.load();
 						Stage newStage = new Stage();
 
-						// set stage size
-						game.getSettings().setGameSize(GameSize.FULL_SCREEN);
+						// set stage size						
 						if(game.getSettings().getGameSize().equals(GameSize.FULL_SCREEN))
 						{
 							newStage.setScene(new Scene(root));

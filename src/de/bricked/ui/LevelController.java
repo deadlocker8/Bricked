@@ -13,6 +13,7 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -127,7 +128,7 @@ public class LevelController
 			ColumnConstraints c = new ColumnConstraints();
 			c.setPercentWidth(xPercentage * 100);			
 			grid.getColumnConstraints().add(c);
-		}	
+		}
 
 		grid.getRowConstraints().clear();
 		double yPercentage = 1.0 / Board.HEIGHT;
@@ -147,16 +148,20 @@ public class LevelController
 				StackPane pane = new StackPane();
 
 				Rectangle r = new Rectangle(brickWidth, brickHeight);
-				r.setFill(Color.TRANSPARENT);
-
-				ImageView iv = new ImageView(new Image("de/bricked/resources/textures/bricks/" + currentBrick.getCurrentTextureID() + ".png"));
-				iv.setFitWidth(brickWidth);
-				iv.setFitHeight(brickHeight);
+				r.setFill(Color.TRANSPARENT);		
 
 				//DEBUG
-				Label l = new Label(currentBrick.getType().getID());			
+				Label l = new Label(currentBrick.getType().getID());
+				l.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/bricks/" + currentBrick.getCurrentTextureID() + ".png\");"
+						+ "-fx-background-position: center center;"
+						+ "-fx-background-repeat: no-repeat;"
+						+ "-fx-background-size: cover");
+				l.setAlignment(Pos.CENTER);
+				
+				l.prefWidthProperty().bind(grid.getColumnConstraints().get(0).percentWidthProperty().multiply((game.getSettings().getGameSize().getWidth() - 100)));
+				l.prefHeightProperty().bind(grid.getRowConstraints().get(0).percentHeightProperty().multiply((game.getSettings().getGameSize().getHeight() - 150)));
 
-				pane.getChildren().addAll(r, iv, l);
+				pane.getChildren().addAll(r,  l);
 
 				grid.add(pane, k, i);
 			}

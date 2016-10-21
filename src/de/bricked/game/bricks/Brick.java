@@ -1,6 +1,5 @@
 package de.bricked.game.bricks;
 
-import de.bricked.game.config.BrickType;
 import de.bricked.game.powerups.PowerUp;
 
 public class Brick

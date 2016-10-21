@@ -1,4 +1,4 @@
-package de.bricked.game.config;
+package de.bricked.game.bricks;
 
 public enum BrickType
 {
