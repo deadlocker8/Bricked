@@ -401,7 +401,7 @@ public class LevelController
 
 				
 				//DEBUG is this neccessary? --> slows done fps on mac
-				long sleepTime = (previousTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
+//				long sleepTime = (previousTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
 
 //				if(sleepTime > 0)
 //				{
