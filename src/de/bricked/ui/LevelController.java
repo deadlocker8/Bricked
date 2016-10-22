@@ -160,7 +160,7 @@ public class LevelController
             	if(gameState.equals(GameState.RUNNING))
 				{
 	                //--> direct follow mouse               
-	                double newPaddlePosition = event.getSceneX();
+	                double newPaddlePosition = event.getSceneX() - paddle.getWidth()/2;
 	                if(newPaddlePosition + paddle.getWidth() < gamePaneWidth && newPaddlePosition > 0)
 	                {
 	                    labelPaddle.setTranslateX(newPaddlePosition);
