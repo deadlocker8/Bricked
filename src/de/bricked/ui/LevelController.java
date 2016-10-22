@@ -135,7 +135,7 @@ public class LevelController
 		{
 			@Override
 			public void handle(KeyEvent event)
-			{
+			{				
 				if(gameState.equals(GameState.RUNNING))
 				{
 					if(event.getCode().toString().equals("RIGHT"))
@@ -483,9 +483,9 @@ public class LevelController
 
 	private void initPaddle()
 	{
-		anchorPaneGame.getChildren().remove(labelPaddle);
+		anchorPaneGame.getChildren().remove(labelPaddle);	
 
-		paddle = new Paddle(100.0, gamePaneHeight / Board.HEIGHT, gamePaneWidth);	
+		paddle = new Paddle(game.getLevel().getInitPadSize(), gamePaneHeight / Board.HEIGHT, gamePaneWidth);	
 		// create label for paddle
 		labelPaddle = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle.png"));	
 		labelPaddle.setFitWidth(paddle.getWidth());

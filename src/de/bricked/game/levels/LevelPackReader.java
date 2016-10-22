@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import de.bricked.game.paddle.PaddleSize;
 import logger.LogLevel;
 import logger.Logger;
 import java.nio.file.FileSystems;
@@ -34,9 +36,19 @@ public class LevelPackReader
 			int levelPosition = levelObject.get("position").getAsInt();
 			int difficulty = levelObject.get("difficulty").getAsInt();
 			int startLives = levelObject.get("startLives").getAsInt();
-			int initPadSize = levelObject.get("initPadSize").getAsInt();
+			String initPadSize = levelObject.get("initPadSize").getAsString();
+			PaddleSize padSize; 
+			try
+			{
+				padSize = PaddleSize.valueOf(initPadSize);
+			}
+			catch(Exception e)
+			{
+				padSize = PaddleSize.MEDIUM;
+			}	
+			
 			String boardString = levelObject.get("board").getAsString();
-			Level level = new Level(levelName, levelAuthor, levelPosition, difficulty, startLives, initPadSize, boardString);
+			Level level = new Level(levelName, levelAuthor, levelPosition, difficulty, startLives, padSize, boardString);
 			levels.add(level);
 		}
 

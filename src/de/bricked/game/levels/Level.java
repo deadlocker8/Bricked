@@ -1,5 +1,6 @@
 package de.bricked.game.levels;
 
+import de.bricked.game.paddle.PaddleSize;
 
 public class Level
 {
@@ -8,10 +9,10 @@ public class Level
     private int position;
     private int difficulty;
     private int startLives;
-    private int initPadSize;
+    private PaddleSize initPadSize;
     private String board;
 
-    public Level(String name, String author, int position, int difficulty, int startLives, int initPadSize, String board)
+    public Level(String name, String author, int position, int difficulty, int startLives, PaddleSize initPadSize, String board)
     {
         this.name = name;
         this.author = author;
@@ -47,7 +48,7 @@ public class Level
 		return startLives;
 	}
 
-	public int getInitPadSize()
+	public PaddleSize getInitPadSize()
 	{
 		return initPadSize;
 	}
