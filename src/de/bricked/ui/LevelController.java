@@ -490,9 +490,7 @@ public class LevelController
 		labelPaddle = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle.png"));	
 		labelPaddle.setFitWidth(paddle.getWidth());
 		labelPaddle.setFitHeight(paddle.getHeight());
-		labelPaddle.setTranslateX(gamePaneWidth / 2 - paddle.getWidth() / 2);			
-//		labelPaddle.setTranslateY(gamePaneHeight - labelPaddle.getPrefHeight());
-		
+		labelPaddle.setTranslateX(gamePaneWidth / 2 - paddle.getWidth() / 2);		
 		anchorPaneGame.getChildren().add(labelPaddle);
 		AnchorPane.setBottomAnchor(labelPaddle, paddle.getHeight());
 	}
