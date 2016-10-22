@@ -7,7 +7,7 @@ public class Ball
 	private BallType type;
 	private double ballRadius;
 	private Point2D direction;
-	private final double START_ANGLE = 50;
+	private final double START_ANGLE = 40;
 	
 	public Ball(BallType type)
 	{	

@@ -123,7 +123,7 @@ public class Board
 		for(int i = 0; i < HEIGHT; i++)
 		{
 			ArrayList<Brick> currentRow = new ArrayList<>();
-			for(int k = 0; k < HEIGHT; k++)
+			for(int k = 0; k < WIDTH; k++)
 			{
 				currentRow.add(new Brick(BrickType.AIR));
 			}
