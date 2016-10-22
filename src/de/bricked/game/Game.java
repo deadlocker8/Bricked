@@ -105,11 +105,21 @@ public class Game
 				return new Point2D( - direction.getX(), direction.getY());
 
 			case CORNER:
-				return new Point2D( - direction.getX(), - direction.getY());
+				return new Point2D( - direction.getX(), - direction.getY());		
 
 			default:
 				return direction;		
 		}
+	}
+	
+	public Point2D reflectOnPaddle(Point2D direction, double factor, boolean invertX)
+	{	
+		double x = direction.getX();
+		if(invertX)
+		{
+			x = -x;
+		}
+		return new Point2D(x, - direction.getY() - factor);				
 	}
 
 	public HitLocation hitsWall(double gamePaneWidth, double gamePaneHeight, double ballLayoutX, double ballLayoutY, double ballTranslateX, double ballTranslateY, Point2D direction)
@@ -280,5 +290,13 @@ public class Game
 		{
 			return false;
 		}
+	}
+	
+	public double getDistanceToPaddleCenter(Point2D ballPosition, Point2D paddlePosition, double paddleWidth)
+	{
+		Point2D paddleCenter = new Point2D(paddlePosition.getX() + paddleWidth / 2, paddlePosition.getY());
+		Point2D ballCenter = new Point2D(ballPosition.getX() + ball.getBallRadius(), ballPosition.getY() + ball.getBallRadius());
+
+		return Math.abs((paddleCenter.getX() - ballCenter.getX())/paddleWidth);
 	}
 }

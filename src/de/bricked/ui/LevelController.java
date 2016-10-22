@@ -313,23 +313,23 @@ public class LevelController
 						if(game.collidesWithRightPaddleSide(ballPosition, paddlePosition, paddle.getWidth()))
 						{							
 							if(angle > 90.0)
-							{
-								game.getBall().setDirection(game.reflectBall(HitLocation.CORNER, game.getBall().getDirection()));
+							{								
+								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), true));
 							}
 							else
 							{
-								game.getBall().setDirection(game.reflectBall(HitLocation.TOP, game.getBall().getDirection()));
+								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), false));						
 							}
 						}
 						else
 						{						
 							if(angle > 90.0)
 							{
-								game.getBall().setDirection(game.reflectBall(HitLocation.TOP, game.getBall().getDirection()));
+								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), false));						
 							}
 							else
 							{
-								game.getBall().setDirection(game.reflectBall(HitLocation.CORNER, game.getBall().getDirection()));								
+								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), true));						
 							}
 						}
 					}
