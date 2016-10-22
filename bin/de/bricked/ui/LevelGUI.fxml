@@ -58,5 +58,10 @@
          </children>
       </HBox>
       <VBox fx:id="vboxLives" layoutX="745.0" layoutY="603.0" minHeight="71.0" minWidth="40.0" prefHeight="183.0" prefWidth="40.0" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="15.0" />
+      <Label fx:id="labelFPS" layoutX="770.0" layoutY="6.0" text="0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

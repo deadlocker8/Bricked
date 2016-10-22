@@ -87,7 +87,7 @@ public class LevelSelectController
 
 				Platform.exit();
 			}
-		});
+		});		
 	}
 
 	public void reload()

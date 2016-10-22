@@ -15,6 +15,7 @@ public class PossibleCommands
 				new CommandHelp(),
 				new CommandClear(),
 				new CommandShortcuts(),			
-				new CommandWin()				
+				new CommandWin(),
+				new CommandShowFPS()
 			));	
 }

@@ -18,6 +18,7 @@ public class CommandBundle
 	private ResourceBundle languageBundle;	
 	private Game game;
 	private Level currentLevel;	
+	private boolean showFPS = false;
 
 	public CommandBundle(Game game)
 	{
@@ -62,5 +63,15 @@ public class CommandBundle
 	public void setCurrentLevel(Level currentLevel)
 	{
 		this.currentLevel = currentLevel;
+	}
+
+	public boolean isShowFPS()
+	{
+		return showFPS;
+	}
+
+	public void setShowFPS(boolean showFPS)
+	{
+		this.showFPS = showFPS;
 	}
 }

@@ -61,6 +61,7 @@ public class LevelController
 	@FXML private Button buttonBack;
 	@FXML private VBox vboxPowerUps;
 	@FXML private VBox vboxLives;
+	@FXML private Label labelFPS;
 
 	public Stage stage;
 	public Image icon = new Image("de/bricked/resources/icon.png");
@@ -272,6 +273,8 @@ public class LevelController
 		anchorPaneGame.widthProperty().addListener(widthListener);
 
 		anchorPaneGame.requestFocus();
+		
+		labelFPS.setVisible(levelSelectController.controller.controller.getCommandLine().getBundle().isShowFPS());
 
 		gameState = GameState.WAITING;
 	}
@@ -301,7 +304,8 @@ public class LevelController
 
 				if(secondsElapsedSinceLastFpsUpdate >= 1000000000)
 				{
-					System.out.println("(FPS: " + fps + ")");
+					labelFPS.setText(String.valueOf(fps));
+					Logger.log(LogLevel.DEBUG, "current FPS: " + fps);
 					secondsElapsedSinceLastFpsUpdate = 0;
 					fps = 0;
 				}
