@@ -196,9 +196,9 @@ public class Board
 		{
 			for(int k = currentCol; k <= currentCol + 2; k++)
 			{
-				if(i >= 0 && i < (HEIGHT - 1))
+				if(i >= 0 && i < HEIGHT)
 				{
-					if(k >= 0 && k < (WIDTH - 1))
+					if(k >= 0 && k < WIDTH)
 					{
 						destroyBrick(i, k, true);
 					}
