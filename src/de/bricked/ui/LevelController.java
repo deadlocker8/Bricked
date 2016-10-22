@@ -81,6 +81,8 @@ public class LevelController
 	private ImageView labelPaddle;
 	private StackPane stackPaneBall;
 	private ChangeListener<Number> heightListener;
+	private ChangeListener<Number> widthListener;
+	private double oldMousePosition;
 
 	public void init(Stage stage, LevelSelectController levelSelectController, Game game)
 	{
@@ -107,7 +109,8 @@ public class LevelController
 					if(gameState.equals(GameState.WAITING))
 					{
 						anchorPaneGame.heightProperty().removeListener(heightListener);
-						
+						anchorPaneGame.widthProperty().removeListener(widthListener);
+
 						// start random into left or right direction
 						int random = new Random().nextInt(2);
 						if(random == 0)
@@ -125,7 +128,7 @@ public class LevelController
 						gameState = GameState.RUNNING;
 					}
 					event.consume();
-					
+
 					anchorPaneGame.requestFocus();
 					return;
 				}
@@ -136,38 +139,61 @@ public class LevelController
 		{
 			@Override
 			public void handle(KeyEvent event)
-			{				
+			{
 				if(gameState.equals(GameState.RUNNING))
 				{
 					if(event.getCode().toString().equals("RIGHT"))
 					{
 						movePaddleRight();
 					}
-	
+
 					if(event.getCode().toString().equals("LEFT"))
 					{
 						movePaddleLeft();
 					}
 				}
 			}
-		});
+		});		
 
-        anchorPane.setOnMouseMoved(new EventHandler<MouseEvent>()
-        {
-            @Override
-            public void handle(MouseEvent event)
-            {
-            	if(gameState.equals(GameState.RUNNING))
+		anchorPane.setOnMouseMoved(new EventHandler<MouseEvent>()
+		{
+			@Override
+			public void handle(MouseEvent event)
+			{
+				if(gameState.equals(GameState.RUNNING))
 				{
-	                //--> direct follow mouse               
-	                double newPaddlePosition = event.getSceneX() - paddle.getWidth()/2;
-	                if(newPaddlePosition + paddle.getWidth() < gamePaneWidth && newPaddlePosition > 0)
-	                {
-	                    labelPaddle.setTranslateX(newPaddlePosition);
-	                }
+					// --> direct follow mouse
+					double newPaddlePosition = event.getSceneX() - paddle.getWidth() / 2;				
+
+					// move left
+					if(newPaddlePosition < oldMousePosition)
+					{
+						if(newPaddlePosition > 0)
+						{
+							labelPaddle.setTranslateX(newPaddlePosition);						
+						}
+						else
+						{
+							labelPaddle.setTranslateX(0);							
+						}
+					}
+					// move right
+					else
+					{						
+						if((newPaddlePosition + paddle.getWidth()) < gamePaneWidth)
+						{
+							labelPaddle.setTranslateX(newPaddlePosition);							
+						}
+						else
+						{
+							labelPaddle.setTranslateX(gamePaneWidth - paddle.getWidth());
+						}
+					}	
+
+					oldMousePosition = labelPaddle.getScene().getX();
 				}
-            }
-        });
+			}
+		});
 
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>()
 		{
@@ -219,25 +245,37 @@ public class LevelController
 		redraw();
 
 		refreshLiveCounter();
-		
+
 		initPaddle();
-		
+		oldMousePosition = labelPaddle.getScene().getX() - paddle.getWidth() / 2;
+
 		heightListener = new ChangeListener<Number>()
 		{
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
-			{				
-				initBall();				
+			{
+				initBall();
+				gamePaneHeight = newValue.doubleValue();
 			}
 		};
 		
+		widthListener = new ChangeListener<Number>()
+		{
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+			{				
+				gamePaneWidth = newValue.doubleValue();
+			}
+		};
+
 		anchorPaneGame.heightProperty().addListener(heightListener);
+		anchorPaneGame.widthProperty().addListener(widthListener);
 
 		anchorPaneGame.requestFocus();
 
 		gameState = GameState.WAITING;
 	}
-	
+
 	private void initTimer()
 	{
 		timer = new AnimationTimer()
@@ -289,8 +327,8 @@ public class LevelController
 
 							gameState = GameState.STOPPED;
 							timer.stop();
-							
-							Platform.runLater(()->{	
+
+							Platform.runLater(() -> {
 								Alert alert = new Alert(AlertType.INFORMATION);
 								alert.setTitle("Game Over");
 								alert.setHeaderText("");
@@ -305,7 +343,7 @@ public class LevelController
 						{
 							gameState = GameState.WAITING;
 							timer.stop();
-							
+
 							// reset paddle and ball
 							initPaddle();
 							initBall();
@@ -316,42 +354,46 @@ public class LevelController
 						game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
 					}
 				}
-				// ball doesn't collide with border --> check collision with paddle
+				// ball doesn't collide with border --> check collision with
+				// paddle
 				else
 				{
-					hitLocation = game.collides(stackPaneBall.getBoundsInParent(), stackPaneBall.getLayoutX(), stackPaneBall.getLayoutY(), stackPaneBall.getTranslateX(),
-							stackPaneBall.getTranslateY(), labelPaddle.getBoundsInParent(), labelPaddle.getLayoutX(), labelPaddle.getLayoutY(), labelPaddle.getTranslateX(),
-							labelPaddle.getTranslateY(), paddle.getWidth(), paddle.getHeight(), true);
+					hitLocation = game.collides(stackPaneBall.getBoundsInParent(), stackPaneBall.getLayoutX(), stackPaneBall.getLayoutY(), stackPaneBall.getTranslateX(), stackPaneBall.getTranslateY(),
+							labelPaddle.getBoundsInParent(), labelPaddle.getLayoutX(), labelPaddle.getLayoutY(), labelPaddle.getTranslateX(), labelPaddle.getTranslateY(), paddle.getWidth(),
+							paddle.getHeight(), true);
 					if(hitLocation != null && hitLocation.equals(HitLocation.PADDLE))
 					{
 						Point2D ballPosition = new Point2D(stackPaneBall.getLayoutX() + stackPaneBall.getTranslateX(), stackPaneBall.getLayoutY() + stackPaneBall.getTranslateY());
 						Point2D paddlePosition = new Point2D(labelPaddle.getLayoutX() + labelPaddle.getTranslateX(), labelPaddle.getLayoutY() + labelPaddle.getTranslateY());
 						double angle = MathUtils.getAngle(game.getBall().getDirection(), paddlePosition, paddle.getWidth());
-												
+
 						if(game.collidesWithRightPaddleSide(ballPosition, paddlePosition, paddle.getWidth()))
-						{							
+						{
 							if(angle > 90.0)
-							{								
+							{
 								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), true));
 							}
 							else
 							{
-								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), false));						
+								game.getBall()
+										.setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), false));
 							}
 						}
 						else
-						{						
+						{
 							if(angle > 90.0)
 							{
-								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), false));						
+								game.getBall()
+										.setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), false));
 							}
 							else
 							{
-								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), true));						
+								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), true));
 							}
 						}
 					}
-					// ball doesn't collide with paddle --> check collision with bricks
+					// ball doesn't collide with paddle --> check collision with
+					// bricks
 					else
 					{
 						// loop over all non air bricks
@@ -360,7 +402,7 @@ public class LevelController
 							for(int k = 0; k < Board.WIDTH; k++)
 							{
 								Brick currentBrick = board.getBricks().get(i).get(k);
-								if( ! currentBrick.getType().equals(BrickType.AIR))
+								if(!currentBrick.getType().equals(BrickType.AIR))
 								{
 									StackPane stackPaneBrick = (StackPane)grid.getChildren().get(i * (int)Board.WIDTH + k);
 
@@ -368,7 +410,7 @@ public class LevelController
 											stackPaneBall.getTranslateY(), stackPaneBrick.getBoundsInParent(), stackPaneBrick.getLayoutX(), stackPaneBrick.getLayoutY(), stackPaneBrick.getTranslateX(),
 											stackPaneBrick.getTranslateY(), stackPaneBrick.getWidth(), stackPaneBrick.getHeight(), false);
 									if(hitLocation != null)
-									{										
+									{
 										game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
 										game.setPoints(game.getPoints() + board.hitBrick(i, k, false));
 										labelPoints.setText(String.valueOf(game.getPoints()));
@@ -380,8 +422,8 @@ public class LevelController
 
 											gameState = GameState.STOPPED;
 											timer.stop();
-											
-											Platform.runLater(()->{	
+
+											Platform.runLater(() -> {
 												Alert alert = new Alert(AlertType.INFORMATION);
 												alert.setTitle("Congratulations!");
 												alert.setHeaderText("");
@@ -391,7 +433,7 @@ public class LevelController
 												dialogStage.centerOnScreen();
 												alert.showAndWait();
 											});
-										}										
+										}
 									}
 								}
 							}
@@ -399,21 +441,21 @@ public class LevelController
 					}
 				}
 
-				
-				//DEBUG is this neccessary? --> slows done fps on mac
-//				long sleepTime = (previousTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
+				// DEBUG is this neccessary? --> slows done fps on mac
+				// long sleepTime = (previousTime - System.nanoTime() +
+				// OPTIMAL_TIME) / 1000000;
 
-//				if(sleepTime > 0)
-//				{
-//					try
-//					{
-//						Thread.sleep(sleepTime);
-//					}
-//					catch(Exception e)
-//					{
-//						e.printStackTrace();
-//					}
-//				}
+				// if(sleepTime > 0)
+				// {
+				// try
+				// {
+				// Thread.sleep(sleepTime);
+				// }
+				// catch(Exception e)
+				// {
+				// e.printStackTrace();
+				// }
+				// }
 			}
 		};
 	}
@@ -503,14 +545,14 @@ public class LevelController
 
 	private void initPaddle()
 	{
-		anchorPaneGame.getChildren().remove(labelPaddle);	
+		anchorPaneGame.getChildren().remove(labelPaddle);
 
-		paddle = new Paddle(game.getLevel().getInitPadSize(), gamePaneHeight / Board.HEIGHT, gamePaneWidth);	
+		paddle = new Paddle(game.getLevel().getInitPadSize(), gamePaneHeight / Board.HEIGHT, gamePaneWidth);
 		// create label for paddle
-		labelPaddle = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle.png"));	
+		labelPaddle = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle.png"));
 		labelPaddle.setFitWidth(paddle.getWidth());
 		labelPaddle.setFitHeight(paddle.getHeight());
-		labelPaddle.setTranslateX(gamePaneWidth / 2 - paddle.getWidth() / 2);		
+		labelPaddle.setTranslateX(gamePaneWidth / 2 - paddle.getWidth() / 2);
 		anchorPaneGame.getChildren().add(labelPaddle);
 		AnchorPane.setBottomAnchor(labelPaddle, paddle.getHeight());
 	}
@@ -525,11 +567,11 @@ public class LevelController
 		final Circle circle = new Circle(game.getBall().getBallRadius(), Color.rgb(156, 216, 255));
 		circle.setEffect(new Lighting());
 		stackPaneBall = new StackPane();
-		stackPaneBall.getChildren().addAll(circle);	
+		stackPaneBall.getChildren().addAll(circle);
 		stackPaneBall.setTranslateX(gamePaneWidth / 2 - game.getBall().getBallRadius());
 		stackPaneBall.setTranslateY(anchorPaneGame.getHeight() - paddle.getHeight() * 2 - game.getBall().getBallRadius() * 2);
 		anchorPaneGame.getChildren().add(stackPaneBall);
-		
+
 		initTimer();
 	}
 
@@ -554,14 +596,14 @@ public class LevelController
 		else
 		{
 			labelPaddle.setTranslateX(anchorPaneGame.getWidth() - paddle.getWidth());
-		}		
+		}
 	}
 
 	public void showCommandLine()
 	{
 		try
 		{
-			levelSelectController.controller.controller.getCommandLine().showCommandLine("Debug Console", 400, 250, 400, 200, - 1, - 1, true);
+			levelSelectController.controller.controller.getCommandLine().showCommandLine("Debug Console", 400, 250, 400, 200, -1, -1, true);
 		}
 		catch(IOException e)
 		{
@@ -577,8 +619,8 @@ public class LevelController
 			timer.stop();
 		}
 		stage.close();
-		levelSelectController.stage.show();			
-	
+		levelSelectController.stage.show();
+
 		anchorPaneGame.requestFocus();
 	}
 }
