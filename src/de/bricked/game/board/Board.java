@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import de.bricked.game.bricks.Brick;
 import de.bricked.game.bricks.BrickType;
 import de.bricked.game.levels.Level;
-import de.bricked.game.levels.LevelPack;
-import de.bricked.game.levels.LevelPackReader;
 
 public class Board
 {
