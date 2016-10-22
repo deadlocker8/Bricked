@@ -106,6 +106,9 @@ public class Game
 
 			case CORNER:
 				return new Point2D( - direction.getX(), - direction.getY());
+				
+			case LIFE_LOST:
+				return direction;
 		}
 
 		return null;
@@ -151,12 +154,12 @@ public class Game
 			return HitLocation.RIGHT;
 		}
 
-		// collides with bottom wall
-		// TODO life lost
+		// collides with bottom wall	
 		if((ballLayoutY + ballTranslateY + ball.getBallRadius() * 2) >= gamePaneHeight)
 		{
-			wallCollision = true;
+			wallCollision = true; 
 			System.out.println("BOTTOM-WALL");
+			//TODO replace with LIFE_LOST
 			return HitLocation.TOP;
 		}
 

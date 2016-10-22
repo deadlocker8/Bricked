@@ -20,8 +20,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -227,12 +229,45 @@ public class LevelController
 										stackPaneBrick.getHeight(),
 										false);
 								if(hitLocation != null)
-								{									
-									game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
-									game.setPoints(game.getPoints() + board.hitBrick(i, k, false));									
-									labelPoints.setText(String.valueOf(game.getPoints()));
-									labelBlocksRemaining.setText(board.getNumberOfRemainingBricks() + " Bricks remaining");	
-									redraw();
+								{		
+									if(hitLocation.equals(HitLocation.LIFE_LOST))
+									{
+										game.setLivesRemaining(game.getLivesRemaining() - 1);
+										refreshLiveCounter();
+										if(game.getLivesRemaining() <= 0)
+										{
+											//game over
+											Alert alert = new Alert(AlertType.INFORMATION);
+											alert.setTitle("Game Over");
+											alert.setHeaderText(""); 
+											alert.setContentText("You have no lives left");
+											Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
+											dialogStage.getIcons().add(icon);
+											dialogStage.centerOnScreen();
+											alert.showAndWait();
+										}
+										//TODO reset ball and paddle
+									}
+									else
+									{
+										game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
+										game.setPoints(game.getPoints() + board.hitBrick(i, k, false));									
+										labelPoints.setText(String.valueOf(game.getPoints()));
+										labelBlocksRemaining.setText(board.getNumberOfRemainingBricks() + " Bricks remaining");	
+										redraw();
+										if(board.getNumberOfRemainingBricks() == 0)
+										{											
+											//level done
+											Alert alert = new Alert(AlertType.INFORMATION);
+											alert.setTitle("Congratulations!");
+											alert.setHeaderText(""); 
+											alert.setContentText("You finished Level \"" + game.getLevel().getName() + "\" with " + game.getPoints() + " Points" );
+											Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
+											dialogStage.getIcons().add(icon);
+											dialogStage.centerOnScreen();
+											alert.showAndWait();
+										}
+									}
 								}
 							}
 						}						
