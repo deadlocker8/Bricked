@@ -14,6 +14,7 @@ public class Board
 	private ArrayList<ArrayList<Brick>> bricks;
 	public static final double WIDTH = 18.0;
 	public static final double HEIGHT = 26.0;
+	private int points = 0;
 
 	public Board(Level level)
 	{
@@ -150,8 +151,17 @@ public class Board
 	{
 		return HEIGHT;
 	}
+	
+	public int hitBrick(int row, int col, boolean instantDestroy)
+	{
+		points = 0;
+		
+		destroyBrick(row, col, instantDestroy);
+		
+		return points;
+	}
 
-	public void hitBrick(int row, int col, boolean instantDestroy)
+	public void destroyBrick(int row, int col, boolean instantDestroy)
 	{
 		Brick hittedBrick = bricks.get(row).get(col);
 
@@ -168,12 +178,14 @@ public class Board
 			if(hittedBrick.getType().equals(BrickType.TNT))
 			{
 				explodeBrick(row, col);
-			}
+			}			
 
 			if(hittedBrick.getPowerUp() != null)
 			{
 				//TODO deploy PowerUp
 			}
+			
+			points += hittedBrick.getType().getPoints();
 		}
 	}
 
@@ -190,7 +202,7 @@ public class Board
 				{
 					if(k >= 0 && k < (WIDTH - 1))
 					{
-						hitBrick(i, k, true);
+						destroyBrick(i, k, true);
 					}
 				}
 			}
@@ -211,14 +223,6 @@ public class Board
 		}
 
 		return b.toString();
-	}
-
-	public static void main(String[] args)
-	{
-		LevelPackReader levelPackReader = new LevelPackReader("default.json");
-		LevelPack levelPack = levelPackReader.read();
-		Board board = new Board(levelPack.getLevels().get(0));
-		System.out.println(board.print());
 	}
 
 	@Override

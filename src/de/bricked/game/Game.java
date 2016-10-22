@@ -16,6 +16,7 @@ public class Game
 	private Ball ball;
 	private boolean collision = false;
 	private boolean wallCollision = false;
+	private int points;
 
 	public Game()
 	{		
@@ -24,6 +25,7 @@ public class Game
 		this.level = null;	
 		this.livesRemaining = 0;
 		this.ball = null;
+		this.points = 0;
 	}
 	
 	public Settings getSettings()
@@ -74,8 +76,18 @@ public class Game
 	public void setBall(Ball ball)
 	{
 		this.ball = ball;
-	}
+	}	
 	
+	public int getPoints()
+	{
+		return points;
+	}
+
+	public void setPoints(int points)
+	{
+		this.points = points;
+	}
+
 	public Point2D reflectBall(HitLocation hitLocation, Point2D direction)
 	{
 		switch(hitLocation)

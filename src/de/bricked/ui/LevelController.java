@@ -229,9 +229,10 @@ public class LevelController
 								if(hitLocation != null)
 								{									
 									game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
-									board.hitBrick(i, k, false);
+									game.setPoints(game.getPoints() + board.hitBrick(i, k, false));									
+									labelPoints.setText(String.valueOf(game.getPoints()));
+									labelBlocksRemaining.setText(board.getNumberOfRemainingBricks() + " Bricks remaining");	
 									redraw();
-									labelBlocksRemaining.setText(board.getNumberOfRemainingBricks() + " Bricks remaining");									
 								}
 							}
 						}						
