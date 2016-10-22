@@ -8,6 +8,7 @@ public class MathUtils
     {
         Point2D paddleRight = new Point2D(paddlePosition.getX()+paddleWidth, paddlePosition.getY());
         Point2D paddleVector = new Point2D(paddleRight.getX() - paddlePosition.getX(), paddleRight.getY() - paddlePosition.getY());
-        double angle = directionBall.angle(paddleVector);        return angle;
+        double angle = directionBall.angle(paddleVector);
+        return angle;
     }    
 }

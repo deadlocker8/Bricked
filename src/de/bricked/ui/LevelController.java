@@ -34,6 +34,7 @@ import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -42,6 +43,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import logger.LogLevel;
@@ -150,6 +152,21 @@ public class LevelController
 				}
 			}
 		});
+
+        anchorPane.setOnMouseMoved(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent event)
+            {
+                //--> direct follow mouse
+                double oldPaddlePosition = labelPaddle.getScene().getX();
+                double newPaddlePosition = event.getSceneX();
+                if(newPaddlePosition + paddle.getWidth() < gamePaneWidth && newPaddlePosition > 0)
+                {
+                    labelPaddle.setTranslateX(newPaddlePosition);
+                }
+            }
+        });
 
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>()
 		{
