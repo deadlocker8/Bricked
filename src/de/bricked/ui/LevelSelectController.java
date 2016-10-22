@@ -114,9 +114,10 @@ public class LevelSelectController
 			@Override
 			public void handle(MouseEvent event)
 			{
-				Level selectedLevel = listView.getSelectionModel().getSelectedItem();
+				Level selectedLevel = listView.getSelectionModel().getSelectedItem();				
 				if(selectedLevel != null)
 				{
+					listView.getSelectionModel().clearSelection();
 					game.setLevel(selectedLevel);
 
 					try

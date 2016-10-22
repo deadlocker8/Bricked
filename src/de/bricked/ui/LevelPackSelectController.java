@@ -115,6 +115,7 @@ public class LevelPackSelectController
 				LevelPack selectedPack = listView.getSelectionModel().getSelectedItem();			
 				if(selectedPack != null)
 				{
+					listView.getSelectionModel().clearSelection();
 					game.setLevelPack(selectedPack);
 
 					try
