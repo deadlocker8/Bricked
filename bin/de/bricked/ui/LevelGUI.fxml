@@ -42,7 +42,7 @@
                   </Label>
                </children>
             </VBox>
-            <Label fx:id="labelPoints" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="123.0" text="300000">
+            <Label fx:id="labelPoints" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="123.0" text="0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
