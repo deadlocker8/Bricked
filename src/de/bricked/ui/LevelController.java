@@ -14,13 +14,17 @@ import de.bricked.game.board.Board;
 import de.bricked.game.bricks.Brick;
 import de.bricked.game.bricks.BrickType;
 import de.bricked.game.paddle.Paddle;
+import de.bricked.utils.MathUtils;
 import fontAwesome.FontIcon;
 import fontAwesome.FontIconType;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -75,6 +79,7 @@ public class LevelController
 	private GameState gameState;
 	private ImageView labelPaddle;
 	private StackPane stackPaneBall;
+	private ChangeListener<Number> heightListener;
 
 	public void init(Stage stage, LevelSelectController levelSelectController, Game game)
 	{
@@ -100,6 +105,8 @@ public class LevelController
 				{
 					if(gameState.equals(GameState.WAITING))
 					{
+						anchorPaneGame.heightProperty().removeListener(heightListener);
+						
 						// start random into left or right direction
 						int random = new Random().nextInt(2);
 						if(random == 0)
@@ -117,6 +124,8 @@ public class LevelController
 						gameState = GameState.RUNNING;
 					}
 					event.consume();
+					
+					anchorPaneGame.requestFocus();
 					return;
 				}
 			}
@@ -127,14 +136,17 @@ public class LevelController
 			@Override
 			public void handle(KeyEvent event)
 			{
-				if(event.getCode().toString().equals("RIGHT"))
+				if(gameState.equals(GameState.RUNNING))
 				{
-					movePaddleRight();
-				}
-
-				if(event.getCode().toString().equals("LEFT"))
-				{
-					movePaddleLeft();
+					if(event.getCode().toString().equals("RIGHT"))
+					{
+						movePaddleRight();
+					}
+	
+					if(event.getCode().toString().equals("LEFT"))
+					{
+						movePaddleLeft();
+					}
 				}
 			}
 		});
@@ -174,6 +186,42 @@ public class LevelController
 		gamePaneWidth = game.getSettings().getGameSize().getWidth() - 100;
 		gamePaneHeight = game.getSettings().getGameSize().getHeight() - 150;
 
+		grid = new GridPane();
+		grid.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
+		grid.setGridLinesVisible(false);
+		grid.setHgap(0);
+		grid.setVgap(0);
+
+		anchorPaneGame.getChildren().add(grid);
+		AnchorPane.setTopAnchor(grid, 0.0);
+		AnchorPane.setRightAnchor(grid, 0.0);
+		AnchorPane.setBottomAnchor(grid, 0.0);
+		AnchorPane.setLeftAnchor(grid, 0.0);
+
+		redraw();
+
+		refreshLiveCounter();
+		
+		initPaddle();
+		
+		heightListener = new ChangeListener<Number>()
+		{
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+			{				
+				initBall();				
+			}
+		};
+		
+		anchorPaneGame.heightProperty().addListener(heightListener);
+
+		anchorPaneGame.requestFocus();
+
+		gameState = GameState.WAITING;
+	}
+	
+	private void initTimer()
+	{
 		timer = new AnimationTimer()
 		{
 			private long previousTime = 0;
@@ -213,55 +261,96 @@ public class LevelController
 				// irrelevant
 				if(hitLocation != null)
 				{
-					game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
+					if(hitLocation.equals(HitLocation.LIFE_LOST))
+					{
+						game.setLivesRemaining(game.getLivesRemaining() - 1);
+						refreshLiveCounter();
+						if(game.getLivesRemaining() <= 0)
+						{
+							// game over
+
+							gameState = GameState.STOPPED;
+							timer.stop();
+							
+							Platform.runLater(()->{	
+								Alert alert = new Alert(AlertType.INFORMATION);
+								alert.setTitle("Game Over");
+								alert.setHeaderText("");
+								alert.setContentText("You have no lives left");
+								Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
+								dialogStage.getIcons().add(icon);
+								dialogStage.centerOnScreen();
+								alert.showAndWait();
+							});
+						}
+						else
+						{
+							gameState = GameState.WAITING;
+							timer.stop();
+							
+							// reset paddle and ball
+							initPaddle();
+							initBall();
+						}
+					}
+					else
+					{
+						game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
+					}
 				}
-				// ball doesn't collide with border --> check collision with
-				// bricks
+				// ball doesn't collide with border --> check collision with paddle
 				else
 				{
-					// loop over all non air bricks
-					for(int i = 0; i < Board.HEIGHT; i++)
+					hitLocation = game.collides(stackPaneBall.getBoundsInParent(), stackPaneBall.getLayoutX(), stackPaneBall.getLayoutY(), stackPaneBall.getTranslateX(),
+							stackPaneBall.getTranslateY(), labelPaddle.getBoundsInParent(), labelPaddle.getLayoutX(), labelPaddle.getLayoutY(), labelPaddle.getTranslateX(),
+							labelPaddle.getTranslateY(), paddle.getWidth(), paddle.getHeight(), true);
+					if(hitLocation != null && hitLocation.equals(HitLocation.PADDLE))
 					{
-						for(int k = 0; k < Board.WIDTH; k++)
-						{
-							Brick currentBrick = board.getBricks().get(i).get(k);
-							if( ! currentBrick.getType().equals(BrickType.AIR))
+						Point2D ballPosition = new Point2D(stackPaneBall.getLayoutX() + stackPaneBall.getTranslateX(), stackPaneBall.getLayoutY() + stackPaneBall.getTranslateY());
+						Point2D paddlePosition = new Point2D(labelPaddle.getLayoutX() + labelPaddle.getTranslateX(), labelPaddle.getLayoutY() + labelPaddle.getTranslateY());
+						double angle = MathUtils.getAngle(game.getBall().getDirection(), paddlePosition, paddle.getWidth());
+												
+						if(game.collidesWithRightPaddleSide(ballPosition, paddlePosition, paddle.getWidth()))
+						{							
+							if(angle > 90.0)
 							{
-								StackPane stackPaneBrick = (StackPane)grid.getChildren().get(i * (int)Board.WIDTH + k);
-
-								hitLocation = game.collides(stackPaneBall.getBoundsInParent(), stackPaneBall.getLayoutX(), stackPaneBall.getLayoutY(), stackPaneBall.getTranslateX(),
-										stackPaneBall.getTranslateY(), stackPaneBrick.getBoundsInParent(), stackPaneBrick.getLayoutX(), stackPaneBrick.getLayoutY(), stackPaneBrick.getTranslateX(),
-										stackPaneBrick.getTranslateY(), stackPaneBrick.getWidth(), stackPaneBrick.getHeight(), false);
-								if(hitLocation != null)
+								game.getBall().setDirection(game.reflectBall(HitLocation.CORNER, game.getBall().getDirection()));
+							}
+							else
+							{
+								game.getBall().setDirection(game.reflectBall(HitLocation.TOP, game.getBall().getDirection()));
+							}
+						}
+						else
+						{						
+							if(angle > 90.0)
+							{
+								game.getBall().setDirection(game.reflectBall(HitLocation.TOP, game.getBall().getDirection()));
+							}
+							else
+							{
+								game.getBall().setDirection(game.reflectBall(HitLocation.CORNER, game.getBall().getDirection()));								
+							}
+						}
+					}
+					// ball doesn't collide with paddle --> check collision with bricks
+					else
+					{
+						// loop over all non air bricks
+						for(int i = 0; i < Board.HEIGHT; i++)
+						{
+							for(int k = 0; k < Board.WIDTH; k++)
+							{
+								Brick currentBrick = board.getBricks().get(i).get(k);
+								if( ! currentBrick.getType().equals(BrickType.AIR))
 								{
-									if(hitLocation.equals(HitLocation.LIFE_LOST))
-									{
-										game.setLivesRemaining(game.getLivesRemaining() - 1);
-										refreshLiveCounter();
-										if(game.getLivesRemaining() <= 0)
-										{
-											// game over
+									StackPane stackPaneBrick = (StackPane)grid.getChildren().get(i * (int)Board.WIDTH + k);
 
-											gameState = GameState.STOPPED;
-
-											Alert alert = new Alert(AlertType.INFORMATION);
-											alert.setTitle("Game Over");
-											alert.setHeaderText("");
-											alert.setContentText("You have no lives left");
-											Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-											dialogStage.getIcons().add(icon);
-											dialogStage.centerOnScreen();
-											alert.showAndWait();
-										}
-										else
-										{
-											// reset paddle and ball
-											initPaddle();
-											initBall();
-										}
-									}
-									else
-									{
+									hitLocation = game.collides(stackPaneBall.getBoundsInParent(), stackPaneBall.getLayoutX(), stackPaneBall.getLayoutY(), stackPaneBall.getTranslateX(),
+											stackPaneBall.getTranslateY(), stackPaneBrick.getBoundsInParent(), stackPaneBrick.getLayoutX(), stackPaneBrick.getLayoutY(), stackPaneBrick.getTranslateX(),
+											stackPaneBrick.getTranslateY(), stackPaneBrick.getWidth(), stackPaneBrick.getHeight(), false);
+									if(hitLocation != null)
+									{										
 										game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
 										game.setPoints(game.getPoints() + board.hitBrick(i, k, false));
 										labelPoints.setText(String.valueOf(game.getPoints()));
@@ -272,16 +361,19 @@ public class LevelController
 											// level done
 
 											gameState = GameState.STOPPED;
-
-											Alert alert = new Alert(AlertType.INFORMATION);
-											alert.setTitle("Congratulations!");
-											alert.setHeaderText("");
-											alert.setContentText("You finished Level \"" + game.getLevel().getName() + "\" with " + game.getPoints() + " Points");
-											Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-											dialogStage.getIcons().add(icon);
-											dialogStage.centerOnScreen();
-											alert.showAndWait();
-										}
+											timer.stop();
+											
+											Platform.runLater(()->{	
+												Alert alert = new Alert(AlertType.INFORMATION);
+												alert.setTitle("Congratulations!");
+												alert.setHeaderText("");
+												alert.setContentText("You finished Level \"" + game.getLevel().getName() + "\" with " + game.getPoints() + " Points");
+												Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
+												dialogStage.getIcons().add(icon);
+												dialogStage.centerOnScreen();
+												alert.showAndWait();
+											});
+										}										
 									}
 								}
 							}
@@ -304,29 +396,6 @@ public class LevelController
 				}
 			}
 		};
-
-		grid = new GridPane();
-		grid.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
-		grid.setGridLinesVisible(false);
-		grid.setHgap(0);
-		grid.setVgap(0);
-
-		anchorPaneGame.getChildren().add(grid);
-		AnchorPane.setTopAnchor(grid, 0.0);
-		AnchorPane.setRightAnchor(grid, 0.0);
-		AnchorPane.setBottomAnchor(grid, 0.0);
-		AnchorPane.setLeftAnchor(grid, 0.0);
-
-		redraw();
-
-		refreshLiveCounter();
-
-		initBall();
-		initPaddle();
-
-		anchorPaneGame.requestFocus();
-
-		gameState = GameState.WAITING;
 	}
 
 	public void redraw()
@@ -438,11 +507,12 @@ public class LevelController
 		final Circle circle = new Circle(game.getBall().getBallRadius(), Color.rgb(156, 216, 255));
 		circle.setEffect(new Lighting());
 		stackPaneBall = new StackPane();
-		stackPaneBall.getChildren().addAll(circle);
-		// TODO center on paddle
-		stackPaneBall.setLayoutX(gamePaneWidth / 2);
-		stackPaneBall.setLayoutY(gamePaneHeight - game.getBall().getBallRadius() * 2);
+		stackPaneBall.getChildren().addAll(circle);	
+		stackPaneBall.setTranslateX(gamePaneWidth / 2 - game.getBall().getBallRadius());
+		stackPaneBall.setTranslateY(anchorPaneGame.getHeight() - paddle.getHeight() * 2 - game.getBall().getBallRadius() * 2);
 		anchorPaneGame.getChildren().add(stackPaneBall);
+		
+		initTimer();
 	}
 
 	private void movePaddleLeft()

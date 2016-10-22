@@ -19,15 +19,15 @@ public class Game
 	private int points;
 
 	public Game()
-	{		
-		this.settings = new Settings();				
+	{
+		this.settings = new Settings();
 		this.levelPack = null;
-		this.level = null;	
+		this.level = null;
 		this.livesRemaining = 0;
 		this.ball = null;
 		this.points = 0;
 	}
-	
+
 	public Settings getSettings()
 	{
 		return settings;
@@ -47,12 +47,12 @@ public class Game
 	{
 		return levelPack;
 	}
-	
+
 	public void setLevel(Level level)
 	{
 		this.level = level;
 	}
-	
+
 	public Level getLevel()
 	{
 		return level;
@@ -76,8 +76,8 @@ public class Game
 	public void setBall(Ball ball)
 	{
 		this.ball = ball;
-	}	
-	
+	}
+
 	public int getPoints()
 	{
 		return points;
@@ -106,12 +106,10 @@ public class Game
 
 			case CORNER:
 				return new Point2D( - direction.getX(), - direction.getY());
-				
-			case LIFE_LOST:
-				return direction;
-		}
 
-		return null;
+			default:
+				return direction;		
+		}
 	}
 
 	public HitLocation hitsWall(double gamePaneWidth, double gamePaneHeight, double ballLayoutX, double ballLayoutY, double ballTranslateX, double ballTranslateY, Point2D direction)
@@ -154,13 +152,13 @@ public class Game
 			return HitLocation.RIGHT;
 		}
 
-		// collides with bottom wall	
+		// collides with bottom wall
 		if((ballLayoutY + ballTranslateY + ball.getBallRadius() * 2) >= gamePaneHeight)
 		{
-			wallCollision = true; 
+			wallCollision = true;
 			System.out.println("BOTTOM-WALL");
-			//TODO replace with LIFE_LOST
-			return HitLocation.TOP;
+			// TODO replace with LIFE_LOST
+			return HitLocation.LIFE_LOST;
 		}
 
 		// collides with top wall
@@ -172,11 +170,12 @@ public class Game
 		}
 
 		wallCollision = false;
-		return null;			
+		return null;
 	}
-	
-	public HitLocation collides(Bounds ballBoundsInParent, double ballLayoutX, double ballLayoutY, double ballTranslateX, double ballTranslateY, Bounds brickBoundsInParent, double brickLayoutX, double brickLayoutY, double brickTranslateX, double brickTranslateY, double brickWidth, double brickHeight, boolean isPaddle)
-	{			
+
+	public HitLocation collides(Bounds ballBoundsInParent, double ballLayoutX, double ballLayoutY, double ballTranslateX, double ballTranslateY, Bounds brickBoundsInParent, double brickLayoutX,
+			double brickLayoutY, double brickTranslateX, double brickTranslateY, double brickWidth, double brickHeight, boolean isPaddle)
+	{
 		if(brickBoundsInParent.intersects(ballBoundsInParent))
 		{
 			if(collision)
@@ -192,7 +191,7 @@ public class Game
 
 			// Minkowski sum
 			double wy = (brickWidth + ball.getBallRadius() * 2) * (centerBrick.getY() - centerBall.getY());
-			double hx = (brickHeight + ball.getBallRadius() * 2) * (centerBrick.getX() - centerBall.getX());			
+			double hx = (brickHeight + ball.getBallRadius() * 2) * (centerBrick.getX() - centerBall.getX());
 
 			if(Math.abs(wy - hx) < 0.00001)
 			{
@@ -215,7 +214,8 @@ public class Game
 				{
 					if(isPaddle)
 					{
-						//TODO reflect on paddle
+						System.out.println("PADDLE");
+						return HitLocation.PADDLE;
 					}
 					else
 					{
@@ -227,12 +227,12 @@ public class Game
 				{
 					if(isPaddle)
 					{
-						System.out.println("PADDLE-RIGHT");					
+						System.out.println("PADDLE-RIGHT");
 						return HitLocation.CORNER;
 					}
 					else
 					{
-						System.out.println("RIGHT");					
+						System.out.println("RIGHT");
 						return HitLocation.RIGHT;
 					}
 				}
@@ -243,12 +243,12 @@ public class Game
 				{
 					if(isPaddle)
 					{
-						System.out.println("PADDLE-LEFT");					
+						System.out.println("PADDLE-LEFT");
 						return HitLocation.CORNER;
 					}
 					else
 					{
-						System.out.println("LEFT");					
+						System.out.println("LEFT");
 						return HitLocation.LEFT;
 					}
 				}
@@ -265,5 +265,20 @@ public class Game
 		}
 
 		return null;
+	}
+
+	public boolean collidesWithRightPaddleSide(Point2D ballPosition, Point2D paddlePosition, double paddleWidth)
+	{
+		Point2D paddleCenter = new Point2D(paddlePosition.getX() + paddleWidth / 2, paddlePosition.getY());
+		Point2D ballCenter = new Point2D(ballPosition.getX() + ball.getBallRadius(), ballPosition.getY() + ball.getBallRadius());
+
+		if(ballCenter.getX() >= paddleCenter.getX())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
