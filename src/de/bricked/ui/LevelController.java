@@ -43,7 +43,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import logger.LogLevel;
@@ -158,13 +157,15 @@ public class LevelController
             @Override
             public void handle(MouseEvent event)
             {
-                //--> direct follow mouse
-                double oldPaddlePosition = labelPaddle.getScene().getX();
-                double newPaddlePosition = event.getSceneX();
-                if(newPaddlePosition + paddle.getWidth() < gamePaneWidth && newPaddlePosition > 0)
-                {
-                    labelPaddle.setTranslateX(newPaddlePosition);
-                }
+            	if(gameState.equals(GameState.RUNNING))
+				{
+	                //--> direct follow mouse               
+	                double newPaddlePosition = event.getSceneX();
+	                if(newPaddlePosition + paddle.getWidth() < gamePaneWidth && newPaddlePosition > 0)
+	                {
+	                    labelPaddle.setTranslateX(newPaddlePosition);
+	                }
+				}
             }
         });
 
@@ -398,19 +399,21 @@ public class LevelController
 					}
 				}
 
+				
+				//DEBUG is this neccessary? --> slows done fps on mac
 				long sleepTime = (previousTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
 
-				if(sleepTime > 0)
-				{
-					try
-					{
-						Thread.sleep(sleepTime);
-					}
-					catch(Exception e)
-					{
-						e.printStackTrace();
-					}
-				}
+//				if(sleepTime > 0)
+//				{
+//					try
+//					{
+//						Thread.sleep(sleepTime);
+//					}
+//					catch(Exception e)
+//					{
+//						e.printStackTrace();
+//					}
+//				}
 			}
 		};
 	}
