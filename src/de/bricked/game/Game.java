@@ -112,17 +112,6 @@ public class Game
 		}
 	}
 	
-	@Deprecated
-	public Point2D reflectOnPaddle(Point2D direction, double factor, boolean invertX)
-	{	
-		double x = direction.getX();
-		if(invertX)
-		{
-			x = -x;
-		}
-		return new Point2D(x, - direction.getY() - factor);				
-	}
-	
 	public Point2D reflectOnPaddle(Point2D direction, double factor)
 	{
 		double influenceX = 0.75;

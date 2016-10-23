@@ -14,7 +14,6 @@ import de.bricked.game.board.Board;
 import de.bricked.game.bricks.Brick;
 import de.bricked.game.bricks.BrickType;
 import de.bricked.game.paddle.Paddle;
-import de.bricked.utils.MathUtils;
 import fontAwesome.FontIcon;
 import fontAwesome.FontIconType;
 import javafx.animation.AnimationTimer;
@@ -374,31 +373,7 @@ public class LevelController
 					{
 						Point2D ballPosition = new Point2D(stackPaneBall.getLayoutX() + stackPaneBall.getTranslateX(), stackPaneBall.getLayoutY() + stackPaneBall.getTranslateY());
 						Point2D paddlePosition = new Point2D(labelPaddle.getLayoutX() + labelPaddle.getTranslateX(), labelPaddle.getLayoutY() + labelPaddle.getTranslateY());
-						double angle = MathUtils.getAngle(game.getBall().getDirection(), paddlePosition, paddle.getWidth());
-
-//						if(game.collidesWithRightPaddleSide(ballPosition, paddlePosition, paddle.getWidth()))
-//						{
-//							if(angle > 90.0)
-//							{
-//								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), true));
-//							}
-//							else
-//							{
-//								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), false));
-//							}
-//						}
-//						else
-//						{
-//							if(angle > 90.0)
-//							{
-//								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), false));
-//							}
-//							else
-//							{
-//								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), true));
-//							}
-//						}
-						
+											
 						game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth())));
 					}
 					// ball doesn't collide with paddle --> check collision with
