@@ -38,4 +38,5 @@ public enum BallType
 	{
 		return speedFactor;
 	}
+
 }

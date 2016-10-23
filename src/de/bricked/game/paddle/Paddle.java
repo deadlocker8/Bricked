@@ -3,7 +3,8 @@ package de.bricked.game.paddle;
 public class Paddle
 {
 	private double width;
-	private double height;	
+	private double height;
+    private PaddleSize paddleSize;
 	private final double MIN_WIDTH = 50.0;
 	private final double MAX_WIDTH_PERCENTAGE = 0.4;
 	private double MAX_WIDTH;		
@@ -25,19 +26,31 @@ public class Paddle
 
 	public double getWidth()
 	{
-		return width;
+		return width * paddleSize.getSizeFactor();
 	}
 	
 	public double getHeight()
 	{
 		return height;
 	}
-	
-	public double getSpeed()
+
+    public PaddleSize getPaddleSize()
+    {
+        return paddleSize;
+    }
+
+    public void setPaddleSize(PaddleSize paddleSize)
+    {
+        this.paddleSize = paddleSize;
+        width = paddleSize.getSizeFactor() * width;
+    }
+
+    public double getSpeed()
 	{
 		return speed; 
 	}
-	
+
+	@Deprecated
 	public void changeWidth(double factor)
 	{
 		if(width * factor <= MAX_WIDTH && width * factor >= MIN_WIDTH)
