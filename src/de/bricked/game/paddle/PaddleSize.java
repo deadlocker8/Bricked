@@ -4,12 +4,11 @@ import java.util.ArrayList;
 
 public enum PaddleSize
 {
-	SMALL(0.0),
-	MEDIUM(0.1),
-	LARGE(0.2),
-	EXTRA_LARGE(0.3);
-	
-	
+	SMALL(0.1),
+	MEDIUM(0.2),
+	LARGE(0.3),
+	EXTRA_LARGE(0.4);
+
 	private double sizeFactor;
     private static PaddleSize[] paddleSizes = PaddleSize.values();
 		
@@ -17,6 +16,18 @@ public enum PaddleSize
 	{				
 		this.sizeFactor = sizeFactor;
 	}
+
+	public static PaddleSize getPaddleSize(double size)
+    {
+        for(PaddleSize paddleSize : paddleSizes)
+        {
+            if(paddleSize.getSizeFactor() == size)
+            {
+                return paddleSize;
+            }
+        }
+        return PaddleSize.EXTRA_LARGE;
+    }
 	
 	public double getSizeFactor()
 	{

@@ -3,7 +3,7 @@ package de.bricked.game.paddle;
 public class Paddle
 {
 	private double height;
-    private PaddleSize paddleSize;	    
+    private PaddleSize paddleSize;
 	private double SPEED_FACTOR = 0.03;
 	private double speed;
     private double gameWidth;
@@ -13,12 +13,13 @@ public class Paddle
         this.gameWidth = gameWidth;
         this.paddleSize = size;
 		this.height = initialHeight;
+		//this.MAX_WIDTH = MAX_WIDTH_PERCENTAGE * gameWidth;
 		this.speed = SPEED_FACTOR * gameWidth;
 	}
 
 	public double getWidth()
 	{
-		return gameWidth * paddleSize.getSizeFactor() + paddleSize.getSizeFactor()/2;
+		return gameWidth * paddleSize.getSizeFactor() + paddleSize.getSizeFactor();
 	}
 	
 	public double getHeight()

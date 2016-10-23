@@ -285,7 +285,17 @@ public class LevelController
 		gameState = GameState.WAITING;
 	}
 
-	private void initTimer()
+    public Paddle getPaddle()
+    {
+        return paddle;
+    }
+
+    public ImageView getLabelPaddle()
+    {
+        return labelPaddle;
+    }
+
+    private void initTimer()
 	{
 		timer = new AnimationTimer()
 		{
