@@ -14,6 +14,7 @@ public class Paddle
 	public Paddle(PaddleSize size, double initialHeight, double gameWidth)
 	{		
 		this.width = gameWidth * size.getSizeFactor();
+        this.paddleSize = size;
 		if(this.width < MIN_WIDTH)
 		{
 			this.width = MIN_WIDTH;
