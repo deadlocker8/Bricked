@@ -2,7 +2,6 @@ package de.bricked.game.paddle;
 
 public class Paddle
 {
-	private double width;
 	private double height;
     private PaddleSize paddleSize;
 	private final double MIN_WIDTH = 50.0;
@@ -16,19 +15,13 @@ public class Paddle
 	{
         this.gameWidth = gameWidth;
         this.paddleSize = size;
-		if(this.width < MIN_WIDTH)
-		{
-			this.width = MIN_WIDTH;
-		}
-		
 		this.height = initialHeight;
-		this.MAX_WIDTH = MAX_WIDTH_PERCENTAGE * gameWidth;
 		this.speed = SPEED_FACTOR * gameWidth;
 	}
 
 	public double getWidth()
 	{
-		return gameWidth * paddleSize.getSizeFactor();
+		return gameWidth * paddleSize.getSizeFactor() + paddleSize.getSizeFactor()/2;
 	}
 	
 	public double getHeight()
@@ -44,20 +37,10 @@ public class Paddle
     public void setPaddleSize(PaddleSize paddleSize)
     {
         this.paddleSize = paddleSize;
-        width = paddleSize.getSizeFactor() * width;
     }
 
     public double getSpeed()
 	{
 		return speed; 
-	}
-
-	@Deprecated
-	public void changeWidth(double factor)
-	{
-		if(width * factor <= MAX_WIDTH && width * factor >= MIN_WIDTH)
-		{
-			width = width * factor;
-		}
 	}
 }
