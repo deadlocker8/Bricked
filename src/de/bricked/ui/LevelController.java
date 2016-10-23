@@ -133,6 +133,13 @@ public class LevelController
 					anchorPaneGame.requestFocus();
 					return;
 				}
+				
+
+				if(event.getCode().toString().equals("ESCAPE"))
+				{					
+					back();
+					event.consume();
+				}
 			}
 		});
 
