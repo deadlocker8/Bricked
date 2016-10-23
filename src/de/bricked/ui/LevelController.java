@@ -133,10 +133,9 @@ public class LevelController
 					anchorPaneGame.requestFocus();
 					return;
 				}
-				
 
 				if(event.getCode().toString().equals("ESCAPE"))
-				{					
+				{
 					back();
 					event.consume();
 				}
@@ -161,7 +160,7 @@ public class LevelController
 					}
 				}
 			}
-		});		
+		});
 
 		anchorPane.setOnMouseMoved(new EventHandler<MouseEvent>()
 		{
@@ -171,32 +170,32 @@ public class LevelController
 				if(gameState.equals(GameState.RUNNING))
 				{
 					// --> direct follow mouse
-					double newPaddlePosition = event.getSceneX() - paddle.getWidth() / 2;				
+					double newPaddlePosition = event.getSceneX() - paddle.getWidth() / 2;
 
 					// move left
 					if(newPaddlePosition < oldMousePosition)
 					{
 						if(newPaddlePosition > 0)
 						{
-							labelPaddle.setTranslateX(newPaddlePosition);						
+							labelPaddle.setTranslateX(newPaddlePosition);
 						}
 						else
 						{
-							labelPaddle.setTranslateX(0);							
+							labelPaddle.setTranslateX(0);
 						}
 					}
 					// move right
 					else
-					{						
+					{
 						if((newPaddlePosition + paddle.getWidth()) < gamePaneWidth)
 						{
-							labelPaddle.setTranslateX(newPaddlePosition);							
+							labelPaddle.setTranslateX(newPaddlePosition);
 						}
 						else
 						{
 							labelPaddle.setTranslateX(gamePaneWidth - paddle.getWidth());
 						}
-					}	
+					}
 
 					oldMousePosition = labelPaddle.getScene().getX();
 				}
@@ -266,12 +265,12 @@ public class LevelController
 				gamePaneHeight = newValue.doubleValue();
 			}
 		};
-		
+
 		widthListener = new ChangeListener<Number>()
 		{
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
-			{				
+			{
 				gamePaneWidth = newValue.doubleValue();
 			}
 		};
@@ -280,7 +279,7 @@ public class LevelController
 		anchorPaneGame.widthProperty().addListener(widthListener);
 
 		anchorPaneGame.requestFocus();
-		
+
 		showLabelFPS(levelSelectController.controller.controller.getCommandLine().getBundle().isShowFPS());
 		labelFPS.setStyle("-fx-text-fill: #FF0000");
 
@@ -323,8 +322,7 @@ public class LevelController
 				stackPaneBall.setTranslateY(stackPaneBall.getTranslateY() + game.getBall().getDirection().getY() * delta);
 
 				// hit detection
-				HitLocation hitLocation = game.hitsWall(gamePaneWidth, gamePaneHeight, stackPaneBall.getLayoutX(), stackPaneBall.getLayoutY(), stackPaneBall.getTranslateX(),
-						stackPaneBall.getTranslateY(), game.getBall().getDirection());
+				HitLocation hitLocation = game.hitsWall(gamePaneWidth, gamePaneHeight, stackPaneBall.getLayoutX(), stackPaneBall.getLayoutY(), stackPaneBall.getTranslateX(), stackPaneBall.getTranslateY(), game.getBall().getDirection());
 				// if ball collides with border then brick collisions are
 				// irrelevant
 				if(hitLocation != null)
@@ -370,39 +368,38 @@ public class LevelController
 				// paddle
 				else
 				{
-					hitLocation = game.collides(stackPaneBall.getBoundsInParent(), stackPaneBall.getLayoutX(), stackPaneBall.getLayoutY(), stackPaneBall.getTranslateX(), stackPaneBall.getTranslateY(),
-							labelPaddle.getBoundsInParent(), labelPaddle.getLayoutX(), labelPaddle.getLayoutY(), labelPaddle.getTranslateX(), labelPaddle.getTranslateY(), paddle.getWidth(),
-							paddle.getHeight(), true);
+					hitLocation = game.collides(stackPaneBall.getBoundsInParent(), stackPaneBall.getLayoutX(), stackPaneBall.getLayoutY(), stackPaneBall.getTranslateX(), stackPaneBall.getTranslateY(), labelPaddle.getBoundsInParent(), labelPaddle.getLayoutX(), labelPaddle.getLayoutY(),
+							labelPaddle.getTranslateX(), labelPaddle.getTranslateY(), paddle.getWidth(), paddle.getHeight(), true);
 					if(hitLocation != null && hitLocation.equals(HitLocation.PADDLE))
 					{
 						Point2D ballPosition = new Point2D(stackPaneBall.getLayoutX() + stackPaneBall.getTranslateX(), stackPaneBall.getLayoutY() + stackPaneBall.getTranslateY());
 						Point2D paddlePosition = new Point2D(labelPaddle.getLayoutX() + labelPaddle.getTranslateX(), labelPaddle.getLayoutY() + labelPaddle.getTranslateY());
 						double angle = MathUtils.getAngle(game.getBall().getDirection(), paddlePosition, paddle.getWidth());
 
-						if(game.collidesWithRightPaddleSide(ballPosition, paddlePosition, paddle.getWidth()))
-						{
-							if(angle > 90.0)
-							{
-								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), true));
-							}
-							else
-							{
-								game.getBall()
-										.setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), false));
-							}
-						}
-						else
-						{
-							if(angle > 90.0)
-							{
-								game.getBall()
-										.setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), false));
-							}
-							else
-							{
-								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), true));
-							}
-						}
+//						if(game.collidesWithRightPaddleSide(ballPosition, paddlePosition, paddle.getWidth()))
+//						{
+//							if(angle > 90.0)
+//							{
+//								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), true));
+//							}
+//							else
+//							{
+//								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), false));
+//							}
+//						}
+//						else
+//						{
+//							if(angle > 90.0)
+//							{
+//								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), false));
+//							}
+//							else
+//							{
+//								game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), true));
+//							}
+//						}
+						
+						game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth())));
 					}
 					// ball doesn't collide with paddle --> check collision with
 					// bricks
@@ -418,9 +415,8 @@ public class LevelController
 								{
 									StackPane stackPaneBrick = (StackPane)grid.getChildren().get(i * (int)Board.WIDTH + k);
 
-									hitLocation = game.collides(stackPaneBall.getBoundsInParent(), stackPaneBall.getLayoutX(), stackPaneBall.getLayoutY(), stackPaneBall.getTranslateX(),
-											stackPaneBall.getTranslateY(), stackPaneBrick.getBoundsInParent(), stackPaneBrick.getLayoutX(), stackPaneBrick.getLayoutY(), stackPaneBrick.getTranslateX(),
-											stackPaneBrick.getTranslateY(), stackPaneBrick.getWidth(), stackPaneBrick.getHeight(), false);
+									hitLocation = game.collides(stackPaneBall.getBoundsInParent(), stackPaneBall.getLayoutX(), stackPaneBall.getLayoutY(), stackPaneBall.getTranslateX(), stackPaneBall.getTranslateY(), stackPaneBrick.getBoundsInParent(), stackPaneBrick.getLayoutX(),
+											stackPaneBrick.getLayoutY(), stackPaneBrick.getTranslateX(), stackPaneBrick.getTranslateY(), stackPaneBrick.getWidth(), stackPaneBrick.getHeight(), false);
 									if(hitLocation != null)
 									{
 										game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
@@ -504,8 +500,7 @@ public class LevelController
 
 				// DEBUG
 				Label l = new Label(currentBrick.getType().getID());
-				l.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/bricks/" + currentBrick.getCurrentTextureID() + ".png\");" + "-fx-background-position: center center;"
-						+ "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");
+				l.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/bricks/" + currentBrick.getCurrentTextureID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");
 				l.setAlignment(Pos.CENTER);
 
 				l.prefWidthProperty().bind(grid.getColumnConstraints().get(0).percentWidthProperty().multiply(gamePaneWidth));
@@ -610,7 +605,7 @@ public class LevelController
 			labelPaddle.setTranslateX(anchorPaneGame.getWidth() - paddle.getWidth());
 		}
 	}
-	
+
 	public void showLabelFPS(boolean value)
 	{
 		labelFPS.setVisible(value);
