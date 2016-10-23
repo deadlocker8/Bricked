@@ -13,6 +13,8 @@ public class Settings
 {
     private GameSize gameSize;
     private String language; //TODO change this to lanugage class maybe?
+    private double volume;
+    private boolean muted;
     private transient final String directory = "/deadspaghetti/bricked/";
     private transient final String filename = "settings.json";
     private transient Gson gson;
@@ -30,6 +32,8 @@ public class Settings
     {
         gameSize = GameSize.NORMAL;
         language = "eng";
+        muted = false;
+        volume = 0.5;
     }
 
     public void save()
@@ -57,6 +61,8 @@ public class Settings
             Settings loadedSettings = gson.fromJson(jsonContent, Settings.class);
             this.gameSize = loadedSettings.gameSize;
             this.language = loadedSettings.language;
+            this.muted = loadedSettings.muted;
+            this.volume = loadedSettings.volume;
             // MORE settings go here
 
         }

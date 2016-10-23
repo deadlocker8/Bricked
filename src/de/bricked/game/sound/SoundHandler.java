@@ -11,15 +11,17 @@ import logger.Logger;
 public class SoundHandler
 {
     private double volume;
+    private boolean muted;
 
     public SoundHandler()
     {
         volume = 0.0;
+        muted = false;
     }
 
     public void play(String soundID)
 	{
-        if(volume > 0)
+        if(volume > 0 && !muted)
         {
             try
             {
@@ -35,4 +37,24 @@ public class SoundHandler
             }
         }
 	}
+
+    public double getVolume()
+    {
+        return volume;
+    }
+
+    public boolean isMuted()
+    {
+        return muted;
+    }
+
+    public void setVolume(double volume)
+    {
+        this.volume = volume;
+    }
+
+    public void setMuted(boolean muted)
+    {
+        this.muted = muted;
+    }
 }
