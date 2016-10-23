@@ -145,6 +145,8 @@ public class LevelSelectController
 						newStage.getIcons().add(icon);
 						LevelController newController = fxmlLoader.getController();
 						newController.init(newStage, getController(), game);
+						
+						controller.controller.getCommandLine().getBundle().setLevelController(newController);
 
 						newStage.initModality(Modality.NONE);
 						newStage.setResizable(false);

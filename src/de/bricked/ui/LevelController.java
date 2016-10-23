@@ -274,7 +274,8 @@ public class LevelController
 
 		anchorPaneGame.requestFocus();
 		
-		labelFPS.setVisible(levelSelectController.controller.controller.getCommandLine().getBundle().isShowFPS());
+		showLabelFPS(levelSelectController.controller.controller.getCommandLine().getBundle().isShowFPS());
+		labelFPS.setStyle("-fx-text-fill: #FF0000");
 
 		gameState = GameState.WAITING;
 	}
@@ -601,6 +602,11 @@ public class LevelController
 		{
 			labelPaddle.setTranslateX(anchorPaneGame.getWidth() - paddle.getWidth());
 		}
+	}
+	
+	public void showLabelFPS(boolean value)
+	{
+		labelFPS.setVisible(value);
 	}
 
 	public void showCommandLine()

@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import de.bricked.commandLine.CommandLineController;
 import de.bricked.game.Game;
 import de.bricked.game.levels.Level;
+import de.bricked.ui.LevelController;
 
 /**
  * holds important objects that are needed by the commands
@@ -19,6 +20,7 @@ public class CommandBundle
 	private Game game;
 	private Level currentLevel;	
 	private boolean showFPS = false;
+	private LevelController levelController;
 
 	public CommandBundle(Game game)
 	{
@@ -73,5 +75,15 @@ public class CommandBundle
 	public void setShowFPS(boolean showFPS)
 	{
 		this.showFPS = showFPS;
+	}
+
+	public LevelController getLevelController()
+	{
+		return levelController;
+	}
+
+	public void setLevelController(LevelController levelController)
+	{
+		this.levelController = levelController;
 	}
 }
