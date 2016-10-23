@@ -10,10 +10,11 @@ public class Paddle
 	private double MAX_WIDTH;		
 	private double SPEED_FACTOR = 0.03;
 	private double speed;
+    private double gameWidth;
 	
 	public Paddle(PaddleSize size, double initialHeight, double gameWidth)
-	{		
-		this.width = gameWidth * size.getSizeFactor();
+	{
+        this.gameWidth = gameWidth;
         this.paddleSize = size;
 		if(this.width < MIN_WIDTH)
 		{
@@ -27,7 +28,7 @@ public class Paddle
 
 	public double getWidth()
 	{
-		return width * paddleSize.getSizeFactor();
+		return gameWidth * paddleSize.getSizeFactor();
 	}
 	
 	public double getHeight()
