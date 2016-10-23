@@ -3,10 +3,7 @@ package de.bricked.game.paddle;
 public class Paddle
 {
 	private double height;
-    private PaddleSize paddleSize;
-	private final double MIN_WIDTH = 50.0;
-	private final double MAX_WIDTH_PERCENTAGE = 0.4;
-	private double MAX_WIDTH;		
+    private PaddleSize paddleSize;	    
 	private double SPEED_FACTOR = 0.03;
 	private double speed;
     private double gameWidth;
