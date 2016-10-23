@@ -424,49 +424,24 @@ public class LevelController
 					}
 					// ball doesn't collide with paddle --> check collision with bricks
 					else
-					{
-						// loop over all non air bricks
-						for(int i = 0; i < Board.HEIGHT; i++)
-						{
-							for(int k = 0; k < Board.WIDTH; k++)
+					{					
+						if(game.getBall().getDirection().getX() > 0)
+						{									
+							for(int i = 0; i < Board.HEIGHT; i++)
 							{
-								Brick currentBrick = board.getBricks().get(i).get(k);
-								if(!currentBrick.getType().equals(BrickType.AIR))
+								for(int k = 0; k < Board.WIDTH; k++)
 								{
-									StackPane stackPaneBrick = (StackPane)grid.getChildren().get(i * (int)Board.WIDTH + k);
-
-									Point2D brickPosition = new Point2D(stackPaneBrick.getLayoutX() + stackPaneBrick.getTranslateX(), stackPaneBrick.getLayoutY() + stackPaneBrick.getTranslateY());
-
-									hitLocation = game.collides(stackPaneBall.getBoundsInParent(), ballPosition, stackPaneBrick.getBoundsInParent(), brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight(), false);
-									if(hitLocation != null)
-									{
-										game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
-
-										correctBallPosition(hitLocation, ballPosition, brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight());
-
-										game.setPoints(game.getPoints() + board.hitBrick(i, k, false));
-										labelPoints.setText(String.valueOf(game.getPoints()));
-										labelBlocksRemaining.setText(board.getNumberOfRemainingBricks() + " Bricks remaining");
-										redraw();
-										if(board.getNumberOfRemainingBricks() == 0)
-										{
-											// level done
-
-											gameState = GameState.STOPPED;
-											timer.stop();
-
-											Platform.runLater(() -> {
-												Alert alert = new Alert(AlertType.INFORMATION);
-												alert.setTitle("Congratulations!");
-												alert.setHeaderText("");
-												alert.setContentText("You finished Level \"" + game.getLevel().getName() + "\" with " + game.getPoints() + " Points");
-												Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-												dialogStage.getIcons().add(icon);
-												dialogStage.centerOnScreen();
-												alert.showAndWait();
-											});
-										}
-									}
+									brickCollisionDetection(i, k, ballPosition);
+								}
+							}
+						}
+						else
+						{							
+							for(int i = (int)Board.HEIGHT - 1; i > 0; i--)
+							{
+								for(int k = (int)Board.WIDTH - 1; k > 0 ; k--)
+								{
+									brickCollisionDetection(i, k, ballPosition);
 								}
 							}
 						}
@@ -635,6 +610,48 @@ public class LevelController
 		else
 		{
 			labelPaddle.setTranslateX(anchorPaneGame.getWidth() - paddle.getWidth());
+		}
+	}
+	
+	private void brickCollisionDetection(int i, int k,  Point2D ballPosition )
+	{
+		Brick currentBrick = board.getBricks().get(i).get(k);
+		if(!currentBrick.getType().equals(BrickType.AIR))
+		{
+			StackPane stackPaneBrick = (StackPane)grid.getChildren().get(i * (int)Board.WIDTH + k);
+
+			Point2D brickPosition = new Point2D(stackPaneBrick.getLayoutX() + stackPaneBrick.getTranslateX(), stackPaneBrick.getLayoutY() + stackPaneBrick.getTranslateY());
+
+			HitLocation hitLocation = game.collides(stackPaneBall.getBoundsInParent(), ballPosition, stackPaneBrick.getBoundsInParent(), brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight(), false);
+			if(hitLocation != null)
+			{
+				game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
+
+				correctBallPosition(hitLocation, ballPosition, brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight());
+
+				game.setPoints(game.getPoints() + board.hitBrick(i, k, false));
+				labelPoints.setText(String.valueOf(game.getPoints()));
+				labelBlocksRemaining.setText(board.getNumberOfRemainingBricks() + " Bricks remaining");
+				redraw();
+				if(board.getNumberOfRemainingBricks() == 0)
+				{
+					// level done
+
+					gameState = GameState.STOPPED;
+					timer.stop();
+
+					Platform.runLater(() -> {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Congratulations!");
+						alert.setHeaderText("");
+						alert.setContentText("You finished Level \"" + game.getLevel().getName() + "\" with " + game.getPoints() + " Points");
+						Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
+						dialogStage.getIcons().add(icon);
+						dialogStage.centerOnScreen();
+						alert.showAndWait();
+					});
+				}
+			}
 		}
 	}
 
