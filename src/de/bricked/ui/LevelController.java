@@ -322,8 +322,10 @@ public class LevelController
 
 				// hit detection
 				HitLocation hitLocation = game.hitsWall(gamePaneWidth, gamePaneHeight, stackPaneBall.getLayoutX(), stackPaneBall.getLayoutY(), stackPaneBall.getTranslateX(), stackPaneBall.getTranslateY(), game.getBall().getDirection());
-				// if ball collides with border then brick collisions are
-				// irrelevant
+
+				Point2D ballPosition = new Point2D(stackPaneBall.getLayoutX() + stackPaneBall.getTranslateX(), stackPaneBall.getLayoutY() + stackPaneBall.getTranslateY());
+				Point2D paddlePosition = new Point2D(labelPaddle.getLayoutX() + labelPaddle.getTranslateX(), labelPaddle.getLayoutY() + labelPaddle.getTranslateY());
+				// if ball collides with border then brick collisions are irrelevant
 				if(hitLocation != null)
 				{
 					if(hitLocation.equals(HitLocation.LIFE_LOST))
@@ -360,24 +362,57 @@ public class LevelController
 					}
 					else
 					{
-						game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
+						game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));						
+
+						switch(hitLocation)
+						{
+							case TOP:
+								stackPaneBall.setTranslateX(stackPaneBall.getTranslateX());
+								stackPaneBall.setTranslateY(1);
+								break;
+
+							case RIGHT:
+								stackPaneBall.setTranslateX(1);
+								stackPaneBall.setTranslateY(stackPaneBall.getTranslateY());
+								break;
+
+							case LEFT:								
+								stackPaneBall.setTranslateX(gamePaneWidth - game.getBall().getBallRadius() * 2 -1);
+								stackPaneBall.setTranslateY(stackPaneBall.getTranslateY());
+								break;
+								
+							case CORNER:
+								if(ballPosition.getX() +  game.getBall().getBallRadius() > gamePaneWidth / 2)
+								{
+									//ball is in top right corner
+									stackPaneBall.setTranslateX(gamePaneWidth - game.getBall().getBallRadius() * 2 -1);
+									stackPaneBall.setTranslateY(1);
+									break;
+								}
+								else
+								{
+									//ball is in top left corner
+									stackPaneBall.setTranslateX(1);
+									stackPaneBall.setTranslateY(1);
+									break;
+								}
+								
+							default:
+								break;
+						}
 					}
 				}
-				// ball doesn't collide with border --> check collision with
-				// paddle
+				// ball doesn't collide with border --> check collision with paddle
 				else
 				{
-					hitLocation = game.collides(stackPaneBall.getBoundsInParent(), stackPaneBall.getLayoutX(), stackPaneBall.getLayoutY(), stackPaneBall.getTranslateX(), stackPaneBall.getTranslateY(), labelPaddle.getBoundsInParent(), labelPaddle.getLayoutX(), labelPaddle.getLayoutY(),
-							labelPaddle.getTranslateX(), labelPaddle.getTranslateY(), paddle.getWidth(), paddle.getHeight(), true);
-					if(hitLocation != null && hitLocation.equals(HitLocation.PADDLE))
+					hitLocation = game.collides(stackPaneBall.getBoundsInParent(), ballPosition, labelPaddle.getBoundsInParent(), paddlePosition, paddle.getWidth(), paddle.getHeight(), true);
+					if(hitLocation != null && (hitLocation.equals(HitLocation.PADDLE) || hitLocation.equals(HitLocation.CORNER)))
 					{
-						Point2D ballPosition = new Point2D(stackPaneBall.getLayoutX() + stackPaneBall.getTranslateX(), stackPaneBall.getLayoutY() + stackPaneBall.getTranslateY());
-						Point2D paddlePosition = new Point2D(labelPaddle.getLayoutX() + labelPaddle.getTranslateX(), labelPaddle.getLayoutY() + labelPaddle.getTranslateY());
-											
 						game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth())));
+
+						correctBallPosition(hitLocation, ballPosition, paddlePosition, paddle.getWidth(), paddle.getHeight());
 					}
-					// ball doesn't collide with paddle --> check collision with
-					// bricks
+					// ball doesn't collide with paddle --> check collision with bricks
 					else
 					{
 						// loop over all non air bricks
@@ -390,11 +425,15 @@ public class LevelController
 								{
 									StackPane stackPaneBrick = (StackPane)grid.getChildren().get(i * (int)Board.WIDTH + k);
 
-									hitLocation = game.collides(stackPaneBall.getBoundsInParent(), stackPaneBall.getLayoutX(), stackPaneBall.getLayoutY(), stackPaneBall.getTranslateX(), stackPaneBall.getTranslateY(), stackPaneBrick.getBoundsInParent(), stackPaneBrick.getLayoutX(),
-											stackPaneBrick.getLayoutY(), stackPaneBrick.getTranslateX(), stackPaneBrick.getTranslateY(), stackPaneBrick.getWidth(), stackPaneBrick.getHeight(), false);
+									Point2D brickPosition = new Point2D(stackPaneBrick.getLayoutX() + stackPaneBrick.getTranslateX(), stackPaneBrick.getLayoutY() + stackPaneBrick.getTranslateY());
+
+									hitLocation = game.collides(stackPaneBall.getBoundsInParent(), ballPosition, stackPaneBrick.getBoundsInParent(), brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight(), false);
 									if(hitLocation != null)
 									{
 										game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
+
+										correctBallPosition(hitLocation, ballPosition, brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight());
+
 										game.setPoints(game.getPoints() + board.hitBrick(i, k, false));
 										labelPoints.setText(String.valueOf(game.getPoints()));
 										labelBlocksRemaining.setText(board.getNumberOfRemainingBricks() + " Bricks remaining");
@@ -425,8 +464,7 @@ public class LevelController
 				}
 
 				// DEBUG is this neccessary? --> slows done fps on mac
-				// long sleepTime = (previousTime - System.nanoTime() +
-				// OPTIMAL_TIME) / 1000000;
+				// long sleepTime = (previousTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
 
 				// if(sleepTime > 0)
 				// {
@@ -441,6 +479,15 @@ public class LevelController
 				// }
 			}
 		};
+	}
+
+	public void correctBallPosition(HitLocation hitLocation, Point2D ballPosition, Point2D brickPosition, double brickWidth, double brickHeight)
+	{
+		// correct ball position if inside brick
+		Point2D correctedBallPosition = game.getCorrectedBallPosition(hitLocation, ballPosition, brickPosition, brickWidth, brickHeight);
+		System.out.println(ballPosition + " -> " + correctedBallPosition);
+		stackPaneBall.setTranslateX(correctedBallPosition.getX() - stackPaneBall.getLayoutX());
+		stackPaneBall.setTranslateY(correctedBallPosition.getY() - stackPaneBall.getLayoutY());
 	}
 
 	public void redraw()
@@ -607,6 +654,7 @@ public class LevelController
 		}
 		stage.close();
 		levelSelectController.stage.show();
+		game.setPoints(0);
 
 		anchorPaneGame.requestFocus();
 	}
