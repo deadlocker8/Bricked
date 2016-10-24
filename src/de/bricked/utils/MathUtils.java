@@ -4,11 +4,16 @@ import javafx.geometry.Point2D;
 
 public class MathUtils
 {	
-    public static double getAngle(Point2D directionBall, Point2D paddlePosition, double paddleWidth)
+    public static double getAngle(Point2D a, Point2D b)
     {
-        Point2D paddleRight = new Point2D(paddlePosition.getX()+paddleWidth, paddlePosition.getY());
-        Point2D paddleVector = new Point2D(paddleRight.getX() - paddlePosition.getX(), paddleRight.getY() - paddlePosition.getY());
-        double angle = directionBall.angle(paddleVector);
-        return angle;
-    }    
+//    	double angle = Math.toDegrees(Math.atan2(b.getY(), b.getX()) - Math.atan2(a.getY(), a.getX()));
+    	return Math.toDegrees(Math.acos(a.dotProduct(b) / (a.magnitude() * b.magnitude()))); 
+    }
+    public static Point2D normalize(Point2D direction)
+    {
+        double length = Math.sqrt(direction.getX() * direction.getX() + direction.getY() * direction.getY());
+        double newX =  direction.getX() / length;
+        double newY = direction.getY() / length;
+        return new Point2D(newX, newY);
+    }
 }

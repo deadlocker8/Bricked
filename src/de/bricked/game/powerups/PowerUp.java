@@ -1,7 +1,5 @@
 package de.bricked.game.powerups;
 
-import de.bricked.game.Game;
-
 public abstract class PowerUp
 {
     protected int id;

@@ -1,7 +1,5 @@
 package de.bricked.game.paddle;
 
-import java.util.ArrayList;
-
 public enum PaddleSize
 {
 	SMALL(0.1),

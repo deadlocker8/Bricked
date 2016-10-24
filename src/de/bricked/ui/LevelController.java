@@ -296,7 +296,7 @@ public class LevelController
     }
 
     private void initTimer()
-	{
+	{    	
 		timer = new AnimationTimer()
 		{
 			private long previousTime = 0;
@@ -414,8 +414,9 @@ public class LevelController
 				}
 				// ball doesn't collide with border --> check collision with paddle
 				else
-				{
-					hitLocation = game.collides(stackPaneBall.getBoundsInParent(), ballPosition, labelPaddle.getBoundsInParent(), paddlePosition, paddle.getWidth(), paddle.getHeight(), true);
+				{		
+					hitLocation = game.collides(ballPosition, paddlePosition, paddle.getWidth(), paddle.getHeight(), true);
+//					hitLocation = game.collides(game.getBall().getDirection(), stackPaneBall.getBoundsInParent(), labelPaddle.getBoundsInParent(), true);
 					if(hitLocation != null && (hitLocation.equals(HitLocation.PADDLE) || hitLocation.equals(HitLocation.CORNER)))
 					{
 						game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth())));
@@ -437,9 +438,9 @@ public class LevelController
 						}
 						else
 						{							
-							for(int i = (int)Board.HEIGHT - 1; i > 0; i--)
+							for(int i = (int)Board.HEIGHT - 1; i >= 0; i--)
 							{
-								for(int k = (int)Board.WIDTH - 1; k > 0 ; k--)
+								for(int k = (int)Board.WIDTH - 1; k >= 0 ; k--)
 								{
 									brickCollisionDetection(i, k, ballPosition);
 								}
@@ -470,7 +471,6 @@ public class LevelController
 	{
 		// correct ball position if inside brick
 		Point2D correctedBallPosition = game.getCorrectedBallPosition(hitLocation, ballPosition, brickPosition, brickWidth, brickHeight);
-		System.out.println(ballPosition + " -> " + correctedBallPosition);
 		stackPaneBall.setTranslateX(correctedBallPosition.getX() - stackPaneBall.getLayoutX());
 		stackPaneBall.setTranslateY(correctedBallPosition.getY() - stackPaneBall.getLayoutY());
 	}
@@ -517,7 +517,7 @@ public class LevelController
 
 				grid.add(pane, k, i);
 			}
-		}
+		}		
 	}
 
 	private void refreshLiveCounter()
@@ -614,17 +614,18 @@ public class LevelController
 	}
 	
 	private void brickCollisionDetection(int i, int k,  Point2D ballPosition )
-	{
+	{	
 		Brick currentBrick = board.getBricks().get(i).get(k);
 		if(!currentBrick.getType().equals(BrickType.AIR))
-		{
+		{		
 			StackPane stackPaneBrick = (StackPane)grid.getChildren().get(i * (int)Board.WIDTH + k);
 
 			Point2D brickPosition = new Point2D(stackPaneBrick.getLayoutX() + stackPaneBrick.getTranslateX(), stackPaneBrick.getLayoutY() + stackPaneBrick.getTranslateY());
 
-			HitLocation hitLocation = game.collides(stackPaneBall.getBoundsInParent(), ballPosition, stackPaneBrick.getBoundsInParent(), brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight(), false);
+			HitLocation hitLocation = game.collides(ballPosition, brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight(), false);
 			if(hitLocation != null)
-			{
+			{		
+				
 				game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
 
 				correctBallPosition(hitLocation, ballPosition, brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight());

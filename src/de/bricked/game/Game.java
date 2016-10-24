@@ -4,8 +4,9 @@ import de.bricked.game.balls.Ball;
 import de.bricked.game.levels.Level;
 import de.bricked.game.levels.LevelPack;
 import de.bricked.game.settings.Settings;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import logger.LogLevel;
+import logger.Logger;
 
 public class Game
 {
@@ -105,7 +106,7 @@ public class Game
 				return new Point2D(-direction.getX(), direction.getY());
 
 			case CORNER:
-				return new Point2D(-direction.getX(), -direction.getY());		
+				return new Point2D(-direction.getX(), -direction.getY());
 
 			default:
 				return direction;
@@ -135,7 +136,7 @@ public class Game
 		if((ballLayoutX + ballTranslateX + ball.getBallRadius() * 2) >= gamePaneWidth && (ballLayoutY + ballTranslateY) <= 0)
 		{
 			wallCollision = true;
-			System.out.println("TOP-RIGHT-CORNER");
+			Logger.log(LogLevel.DEBUG, "TOP-RIGHT-CORNER");
 			return HitLocation.CORNER;
 		}
 
@@ -143,7 +144,7 @@ public class Game
 		if((ballLayoutX + ballTranslateX) <= 0 && (ballLayoutY + ballTranslateY) <= 0)
 		{
 			wallCollision = true;
-			System.out.println("TOP-LEFT-CORNER");
+			Logger.log(LogLevel.DEBUG, "TOP-LEFT-CORNER");
 			return HitLocation.CORNER;
 		}
 
@@ -151,7 +152,7 @@ public class Game
 		if((ballLayoutX + ballTranslateX + ball.getBallRadius() * 2) >= gamePaneWidth)
 		{
 			wallCollision = true;
-			System.out.println("RIGHT-WALL");
+			Logger.log(LogLevel.DEBUG, "RIGHT-WALL");
 			return HitLocation.LEFT;
 		}
 
@@ -159,7 +160,7 @@ public class Game
 		if((ballLayoutX + ballTranslateX) <= 0)
 		{
 			wallCollision = true;
-			System.out.println("LEFT-WALL");
+			Logger.log(LogLevel.DEBUG, "LEFT-WALL");
 			return HitLocation.RIGHT;
 		}
 
@@ -167,7 +168,7 @@ public class Game
 		if((ballLayoutY + ballTranslateY + ball.getBallRadius() * 2) >= gamePaneHeight)
 		{
 			wallCollision = true;
-			System.out.println("BOTTOM-WALL");
+			Logger.log(LogLevel.DEBUG, "BOTTOM-WALL");
 			// TODO replace with LIFE_LOST
 			return HitLocation.LIFE_LOST;
 		}
@@ -176,7 +177,7 @@ public class Game
 		if((ballLayoutY + ballTranslateY) <= 0)
 		{
 			wallCollision = true;
-			System.out.println("TOP-WALL");
+			Logger.log(LogLevel.DEBUG, "TOP-WALL");
 			return HitLocation.BOTTOM;
 		}
 
@@ -184,89 +185,72 @@ public class Game
 		return null;
 	}
 
-	public HitLocation collides(Bounds ballBoundsInParent, Point2D ballPosition, Bounds brickBoundsInParent, Point2D brickPosition, double brickWidth,
-			double brickHeight, boolean isPaddle)
+	public HitLocation collides(Point2D ballPosition, Point2D brickPosition, double brickWidth, double brickHeight, boolean isPaddle)
 	{
-		if(brickBoundsInParent.intersects(ballBoundsInParent))
+		double dx = (ballPosition.getX() + ball.getBallRadius()) - (brickPosition.getX() + brickWidth / 2);
+		double dy = (ballPosition.getY() + ball.getBallRadius()) - (brickPosition.getY() + brickHeight / 2);
+		double width = (ball.getBallRadius() * 2 + brickWidth) / 2;
+		double height = (ball.getBallRadius() * 2 + brickHeight) / 2;
+		double crossWidth = width * dy;
+		double crossHeight = height * dx;
+
+		if(Math.abs(dx) <= width && Math.abs(dy) <= height)
 		{
 			if(collision)
 			{
 				return null;
 			}
-
+			
 			collision = true;
-
-			// find collided side
-			Point2D centerBrick = new Point2D(brickPosition.getX() + brickWidth / 2, brickPosition.getY() + brickHeight / 2);
-			Point2D centerBall = new Point2D(ballPosition.getX() + ball.getBallRadius(), ballPosition.getY() + ball.getBallRadius());
-
-			// Minkowski sum
-			double wy = (brickWidth + ball.getBallRadius() * 2) * (centerBrick.getY() - centerBall.getY());
-			double hx = (brickHeight + ball.getBallRadius() * 2) * (centerBrick.getX() - centerBall.getX());
-
-			if(Math.abs(wy - hx) < 0.00001)
+			
+			if(crossWidth > crossHeight)
 			{
-				// ball flies in 45 degree angle
-				if(Math.abs(ball.getDirection().getX()) == Math.abs(ball.getDirection().getY()))
+				if(crossWidth > (-crossHeight))
 				{
-					System.out.println("CORNER");
-					return HitLocation.CORNER;
-				}
-				else
-				{
-					System.out.println("CORNER-RIGHT");
-					return HitLocation.RIGHT;
-				}
-			}
-
-			if(wy > hx)
-			{
-				if(wy > -hx)
-				{
-					if(isPaddle)
-					{
-						System.out.println("PADDLE");
-						return HitLocation.PADDLE;
-					}
-					else
-					{
-						System.out.println("TOP");
-						return HitLocation.TOP;
-					}
+					Logger.log(LogLevel.DEBUG, "BOTTOM");
+					return HitLocation.BOTTOM;
 				}
 				else
 				{
 					if(isPaddle)
 					{
-						System.out.println("PADDLE-RIGHT");
+						Logger.log(LogLevel.DEBUG, "PADDLE-LEFT");
 						return HitLocation.CORNER;
 					}
 					else
 					{
-						System.out.println("RIGHT");
-						return HitLocation.RIGHT;
+						Logger.log(LogLevel.DEBUG, "LEFT");
+						return HitLocation.LEFT;
 					}
 				}
 			}
 			else
 			{
-				if(wy > -hx)
+				if(crossWidth > (-crossHeight))
 				{
 					if(isPaddle)
 					{
-						System.out.println("PADDLE-LEFT");
+						Logger.log(LogLevel.DEBUG, "PADDLE-RIGHT");
 						return HitLocation.CORNER;
 					}
 					else
 					{
-						System.out.println("LEFT");
-						return HitLocation.LEFT;
+						Logger.log(LogLevel.DEBUG, "RIGHT");
+						return HitLocation.RIGHT;
 					}
 				}
 				else
 				{
-					System.out.println("BOTTOM");
-					return HitLocation.BOTTOM;
+					if(isPaddle)
+					{
+						Logger.log(LogLevel.DEBUG, "PADDLE");
+						return HitLocation.PADDLE;
+					}
+					else
+					{
+						Logger.log(LogLevel.DEBUG, "TOP");
+						return HitLocation.TOP;
+					}
 				}
 			}
 		}
@@ -274,9 +258,8 @@ public class Game
 		{
 			collision = false;
 		}
-
 		return null;
-	}
+	}	
 
 	public boolean collidesWithRightPaddleSide(Point2D ballPosition, Point2D paddlePosition, double paddleWidth)
 	{
@@ -307,10 +290,10 @@ public class Game
 		{
 			case TOP:
 				return new Point2D(ballPosition.getX(), brickPosition.getY() - ball.getBallRadius() * 2 - 1);
-				
+
 			case PADDLE:
 				return new Point2D(ballPosition.getX(), brickPosition.getY() - ball.getBallRadius() * 2 - 1);
-				
+
 			case RIGHT:
 				return new Point2D(brickPosition.getX() + brickWidth, ballPosition.getY() + 1);
 
@@ -322,16 +305,16 @@ public class Game
 
 			case CORNER:
 				if(ballPosition.getX() + ball.getBallRadius() > brickPosition.getX() + brickWidth / 2)
-				{					
-					//ball is on right	
+				{
+					// ball is on right
 					return new Point2D(brickPosition.getX() + brickWidth, ballPosition.getY() + 1);
 				}
 				else
-				{					
-					//ball is on left
+				{
+					// ball is on left
 					return new Point2D(brickPosition.getX() - ball.getBallRadius() * 2 - 1, ballPosition.getY());
 				}
-				
+
 			default:
 				return null;
 		}
