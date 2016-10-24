@@ -1,0 +1,3 @@
+http://www.java-gaming.org/index.php?topic=24220.0
+
+http://stackoverflow.com/questions/29861096/detect-which-side-of-a-rectangle-is-colliding-with-another-rectangle
