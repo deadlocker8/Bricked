@@ -1,6 +1,7 @@
 package de.bricked.game;
 
 import de.bricked.game.balls.Ball;
+import de.bricked.game.board.Board;
 import de.bricked.game.levels.Level;
 import de.bricked.game.levels.LevelPack;
 import de.bricked.game.settings.Settings;
@@ -18,6 +19,7 @@ public class Game
 	private boolean collision = false;
 	private boolean wallCollision = false;
 	private int points;
+	private Board board;	
 	private final double speedIncreasePerPaddleHitFactor = 1.05; 
 
 	public Game()
@@ -28,6 +30,7 @@ public class Game
 		this.livesRemaining = 0;
 		this.ball = null;
 		this.points = 0;
+		this.board = null;
 	}
 
 	public Settings getSettings()
@@ -88,6 +91,16 @@ public class Game
 	public void setPoints(int points)
 	{
 		this.points = points;
+	}
+
+	public Board getBoard()
+	{
+		return board;
+	}
+
+	public void setBoard(Board board)
+	{
+		this.board = board;
 	}
 
 	public Point2D reflectBall(HitLocation hitLocation, Point2D direction)
@@ -170,8 +183,7 @@ public class Game
 		if((ballLayoutY + ballTranslateY + ball.getBallRadius() * 2) >= gamePaneHeight)
 		{
 			wallCollision = true;
-			Logger.log(LogLevel.DEBUG, "BOTTOM-WALL");
-			// TODO replace with LIFE_LOST
+			Logger.log(LogLevel.DEBUG, "BOTTOM-WALL");			
 			return HitLocation.LIFE_LOST;
 		}
 

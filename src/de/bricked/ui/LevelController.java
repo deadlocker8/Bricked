@@ -1,6 +1,7 @@
 package de.bricked.ui;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -66,9 +67,8 @@ public class LevelController
 	public Image icon = new Image("de/bricked/resources/icon.png");
 	public final ResourceBundle bundle = ResourceBundle.getBundle("de/bricked/main/", Locale.GERMANY);
 	private LevelSelectController levelSelectController;
-	private Game game;
-	private Board board;
-	private GridPane grid;
+	private Game game;	
+	private static GridPane grid;
 	private final int MAX_LIVES = 7;
 	private AnimationTimer timer;
 	private double gamePaneWidth;
@@ -83,13 +83,14 @@ public class LevelController
 	private ChangeListener<Number> heightListener;
 	private ChangeListener<Number> widthListener;
 	private double oldMousePosition;
+	private static ArrayList<Label> brickLabels;
 
 	public void init(Stage stage, LevelSelectController levelSelectController, Game game)
 	{
 		this.stage = stage;
 		this.levelSelectController = levelSelectController;
 		this.game = game;
-		this.board = new Board(game.getLevel());
+		game.setBoard(new Board(game.getLevel()));
 
 		anchorPane.setOnKeyReleased(new EventHandler<KeyEvent>()
 		{
@@ -229,7 +230,7 @@ public class LevelController
 		labelLevelPack.setText(game.getLevelPack().getPackageName());
 		labelAuthor.setText("by " + game.getLevel().getAuthor());
 		labelLevelName.setText(game.getLevel().getName() + " (" + game.getLevel().getPosition() + "/" + game.getLevelPack().getLevels().size() + ")");
-		labelBlocksRemaining.setText(board.getNumberOfRemainingBricks() + " Bricks remaining");
+		labelBlocksRemaining.setText(game.getBoard().getNumberOfRemainingBricks() + " Bricks remaining");
 
 		game.setLivesRemaining(game.getLevel().getStartLives());
 
@@ -339,8 +340,9 @@ public class LevelController
 				if(hitLocation != null)
 				{
 					if(hitLocation.equals(HitLocation.LIFE_LOST))
-					{
+					{						
 						game.setLivesRemaining(game.getLivesRemaining() - 1);
+						Logger.log(LogLevel.DEBUG, "Life lost (" + game.getLivesRemaining() + " lives remaining)");
 						refreshLiveCounter();
 						if(game.getLivesRemaining() <= 0)
 						{
@@ -478,6 +480,7 @@ public class LevelController
 	public void redraw()
 	{
 		grid.getChildren().clear();
+		brickLabels = new ArrayList<>();
 
 		grid.getColumnConstraints().clear();
 		double xPercentage = 1.0 / Board.WIDTH;
@@ -501,22 +504,28 @@ public class LevelController
 		{
 			for(int k = 0; k < Board.WIDTH; k++)
 			{
-				Brick currentBrick = board.getBricks().get(i).get(k);
-
-				StackPane pane = new StackPane();
+				Brick currentBrick = game.getBoard().getBricks().get(i).get(k);			
 				
-				Label l = new Label();
-				l.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/bricks/" + currentBrick.getCurrentTextureID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");
-				l.setAlignment(Pos.CENTER);
+				Label labelBrick = new Label();
+				labelBrick.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/bricks/" + currentBrick.getCurrentTextureID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");
+				labelBrick.setAlignment(Pos.CENTER);
 
-				l.prefWidthProperty().bind(grid.getColumnConstraints().get(0).percentWidthProperty().multiply(gamePaneWidth));
-				l.prefHeightProperty().bind(grid.getRowConstraints().get(0).percentHeightProperty().multiply(gamePaneHeight));
+				labelBrick.prefWidthProperty().bind(grid.getColumnConstraints().get(0).percentWidthProperty().multiply(gamePaneWidth));
+				labelBrick.prefHeightProperty().bind(grid.getRowConstraints().get(0).percentHeightProperty().multiply(gamePaneHeight));			
 
-				pane.getChildren().add(l);
-
-				grid.add(pane, k, i);
+				brickLabels.add(labelBrick);
+				grid.add(labelBrick, k, i);
 			}
 		}		
+	}
+	
+	public static void redrawBrick(int column, int row, Brick brick)
+	{		
+		int id = row * (int)Board.WIDTH + column;
+		
+		Label labelBrick = brickLabels.get(id);		
+		labelBrick.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/bricks/" + brick.getCurrentTextureID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");
+		grid.getChildren().set(id, labelBrick);		
 	}
 
 	private void refreshLiveCounter()
@@ -614,29 +623,27 @@ public class LevelController
 	
 	private void brickCollisionDetection(int i, int k,  Point2D ballPosition )
 	{	
-		Brick currentBrick = board.getBricks().get(i).get(k);
+		Brick currentBrick = game.getBoard().getBricks().get(i).get(k);
 		if(!currentBrick.getType().equals(BrickType.AIR))
 		{		
-			StackPane stackPaneBrick = (StackPane)grid.getChildren().get(i * (int)Board.WIDTH + k);
+			Label stackPaneBrick = (Label)grid.getChildren().get(i * (int)Board.WIDTH + k);
 
 			Point2D brickPosition = new Point2D(stackPaneBrick.getLayoutX() + stackPaneBrick.getTranslateX(), stackPaneBrick.getLayoutY() + stackPaneBrick.getTranslateY());
 
 			HitLocation hitLocation = game.collides(ballPosition, brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight(), false);
 			if(hitLocation != null)
-			{		
-				
+			{					
 				game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
 
 				correctBallPosition(hitLocation, ballPosition, brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight());
 
-				game.setPoints(game.getPoints() + board.hitBrick(i, k, false));
+				game.setPoints(game.getPoints() + game.getBoard().hitBrick(i, k, false));
 				labelPoints.setText(String.valueOf(game.getPoints()));
-				labelBlocksRemaining.setText(board.getNumberOfRemainingBricks() + " Bricks remaining");
-				redraw();
-				if(board.getNumberOfRemainingBricks() == 0)
+				labelBlocksRemaining.setText(game.getBoard().getNumberOfRemainingBricks() + " Bricks remaining");
+				
+				if(game.getBoard().getNumberOfRemainingBricks() == 0)
 				{
 					// level done
-
 					gameState = GameState.STOPPED;
 					timer.stop();
 
