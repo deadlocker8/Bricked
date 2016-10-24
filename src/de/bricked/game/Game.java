@@ -18,6 +18,7 @@ public class Game
 	private boolean collision = false;
 	private boolean wallCollision = false;
 	private int points;
+	private final double speedIncreasePerPaddleHitFactor = 1.05; 
 
 	public Game()
 	{
@@ -115,9 +116,10 @@ public class Game
 
 	public Point2D reflectOnPaddle(Point2D direction, double factor)
 	{
-		double influenceX = 0.75;
+		double influenceX = 0.75;		
 
 		double totalSpeed = Math.sqrt(direction.getX() * direction.getX() + direction.getY() * direction.getY());
+		totalSpeed = totalSpeed * speedIncreasePerPaddleHitFactor;
 		double newXSpeed = totalSpeed * factor * influenceX;
 		double newYSpeed = Math.sqrt(totalSpeed * totalSpeed - newXSpeed * newXSpeed);
 

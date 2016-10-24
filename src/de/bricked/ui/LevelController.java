@@ -376,7 +376,7 @@ public class LevelController
 
 						switch(hitLocation)
 						{
-							case TOP:
+							case BOTTOM:
 								stackPaneBall.setTranslateX(stackPaneBall.getTranslateX());
 								stackPaneBall.setTranslateY(1);
 								break;
@@ -426,18 +426,18 @@ public class LevelController
 					// ball doesn't collide with paddle --> check collision with bricks
 					else
 					{					
-						if(game.getBall().getDirection().getX() > 0)
-						{									
-							for(int i = 0; i < Board.HEIGHT; i++)
-							{
-								for(int k = 0; k < Board.WIDTH; k++)
-								{
-									brickCollisionDetection(i, k, ballPosition);
-								}
-							}
-						}
-						else
-						{							
+//						if(game.getBall().getDirection().getX() > 0)
+//						{									
+//							for(int i = 0; i < Board.HEIGHT; i++)
+//							{
+//								for(int k = 0; k < Board.WIDTH; k++)
+//								{
+//									brickCollisionDetection(i, k, ballPosition);
+//								}
+//							}
+//						}
+//						else
+//						{							
 							for(int i = (int)Board.HEIGHT - 1; i >= 0; i--)
 							{
 								for(int k = (int)Board.WIDTH - 1; k >= 0 ; k--)
@@ -445,7 +445,7 @@ public class LevelController
 									brickCollisionDetection(i, k, ballPosition);
 								}
 							}
-						}
+//						}
 					}
 				}
 
@@ -504,9 +504,8 @@ public class LevelController
 				Brick currentBrick = board.getBricks().get(i).get(k);
 
 				StackPane pane = new StackPane();
-
-				// DEBUG
-				Label l = new Label(currentBrick.getType().getID());
+				
+				Label l = new Label();
 				l.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/bricks/" + currentBrick.getCurrentTextureID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");
 				l.setAlignment(Pos.CENTER);
 
