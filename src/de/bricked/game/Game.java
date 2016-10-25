@@ -20,7 +20,8 @@ public class Game
 	private boolean wallCollision = false;
 	private int points;
 	private Board board;	
-	private final double speedIncreasePerPaddleHitFactor = 1.05; 
+	private final double speedIncreasePerPaddleHitFactor = 1.05;
+	private final double maxTotalSpeed = 10.0;
 
 	public Game()
 	{
@@ -133,6 +134,10 @@ public class Game
 
 		double totalSpeed = Math.sqrt(direction.getX() * direction.getX() + direction.getY() * direction.getY());
 		totalSpeed = totalSpeed * speedIncreasePerPaddleHitFactor;
+		if(totalSpeed > maxTotalSpeed)
+		{
+			totalSpeed = maxTotalSpeed;
+		}
 		double newXSpeed = totalSpeed * factor * influenceX;
 		double newYSpeed = Math.sqrt(totalSpeed * totalSpeed - newXSpeed * newXSpeed);
 
