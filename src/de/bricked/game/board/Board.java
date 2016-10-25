@@ -185,9 +185,15 @@ public class Board
 			}
 			
 			points += hittedBrick.getType().getPoints();
+			
+			LevelController.redrawBrick(col, row, bricks.get(row).get(col), true);
+		}	
+		else
+		{
+			LevelController.redrawBrick(col, row, bricks.get(row).get(col), false);
 		}
+	
 		
-		LevelController.redrawBrick(col, row, bricks.get(row).get(col));
 	}
 
 	private void explodeBrick(int row, int col)

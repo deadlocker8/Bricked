@@ -18,9 +18,11 @@ import de.bricked.game.paddle.Paddle;
 import fontAwesome.FontIcon;
 import fontAwesome.FontIconType;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -45,6 +47,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 import logger.LogLevel;
 import logger.Logger;
 import tools.Worker;
@@ -67,14 +70,15 @@ public class LevelController
 	public Image icon = new Image("de/bricked/resources/icon.png");
 	public final ResourceBundle bundle = ResourceBundle.getBundle("de/bricked/main/", Locale.GERMANY);
 	private LevelSelectController levelSelectController;
-	private Game game;	
-	private static GridPane grid;
-	private final int MAX_LIVES = 7;
+	private Game game;
+	private static GridPane grid;	
 	private AnimationTimer timer;
 	private double gamePaneWidth;
 	private double gamePaneHeight;
-	final int TARGET_FPS = 60;
-	final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
+	private final int MAX_LIVES = 7;
+	private final int TARGET_FPS = 60;
+	private final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
+	private final static double BRICK_FADE_DURATION = 300.0;
 	private int fps;
 	private Paddle paddle;
 	private GameState gameState;
@@ -286,18 +290,18 @@ public class LevelController
 		gameState = GameState.WAITING;
 	}
 
-    public Paddle getPaddle()
-    {
-        return paddle;
-    }
+	public Paddle getPaddle()
+	{
+		return paddle;
+	}
 
-    public ImageView getLabelPaddle()
-    {
-        return labelPaddle;
-    }
+	public ImageView getLabelPaddle()
+	{
+		return labelPaddle;
+	}
 
-    private void initTimer()
-	{    	
+	private void initTimer()
+	{
 		timer = new AnimationTimer()
 		{
 			private long previousTime = 0;
@@ -340,7 +344,7 @@ public class LevelController
 				if(hitLocation != null)
 				{
 					if(hitLocation.equals(HitLocation.LIFE_LOST))
-					{						
+					{
 						game.setLivesRemaining(game.getLivesRemaining() - 1);
 						Logger.log(LogLevel.DEBUG, "Life lost (" + game.getLivesRemaining() + " lives remaining)");
 						refreshLiveCounter();
@@ -374,7 +378,7 @@ public class LevelController
 					}
 					else
 					{
-						game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));						
+						game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
 
 						switch(hitLocation)
 						{
@@ -388,27 +392,27 @@ public class LevelController
 								stackPaneBall.setTranslateY(stackPaneBall.getTranslateY());
 								break;
 
-							case LEFT:								
-								stackPaneBall.setTranslateX(gamePaneWidth - game.getBall().getBallRadius() * 2 -1);
+							case LEFT:
+								stackPaneBall.setTranslateX(gamePaneWidth - game.getBall().getBallRadius() * 2 - 1);
 								stackPaneBall.setTranslateY(stackPaneBall.getTranslateY());
 								break;
-								
+
 							case CORNER:
-								if(ballPosition.getX() +  game.getBall().getBallRadius() > gamePaneWidth / 2)
+								if(ballPosition.getX() + game.getBall().getBallRadius() > gamePaneWidth / 2)
 								{
-									//ball is in top right corner
-									stackPaneBall.setTranslateX(gamePaneWidth - game.getBall().getBallRadius() * 2 -1);
+									// ball is in top right corner
+									stackPaneBall.setTranslateX(gamePaneWidth - game.getBall().getBallRadius() * 2 - 1);
 									stackPaneBall.setTranslateY(1);
 									break;
 								}
 								else
 								{
-									//ball is in top left corner
+									// ball is in top left corner
 									stackPaneBall.setTranslateX(1);
 									stackPaneBall.setTranslateY(1);
 									break;
 								}
-								
+
 							default:
 								break;
 						}
@@ -416,9 +420,9 @@ public class LevelController
 				}
 				// ball doesn't collide with border --> check collision with paddle
 				else
-				{		
+				{
 					hitLocation = game.collides(ballPosition, paddlePosition, paddle.getWidth(), paddle.getHeight(), true);
-//					hitLocation = game.collides(game.getBall().getDirection(), stackPaneBall.getBoundsInParent(), labelPaddle.getBoundsInParent(), true);
+					// hitLocation = game.collides(game.getBall().getDirection(), stackPaneBall.getBoundsInParent(), labelPaddle.getBoundsInParent(), true);
 					if(hitLocation != null && (hitLocation.equals(HitLocation.PADDLE) || hitLocation.equals(HitLocation.CORNER)))
 					{
 						game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth())));
@@ -427,27 +431,27 @@ public class LevelController
 					}
 					// ball doesn't collide with paddle --> check collision with bricks
 					else
-					{					
-//						if(game.getBall().getDirection().getX() > 0)
-//						{									
-//							for(int i = 0; i < Board.HEIGHT; i++)
-//							{
-//								for(int k = 0; k < Board.WIDTH; k++)
-//								{
-//									brickCollisionDetection(i, k, ballPosition);
-//								}
-//							}
-//						}
-//						else
-//						{							
-							for(int i = (int)Board.HEIGHT - 1; i >= 0; i--)
+					{
+						// if(game.getBall().getDirection().getX() > 0)
+						// {
+						// for(int i = 0; i < Board.HEIGHT; i++)
+						// {
+						// for(int k = 0; k < Board.WIDTH; k++)
+						// {
+						// brickCollisionDetection(i, k, ballPosition);
+						// }
+						// }
+						// }
+						// else
+						// {
+						for(int i = (int)Board.HEIGHT - 1; i >= 0; i--)
+						{
+							for(int k = (int)Board.WIDTH - 1; k >= 0; k--)
 							{
-								for(int k = (int)Board.WIDTH - 1; k >= 0 ; k--)
-								{
-									brickCollisionDetection(i, k, ballPosition);
-								}
+								brickCollisionDetection(i, k, ballPosition);
 							}
-//						}
+						}
+						// }
 					}
 				}
 
@@ -504,28 +508,49 @@ public class LevelController
 		{
 			for(int k = 0; k < Board.WIDTH; k++)
 			{
-				Brick currentBrick = game.getBoard().getBricks().get(i).get(k);			
-				
+				Brick currentBrick = game.getBoard().getBricks().get(i).get(k);
+
 				Label labelBrick = new Label();
 				labelBrick.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/bricks/" + currentBrick.getCurrentTextureID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");
 				labelBrick.setAlignment(Pos.CENTER);
 
 				labelBrick.prefWidthProperty().bind(grid.getColumnConstraints().get(0).percentWidthProperty().multiply(gamePaneWidth));
-				labelBrick.prefHeightProperty().bind(grid.getRowConstraints().get(0).percentHeightProperty().multiply(gamePaneHeight));			
+				labelBrick.prefHeightProperty().bind(grid.getRowConstraints().get(0).percentHeightProperty().multiply(gamePaneHeight));
 
 				brickLabels.add(labelBrick);
 				grid.add(labelBrick, k, i);
 			}
-		}		
+		}
 	}
-	
-	public static void redrawBrick(int column, int row, Brick brick)
-	{		
+
+	public static void redrawBrick(int column, int row, Brick brick, boolean fade)
+	{
 		int id = row * (int)Board.WIDTH + column;
+
+		Label labelBrick = brickLabels.get(id);
 		
-		Label labelBrick = brickLabels.get(id);		
-		labelBrick.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/bricks/" + brick.getCurrentTextureID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");
-		grid.getChildren().set(id, labelBrick);		
+		if(fade)
+		{			
+			FadeTransition ft = new FadeTransition(Duration.millis(BRICK_FADE_DURATION), labelBrick);
+			ft.setFromValue(1.0);
+			ft.setToValue(0.0);
+			ft.setCycleCount(1);
+			ft.setAutoReverse(false);
+			ft.setOnFinished(new EventHandler<ActionEvent>()
+			{
+				@Override
+				public void handle(ActionEvent event)
+				{
+					labelBrick.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/bricks/" + brick.getCurrentTextureID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");					
+				}				
+			});
+			ft.play();
+			
+		}
+		else
+		{
+			labelBrick.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/bricks/" + brick.getCurrentTextureID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");
+		}
 	}
 
 	private void refreshLiveCounter()
@@ -620,19 +645,19 @@ public class LevelController
 			labelPaddle.setTranslateX(anchorPaneGame.getWidth() - paddle.getWidth());
 		}
 	}
-	
-	private void brickCollisionDetection(int i, int k,  Point2D ballPosition )
-	{	
+
+	private void brickCollisionDetection(int i, int k, Point2D ballPosition)
+	{
 		Brick currentBrick = game.getBoard().getBricks().get(i).get(k);
 		if(!currentBrick.getType().equals(BrickType.AIR))
-		{		
+		{
 			Label stackPaneBrick = (Label)grid.getChildren().get(i * (int)Board.WIDTH + k);
 
 			Point2D brickPosition = new Point2D(stackPaneBrick.getLayoutX() + stackPaneBrick.getTranslateX(), stackPaneBrick.getLayoutY() + stackPaneBrick.getTranslateY());
 
 			HitLocation hitLocation = game.collides(ballPosition, brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight(), false);
 			if(hitLocation != null)
-			{					
+			{
 				game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
 
 				correctBallPosition(hitLocation, ballPosition, brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight());
@@ -640,7 +665,7 @@ public class LevelController
 				game.setPoints(game.getPoints() + game.getBoard().hitBrick(i, k, false));
 				labelPoints.setText(String.valueOf(game.getPoints()));
 				labelBlocksRemaining.setText(game.getBoard().getNumberOfRemainingBricks() + " Bricks remaining");
-				
+
 				if(game.getBoard().getNumberOfRemainingBricks() == 0)
 				{
 					// level done

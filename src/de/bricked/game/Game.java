@@ -21,7 +21,7 @@ public class Game
 	private int points;
 	private Board board;	
 	private final double speedIncreasePerPaddleHitFactor = 1.05;
-	private final double maxTotalSpeed = 10.0;
+	private final double maxTotalSpeed = 9.0;
 
 	public Game()
 	{
