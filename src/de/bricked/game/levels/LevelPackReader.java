@@ -8,6 +8,8 @@ import com.google.gson.JsonParser;
 import de.bricked.game.paddle.PaddleSize;
 import logger.LogLevel;
 import logger.Logger;
+
+import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class LevelPackReader
 
 	public LevelPackReader(String filename)
 	{
-		this.directory = "src/de/bricked/resources/levelpacks/";
+		this.directory = "/de/bricked/resources/levelpacks/";
 		this.filename = filename;
 	}
 
@@ -80,7 +82,7 @@ public class LevelPackReader
 	{
 		try
 		{
-			String jsonContent = new String(Files.readAllBytes(FileSystems.getDefault().getPath(directory + filename)));
+			String jsonContent = new String(Files.readAllBytes(FileSystems.getDefault().getPath(getClass().getResource(new File(directory,filename).toURI().getPath()).toURI().getPath())));
 			JsonObject root = new JsonParser().parse(jsonContent).getAsJsonObject();
 			String packageName = root.get("name").getAsString();
 			String packageAuthor = root.get("author").getAsString();
