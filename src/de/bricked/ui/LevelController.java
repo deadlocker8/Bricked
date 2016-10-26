@@ -607,7 +607,7 @@ public class LevelController
 	{
 		anchorPaneGame.getChildren().remove(stackPaneBall);
 
-		game.setBall(new Ball(BallType.EXPLOSIVE));
+		game.setBall(new Ball(BallType.NO_COLLISION));
 
 		// create circle for ball
 		final Circle circle = new Circle(game.getBall().getBallRadius(), Color.web(game.getBall().getType().getColor()));
@@ -657,9 +657,12 @@ public class LevelController
 			HitLocation hitLocation = game.collides(ballPosition, brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight(), false);
 			if(hitLocation != null)
 			{
-				game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
+				if(!game.getBall().getType().equals(BallType.NO_COLLISION))
+				{
+					game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
 
-				correctBallPosition(hitLocation, ballPosition, brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight());
+					correctBallPosition(hitLocation, ballPosition, brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight());
+				}
 
 				game.setPoints(game.getPoints() + game.getBoard().hitBrick(i, k, game.getBall()));
 				labelPoints.setText(String.valueOf(game.getPoints()));

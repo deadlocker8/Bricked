@@ -3,7 +3,6 @@ package de.bricked.game.board;
 import java.util.ArrayList;
 
 import de.bricked.game.balls.Ball;
-import de.bricked.game.balls.BallType;
 import de.bricked.game.bricks.Brick;
 import de.bricked.game.bricks.BrickType;
 import de.bricked.game.levels.Level;
@@ -15,7 +14,7 @@ public class Board
 	private ArrayList<ArrayList<Brick>> bricks;
 	public static final double WIDTH = 18.0;
 	public static final double HEIGHT = 26.0;
-	private int points = 0;	
+	private int points = 0;
 
 	public Board(Level level)
 	{
@@ -98,21 +97,21 @@ public class Board
 	}
 
 	private ArrayList<Brick> getRemainingBricks()
-    {
-        ArrayList<Brick> remainingBricks = new ArrayList<>();
-        for(ArrayList<Brick> row : bricks)
-        {
-            for(Brick currentBrick : row)
-            {
-                if(!(currentBrick.getType().equals(BrickType.AIR)) && !(currentBrick.getType().equals(BrickType.SOLID)))
-                {
-                    remainingBricks.add(currentBrick);
-                }
-            }
-        }
-        return remainingBricks;
-    }
-	
+	{
+		ArrayList<Brick> remainingBricks = new ArrayList<>();
+		for(ArrayList<Brick> row : bricks)
+		{
+			for(Brick currentBrick : row)
+			{
+				if(!(currentBrick.getType().equals(BrickType.AIR)) && !(currentBrick.getType().equals(BrickType.SOLID)))
+				{
+					remainingBricks.add(currentBrick);
+				}
+			}
+		}
+		return remainingBricks;
+	}
+
 	public int getNumberOfRemainingBricks()
 	{
 		return getRemainingBricks().size();
@@ -152,24 +151,33 @@ public class Board
 	{
 		return HEIGHT;
 	}
-	
+
 	public int hitBrick(int row, int col, Ball ball)
 	{
-		points = 0;		
-		
-		if(ball.getType().equals(BallType.EXPLOSIVE))
+		points = 0;
+
+		switch(ball.getType())
 		{
-			Brick currentBrick = bricks.get(row).get(col);
-			if(currentBrick.getPowerUp() != null)
-			{
-				//TODO deploy PowerUp
-			}
-			
-			bricks.get(row).set(col, new Brick(BrickType.TNT));
+			case EXPLOSIVE:
+				Brick currentBrick = bricks.get(row).get(col);
+				if(currentBrick.getPowerUp() != null)
+				{
+					// TODO deploy PowerUp
+				}
+
+				bricks.get(row).set(col, new Brick(BrickType.TNT));
+				destroyBrick(row, col, false);
+				break;
+
+			case NO_COLLISION:
+				destroyBrick(row, col, true);
+				break;
+
+			default:
+				destroyBrick(row, col, false);
+				break;
 		}
-		
-		destroyBrick(row, col, false);
-		
+
 		return points;
 	}
 
@@ -185,28 +193,27 @@ public class Board
 		// block was destroyed
 		if(hittedBrick.hit(instantDestroy))
 		{
-			bricks.get(row).set(col, new Brick(BrickType.AIR));				
+			bricks.get(row).set(col, new Brick(BrickType.AIR));
 
 			if(hittedBrick.getType().equals(BrickType.TNT))
 			{
 				explodeBrick(row, col);
-			}			
+			}
 
 			if(hittedBrick.getPowerUp() != null)
 			{
-				//TODO deploy PowerUp
+				// TODO deploy PowerUp
 			}
-			
+
 			points += hittedBrick.getType().getPoints();
-			
+
 			LevelController.redrawBrick(col, row, bricks.get(row).get(col), true);
-		}	
+		}
 		else
 		{
 			LevelController.redrawBrick(col, row, bricks.get(row).get(col), false);
 		}
-	
-		
+
 	}
 
 	private void explodeBrick(int row, int col)
