@@ -607,10 +607,10 @@ public class LevelController
 	{
 		anchorPaneGame.getChildren().remove(stackPaneBall);
 
-		game.setBall(new Ball(BallType.NORMAL));
+		game.setBall(new Ball(BallType.NO_COLLISION));
 
 		// create circle for ball
-		final Circle circle = new Circle(game.getBall().getBallRadius(), Color.rgb(156, 216, 255));
+		final Circle circle = new Circle(game.getBall().getBallRadius(), Color.web(game.getBall().getType().getColor()));
 		circle.setEffect(new Lighting());
 		stackPaneBall = new StackPane();
 		stackPaneBall.getChildren().addAll(circle);

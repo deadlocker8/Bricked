@@ -2,19 +2,19 @@ package de.bricked.game.balls;
 
 public enum BallType
 {
-	NORMAL("N", "normal", 10, 4),
-	EXPLOSIVE("A","explosive", 10, 6),
-	NO_COLLISION("S","no_collision", 10, 8);	
+	NORMAL("N", "#9CD8FF", 10, 4),
+	EXPLOSIVE("A","#CC2E2E", 10, 6),
+	NO_COLLISION("S","#2828CC", 10, 8);	
 
 	private String ID;
-	private String textureID;	
+	private String color;	
 	private double radius;
 	private double speedFactor;
 		
-	private BallType(String ID, String textureID, double radius, double speedFactor)
+	private BallType(String ID, String color, double radius, double speedFactor)
 	{		
 		this.ID = ID;
-		this.textureID = textureID;
+		this.color = color;
 		this.radius = radius;
 		this.speedFactor = speedFactor;
 	}		
@@ -24,9 +24,9 @@ public enum BallType
 		return ID;
 	}
 
-	public String getTextureID()
+	public String getColor()
 	{
-		return textureID;
+		return color;
 	}
 	
 	public double getRadius()
