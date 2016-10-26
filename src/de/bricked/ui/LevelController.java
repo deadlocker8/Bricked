@@ -561,26 +561,26 @@ public class LevelController
 		{
 			ImageView iv = new ImageView(new Image("de/bricked/resources/textures/bricks/empty.png"));
 			iv.setFitWidth(30);
-			iv.setFitHeight(148 / MAX_LIVES);
+			iv.setFitHeight(120 / MAX_LIVES);
 			vboxLives.getChildren().add(iv);
 			if(i > 0)
 			{
-				VBox.setMargin(iv, new Insets(4, 0, 0, 0));
+				VBox.setMargin(iv, new Insets(9, 0, 0, 0));
 			}
 		}
 
 		for(int i = 0; i < game.getLivesRemaining(); i++)
 		{
-			ImageView iv = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle.png"));
+			ImageView iv = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle-extra-small.png"));
 			iv.setFitWidth(30);
-			iv.setFitHeight(148 / MAX_LIVES);
+			iv.setFitHeight(120 / MAX_LIVES);
 			vboxLives.getChildren().add(iv);
 
 			if(game.getLivesRemaining() == MAX_LIVES)
 			{
 				if(i > 0)
 				{
-					VBox.setMargin(iv, new Insets(4, 0, 0, 0));
+					VBox.setMargin(iv, new Insets(9, 0, 0, 0));
 				}
 			}
 			else
@@ -594,9 +594,8 @@ public class LevelController
 	{
 		anchorPaneGame.getChildren().remove(labelPaddle);
 
-		paddle = new Paddle(game.getLevel().getInitPadSize(), gamePaneHeight / Board.HEIGHT, gamePaneWidth);
-		// create label for paddle
-		labelPaddle = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle.png"));
+		paddle = new Paddle(game.getLevel().getInitPadSize(), gamePaneHeight / Board.HEIGHT, gamePaneWidth);			
+		labelPaddle = new ImageView(new Image("de/bricked/resources/textures/paddle/" + paddle.getPaddleSize().getTextureID() + ".png"));		
 		labelPaddle.setFitWidth(paddle.getWidth());
 		labelPaddle.setFitHeight(paddle.getHeight());
 		labelPaddle.setTranslateX(gamePaneWidth / 2 - paddle.getWidth() / 2);
