@@ -653,11 +653,11 @@ public class LevelController
 		labelMultiplicator.setText("x0");
 	}
 
-	private void increaseMultiplicator(int points)
-	{
-		game.increaseMultiplicator();
-		game.increasePointsSinceLastMultiplicatorReset(points);
-		labelMultiplicator.setText("x" + (game.getMultiplicator() - 1));
+	public void increaseMultiplicator(int points)
+	{		
+		game.increaseMultiplicator();		
+		game.increasePointsSinceLastMultiplicatorReset(points);	
+		labelMultiplicator.setText("x" + game.getMultiplicator());
 	}
 
 	private void movePaddleLeft()
@@ -706,8 +706,7 @@ public class LevelController
 				int points = game.getBoard().hitBrick(i, k, game.getBall());
 				//brick has been destroyed
 				if(points > 0)
-				{
-					increaseMultiplicator(points);
+				{					
 					game.setTotalPoints(game.getTotalPoints() + points);
 					labelPoints.setText(String.valueOf(game.getTotalPoints()));
 					labelBlocksRemaining.setText(game.getBoard().getNumberOfRemainingBricks() + " Bricks remaining");

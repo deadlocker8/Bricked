@@ -35,7 +35,7 @@ public class Game
 		this.ball = null;
 		this.totalPoints = 0;
 		this.board = null;
-		this.multiplicator = 1;
+		this.multiplicator = 0;
 		this.pointsSinceLastMultiplicatorReset = 0;
 		this.levelController = null;
 	}
@@ -122,7 +122,7 @@ public class Game
 	
 	public void resetMultiplicator()
 	{
-		this.multiplicator = 1;
+		this.multiplicator = 0;
 	}	
 
 	public int getPointsSinceLastMultiplicatorReset()
