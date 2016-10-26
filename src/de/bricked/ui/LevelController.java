@@ -19,6 +19,8 @@ import fontAwesome.FontIcon;
 import fontAwesome.FontIconType;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -96,6 +98,7 @@ public class LevelController
 		this.levelSelectController = levelSelectController;
 		this.game = game;
 		game.setBoard(new Board(game));
+		game.setLevelController(this);
 
 		anchorPane.setOnKeyReleased(new EventHandler<KeyEvent>()
 		{
@@ -549,9 +552,8 @@ public class LevelController
 				{
 					labelBrick.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/bricks/" + brick.getCurrentTextureID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");
 				}
-			});
-			ft.play();
-
+			});			
+			ft.play();	
 		}
 		else
 		{
@@ -563,7 +565,7 @@ public class LevelController
 	{
 		vboxLives.getChildren().clear();
 
-		for(int i = 0; i < MAX_LIVES - game.getLivesRemaining(); i++)
+		for(int i = 0; i < MAX_LIVES - game.getLivesRemaining() + 1; i++)
 		{
 			ImageView iv = new ImageView(new Image("de/bricked/resources/textures/bricks/empty.png"));
 			iv.setFitWidth(30);
@@ -575,7 +577,7 @@ public class LevelController
 			}
 		}
 
-		for(int i = 0; i < game.getLivesRemaining(); i++)
+		for(int i = 0; i < game.getLivesRemaining() - 1; i++)
 		{
 			ImageView iv = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle-extra-small.png"));
 			iv.setFitWidth(30);
@@ -715,6 +717,46 @@ public class LevelController
 			}
 		}
 	}
+	
+	public void showAnimatedPoints(int row, int col, int points)
+	{
+		double xPosition = (gamePaneWidth / Board.WIDTH) * (col);
+		double yPosition = (gamePaneHeight / Board.HEIGHT) * (row);
+		
+		Label labelNotification = new Label("+" + points);
+		labelNotification.setTranslateX(xPosition);
+		labelNotification.setTranslateY(yPosition);
+		labelNotification.setStyle("-fx-font-weight: bold; -fx-font-size: 15; ");
+		labelNotification.setAlignment(Pos.CENTER);
+		labelNotification.setPrefWidth(gamePaneWidth / Board.WIDTH);
+		labelNotification.setPrefHeight(gamePaneHeight / Board.HEIGHT);
+		anchorPaneGame.getChildren().add(labelNotification);
+
+		FadeTransition fadeTransition = new FadeTransition(Duration.millis(1200), labelNotification);
+		fadeTransition.setFromValue(1.0);
+		fadeTransition.setToValue(0.0);
+		fadeTransition.setCycleCount(1);
+		fadeTransition.setAutoReverse(false);
+		TranslateTransition translateTransition = new TranslateTransition(Duration.millis(1200), labelNotification);
+		translateTransition.setFromY(yPosition);
+		translateTransition.setToY(yPosition - (gamePaneHeight / Board.HEIGHT));
+		translateTransition.setCycleCount(1);
+		translateTransition.setAutoReverse(false);		
+
+		ParallelTransition parallelTransition = new ParallelTransition();
+		parallelTransition.getChildren().addAll(fadeTransition, translateTransition);
+		parallelTransition.setCycleCount(1);		
+		parallelTransition.setOnFinished(new EventHandler<ActionEvent>()
+		{
+			@Override
+			public void handle(ActionEvent event)
+			{
+				anchorPaneGame.getChildren().remove(labelNotification);				
+			}
+		});
+
+		parallelTransition.play();
+	}
 
 	public void showLabelFPS(boolean value)
 	{
@@ -745,6 +787,8 @@ public class LevelController
 		game.setTotalPoints(0);
 		game.resetMultiplicator();
 		game.resetPointsSinceLastMultiplicatorReset();
+		game.setBoard(null);
+		game.setLevelController(null);		
 
 		anchorPaneGame.requestFocus();
 	}

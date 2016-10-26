@@ -5,6 +5,7 @@ import de.bricked.game.board.Board;
 import de.bricked.game.levels.Level;
 import de.bricked.game.levels.LevelPack;
 import de.bricked.game.settings.Settings;
+import de.bricked.ui.LevelController;
 import javafx.geometry.Point2D;
 import logger.LogLevel;
 import logger.Logger;
@@ -23,6 +24,7 @@ public class Game
 	private final double speedIncreasePerPaddleHitFactor = 1.05;
 	private int pointsSinceLastMultiplicatorReset;
 	private int multiplicator;
+	private LevelController levelController;
 
 	public Game()
 	{
@@ -35,6 +37,7 @@ public class Game
 		this.board = null;
 		this.multiplicator = 1;
 		this.pointsSinceLastMultiplicatorReset = 0;
+		this.levelController = null;
 	}
 
 	public Settings getSettings()
@@ -140,7 +143,17 @@ public class Game
 	public void applyMultiplicator()
 	{
 		totalPoints += pointsSinceLastMultiplicatorReset * multiplicator;
-		System.out.println(pointsSinceLastMultiplicatorReset + " x" + multiplicator + "  =  " + totalPoints);		
+		Logger.log(LogLevel.DEBUG, "Applied multiplicator: " + pointsSinceLastMultiplicatorReset + " x" + multiplicator + "  =  " + totalPoints);		
+	}
+
+	public LevelController getLevelController()
+	{
+		return levelController;
+	}
+
+	public void setLevelController(LevelController levelController)
+	{
+		this.levelController = levelController;
 	}
 
 	public Point2D reflectBall(HitLocation hitLocation, Point2D direction)
