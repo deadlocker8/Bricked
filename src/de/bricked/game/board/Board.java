@@ -2,6 +2,8 @@ package de.bricked.game.board;
 
 import java.util.ArrayList;
 
+import de.bricked.game.balls.Ball;
+import de.bricked.game.balls.BallType;
 import de.bricked.game.bricks.Brick;
 import de.bricked.game.bricks.BrickType;
 import de.bricked.game.levels.Level;
@@ -151,11 +153,22 @@ public class Board
 		return HEIGHT;
 	}
 	
-	public int hitBrick(int row, int col, boolean instantDestroy)
+	public int hitBrick(int row, int col, Ball ball)
 	{
-		points = 0;
+		points = 0;		
 		
-		destroyBrick(row, col, instantDestroy);
+		if(ball.getType().equals(BallType.EXPLOSIVE))
+		{
+			Brick currentBrick = bricks.get(row).get(col);
+			if(currentBrick.getPowerUp() != null)
+			{
+				//TODO deploy PowerUp
+			}
+			
+			bricks.get(row).set(col, new Brick(BrickType.TNT));
+		}
+		
+		destroyBrick(row, col, false);
 		
 		return points;
 	}

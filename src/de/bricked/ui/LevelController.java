@@ -607,7 +607,7 @@ public class LevelController
 	{
 		anchorPaneGame.getChildren().remove(stackPaneBall);
 
-		game.setBall(new Ball(BallType.NO_COLLISION));
+		game.setBall(new Ball(BallType.EXPLOSIVE));
 
 		// create circle for ball
 		final Circle circle = new Circle(game.getBall().getBallRadius(), Color.web(game.getBall().getType().getColor()));
@@ -661,7 +661,7 @@ public class LevelController
 
 				correctBallPosition(hitLocation, ballPosition, brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight());
 
-				game.setPoints(game.getPoints() + game.getBoard().hitBrick(i, k, false));
+				game.setPoints(game.getPoints() + game.getBoard().hitBrick(i, k, game.getBall()));
 				labelPoints.setText(String.valueOf(game.getPoints()));
 				labelBlocksRemaining.setText(game.getBoard().getNumberOfRemainingBricks() + " Bricks remaining");
 
