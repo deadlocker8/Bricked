@@ -11,7 +11,7 @@
 <AnchorPane fx:id="anchorPane" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.bricked.ui.LevelController">
    <children>
       <AnchorPane fx:id="anchorPaneGame" layoutX="22.0" layoutY="125.0" minHeight="650.0" minWidth="700.0" prefHeight="650.0" prefWidth="700.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="78.0" AnchorPane.topAnchor="125.0" />
-      <VBox fx:id="vboxPowerUps" layoutX="745.0" layoutY="125.0" minHeight="454.0" minWidth="40.0" prefHeight="454.0" prefWidth="40.0" AnchorPane.bottomAnchor="221.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="125.0" />
+      <VBox fx:id="vboxPowerUps" layoutX="745.0" layoutY="125.0" minHeight="338.0" minWidth="40.0" prefHeight="402.0" prefWidth="40.0" AnchorPane.bottomAnchor="273.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="125.0" />
       <HBox alignment="CENTER" layoutX="34.0" layoutY="23.0" prefHeight="100.0" prefWidth="275.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
          <children>
             <Button fx:id="buttonBack" mnemonicParsing="false" onAction="#back" text="Back" />
@@ -61,6 +61,11 @@
       <Label fx:id="labelFPS" layoutX="770.0" layoutY="6.0" text="0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0">
          <font>
             <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelMultiplicator" alignment="CENTER_RIGHT" layoutX="736.0" layoutY="543.0" prefHeight="30.0" prefWidth="49.0" text="x0" textAlignment="JUSTIFY" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="543.0">
+         <font>
+            <Font name="System Bold" size="20.0" />
          </font>
       </Label>
    </children>

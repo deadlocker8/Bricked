@@ -65,13 +65,14 @@ public class LevelController
 	@FXML private VBox vboxPowerUps;
 	@FXML private VBox vboxLives;
 	@FXML private Label labelFPS;
+	@FXML private Label labelMultiplicator;
 
 	public Stage stage;
 	public Image icon = new Image("de/bricked/resources/icon.png");
 	public final ResourceBundle bundle = ResourceBundle.getBundle("de/bricked/main/", Locale.GERMANY);
 	private LevelSelectController levelSelectController;
 	private Game game;
-	private static GridPane grid;	
+	private static GridPane grid;
 	private AnimationTimer timer;
 	private double gamePaneWidth;
 	private double gamePaneHeight;
@@ -94,7 +95,7 @@ public class LevelController
 		this.stage = stage;
 		this.levelSelectController = levelSelectController;
 		this.game = game;
-		game.setBoard(new Board(game.getLevel()));
+		game.setBoard(new Board(game));
 
 		anchorPane.setOnKeyReleased(new EventHandler<KeyEvent>()
 		{
@@ -287,6 +288,8 @@ public class LevelController
 		showLabelFPS(levelSelectController.controller.controller.getCommandLine().getBundle().isShowFPS());
 		labelFPS.setStyle("-fx-text-fill: #FF0000");
 
+		resetMultiplicator();
+
 		gameState = GameState.WAITING;
 	}
 
@@ -343,6 +346,8 @@ public class LevelController
 				// if ball collides with border then brick collisions are irrelevant
 				if(hitLocation != null)
 				{
+					resetMultiplicator();
+					
 					if(hitLocation.equals(HitLocation.LIFE_LOST))
 					{
 						game.setLivesRemaining(game.getLivesRemaining() - 1);
@@ -373,7 +378,7 @@ public class LevelController
 
 							// reset paddle and ball
 							initPaddle();
-							initBall();
+							initBall();						
 						}
 					}
 					else
@@ -421,37 +426,38 @@ public class LevelController
 				// ball doesn't collide with border --> check collision with paddle
 				else
 				{
-					hitLocation = game.collides(ballPosition, paddlePosition, paddle.getWidth(), paddle.getHeight(), true);
-					// hitLocation = game.collides(game.getBall().getDirection(), stackPaneBall.getBoundsInParent(), labelPaddle.getBoundsInParent(), true);
+					hitLocation = game.collides(ballPosition, paddlePosition, paddle.getWidth(), paddle.getHeight(), true);					
 					if(hitLocation != null && (hitLocation.equals(HitLocation.PADDLE) || hitLocation.equals(HitLocation.CORNER)))
-					{
+					{						
 						game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth())));
 
 						correctBallPosition(hitLocation, ballPosition, paddlePosition, paddle.getWidth(), paddle.getHeight());
+						
+						resetMultiplicator();
 					}
 					// ball doesn't collide with paddle --> check collision with bricks
 					else
 					{
-						// if(game.getBall().getDirection().getX() > 0)
-						// {
-						// for(int i = 0; i < Board.HEIGHT; i++)
-						// {
-						// for(int k = 0; k < Board.WIDTH; k++)
-						// {
-						// brickCollisionDetection(i, k, ballPosition);
-						// }
-						// }
-						// }
-						// else
-						// {
-						for(int i = (int)Board.HEIGHT - 1; i >= 0; i--)
+						if(game.getBall().getDirection().getX() > 0)
 						{
-							for(int k = (int)Board.WIDTH - 1; k >= 0; k--)
+							for(int i = 0; i < Board.HEIGHT; i++)
 							{
-								brickCollisionDetection(i, k, ballPosition);
+								for(int k = 0; k < Board.WIDTH; k++)
+								{
+									brickCollisionDetection(i, k, ballPosition);
+								}
 							}
 						}
-						// }
+						else
+						{
+							for(int i = (int)Board.HEIGHT - 1; i >= 0; i--)
+							{
+								for(int k = (int)Board.WIDTH - 1; k >= 0; k--)
+								{
+									brickCollisionDetection(i, k, ballPosition);
+								}
+							}
+						}
 					}
 				}
 
@@ -528,9 +534,9 @@ public class LevelController
 		int id = row * (int)Board.WIDTH + column;
 
 		Label labelBrick = brickLabels.get(id);
-		
+
 		if(fade)
-		{			
+		{
 			FadeTransition ft = new FadeTransition(Duration.millis(BRICK_FADE_DURATION), labelBrick);
 			ft.setFromValue(1.0);
 			ft.setToValue(0.0);
@@ -541,11 +547,11 @@ public class LevelController
 				@Override
 				public void handle(ActionEvent event)
 				{
-					labelBrick.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/bricks/" + brick.getCurrentTextureID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");					
-				}				
+					labelBrick.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/bricks/" + brick.getCurrentTextureID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");
+				}
 			});
 			ft.play();
-			
+
 		}
 		else
 		{
@@ -594,8 +600,8 @@ public class LevelController
 	{
 		anchorPaneGame.getChildren().remove(labelPaddle);
 
-		paddle = new Paddle(game.getLevel().getInitPadSize(), gamePaneHeight / Board.HEIGHT, gamePaneWidth);			
-		labelPaddle = new ImageView(new Image("de/bricked/resources/textures/paddle/" + paddle.getPaddleSize().getTextureID() + ".png"));		
+		paddle = new Paddle(game.getLevel().getInitPadSize(), gamePaneHeight / Board.HEIGHT, gamePaneWidth);
+		labelPaddle = new ImageView(new Image("de/bricked/resources/textures/paddle/" + paddle.getPaddleSize().getTextureID() + ".png"));
 		labelPaddle.setFitWidth(paddle.getWidth());
 		labelPaddle.setFitHeight(paddle.getHeight());
 		labelPaddle.setTranslateX(gamePaneWidth / 2 - paddle.getWidth() / 2);
@@ -607,7 +613,7 @@ public class LevelController
 	{
 		anchorPaneGame.getChildren().remove(stackPaneBall);
 
-		game.setBall(new Ball(BallType.NO_COLLISION));
+		game.setBall(new Ball(BallType.NORMAL));
 
 		// create circle for ball
 		final Circle circle = new Circle(game.getBall().getBallRadius(), Color.web(game.getBall().getType().getColor()));
@@ -619,6 +625,21 @@ public class LevelController
 		anchorPaneGame.getChildren().add(stackPaneBall);
 
 		initTimer();
+	}
+
+	private void resetMultiplicator()
+	{
+		game.applyMultiplicator();
+		game.resetMultiplicator();
+		game.resetPointsSinceLastMultiplicatorReset();
+		labelMultiplicator.setText("x0");
+	}
+
+	private void increaseMultiplicator(int points)
+	{
+		game.increaseMultiplicator();
+		game.increasePointsSinceLastMultiplicatorReset(points);
+		labelMultiplicator.setText("x" + (game.getMultiplicator() - 1));
 	}
 
 	private void movePaddleLeft()
@@ -662,11 +683,17 @@ public class LevelController
 					game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
 
 					correctBallPosition(hitLocation, ballPosition, brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight());
-				}
-
-				game.setPoints(game.getPoints() + game.getBoard().hitBrick(i, k, game.getBall()));
-				labelPoints.setText(String.valueOf(game.getPoints()));
-				labelBlocksRemaining.setText(game.getBoard().getNumberOfRemainingBricks() + " Bricks remaining");
+				}				
+				
+				int points = game.getBoard().hitBrick(i, k, game.getBall());
+				//brick has been destroyed
+				if(points > 0)
+				{
+					increaseMultiplicator(points);
+					game.setTotalPoints(game.getTotalPoints() + points);
+					labelPoints.setText(String.valueOf(game.getTotalPoints()));
+					labelBlocksRemaining.setText(game.getBoard().getNumberOfRemainingBricks() + " Bricks remaining");
+				}				
 
 				if(game.getBoard().getNumberOfRemainingBricks() == 0)
 				{
@@ -678,7 +705,7 @@ public class LevelController
 						Alert alert = new Alert(AlertType.INFORMATION);
 						alert.setTitle("Congratulations!");
 						alert.setHeaderText("");
-						alert.setContentText("You finished Level \"" + game.getLevel().getName() + "\" with " + game.getPoints() + " Points");
+						alert.setContentText("You finished Level \"" + game.getLevel().getName() + "\" with " + game.getTotalPoints() + " Points");
 						Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
 						dialogStage.getIcons().add(icon);
 						dialogStage.centerOnScreen();
@@ -715,7 +742,9 @@ public class LevelController
 		}
 		stage.close();
 		levelSelectController.stage.show();
-		game.setPoints(0);
+		game.setTotalPoints(0);
+		game.resetMultiplicator();
+		game.resetPointsSinceLastMultiplicatorReset();
 
 		anchorPaneGame.requestFocus();
 	}

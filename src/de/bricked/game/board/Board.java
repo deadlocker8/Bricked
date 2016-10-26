@@ -2,10 +2,10 @@ package de.bricked.game.board;
 
 import java.util.ArrayList;
 
+import de.bricked.game.Game;
 import de.bricked.game.balls.Ball;
 import de.bricked.game.bricks.Brick;
 import de.bricked.game.bricks.BrickType;
-import de.bricked.game.levels.Level;
 import de.bricked.ui.LevelController;
 
 public class Board
@@ -15,11 +15,14 @@ public class Board
 	public static final double WIDTH = 18.0;
 	public static final double HEIGHT = 26.0;
 	private int points = 0;
+	private Game game;
 
-	public Board(Level level)
+	public Board(Game game)
 	{
+		this.game = game;
+		
 		init();
-		String boardString = level.getBoard();
+		String boardString = game.getLevel().getBoard();
 		// parse board -> create bricks
 		String[] bricksAndPowerArray = boardString.split(" ");
 		ArrayList<Brick> loadedBricks = new ArrayList<>();
@@ -207,6 +210,7 @@ public class Board
 
 			points += hittedBrick.getType().getPoints();
 
+			game.increaseMultiplicator();
 			LevelController.redrawBrick(col, row, bricks.get(row).get(col), true);
 		}
 		else

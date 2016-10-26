@@ -18,10 +18,11 @@ public class Game
 	private Ball ball;
 	private boolean collision = false;
 	private boolean wallCollision = false;
-	private int points;
+	private int totalPoints;
 	private Board board;	
 	private final double speedIncreasePerPaddleHitFactor = 1.05;
-	private final double maxTotalSpeed = 8.0;
+	private int pointsSinceLastMultiplicatorReset;
+	private int multiplicator;
 
 	public Game()
 	{
@@ -30,8 +31,10 @@ public class Game
 		this.level = null;
 		this.livesRemaining = 0;
 		this.ball = null;
-		this.points = 0;
+		this.totalPoints = 0;
 		this.board = null;
+		this.multiplicator = 1;
+		this.pointsSinceLastMultiplicatorReset = 0;
 	}
 
 	public Settings getSettings()
@@ -84,14 +87,14 @@ public class Game
 		this.ball = ball;
 	}
 
-	public int getPoints()
+	public int getTotalPoints()
 	{
-		return points;
+		return totalPoints;
 	}
 
-	public void setPoints(int points)
+	public void setTotalPoints(int totalPoints)
 	{
-		this.points = points;
+		this.totalPoints = totalPoints;
 	}
 
 	public Board getBoard()
@@ -102,6 +105,42 @@ public class Game
 	public void setBoard(Board board)
 	{
 		this.board = board;
+	}	
+
+	public int getMultiplicator()
+	{
+		return multiplicator;
+	}
+
+	public void increaseMultiplicator()
+	{
+		this.multiplicator++;
+	}
+	
+	public void resetMultiplicator()
+	{
+		this.multiplicator = 1;
+	}	
+
+	public int getPointsSinceLastMultiplicatorReset()
+	{
+		return pointsSinceLastMultiplicatorReset;
+	}
+
+	public void increasePointsSinceLastMultiplicatorReset(int points)
+	{
+		this.pointsSinceLastMultiplicatorReset += points;
+	}
+	
+	public void resetPointsSinceLastMultiplicatorReset()
+	{
+		pointsSinceLastMultiplicatorReset = 0;
+	}
+	
+	public void applyMultiplicator()
+	{
+		totalPoints += pointsSinceLastMultiplicatorReset * multiplicator;
+		System.out.println(pointsSinceLastMultiplicatorReset + " x" + multiplicator + "  =  " + totalPoints);		
 	}
 
 	public Point2D reflectBall(HitLocation hitLocation, Point2D direction)
@@ -134,9 +173,10 @@ public class Game
 
 		double totalSpeed = Math.sqrt(direction.getX() * direction.getX() + direction.getY() * direction.getY());
 		totalSpeed = totalSpeed * speedIncreasePerPaddleHitFactor;
-		if(totalSpeed > maxTotalSpeed)
+		if(totalSpeed > ball.getType().getMaxTotalSpeed())
 		{
-			totalSpeed = maxTotalSpeed;
+			
+			totalSpeed = ball.getType().getMaxTotalSpeed();
 		}
 		double newXSpeed = totalSpeed * factor * influenceX;
 		double newYSpeed = Math.sqrt(totalSpeed * totalSpeed - newXSpeed * newXSpeed);
