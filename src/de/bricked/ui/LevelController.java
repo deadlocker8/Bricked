@@ -248,6 +248,8 @@ public class LevelController
 		vboxPowerUps.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
 		vboxLives.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
 		vboxLives.setPadding(new Insets(3));
+		vboxLives.setAlignment(Pos.BOTTOM_CENTER);
+		vboxLives.setSpacing(9);
 
 		anchorPaneGame.setPadding(new Insets(0));
 
@@ -479,21 +481,6 @@ public class LevelController
 						}
 					}
 				}
-
-				// DEBUG is this neccessary? --> slows done fps on mac
-				// long sleepTime = (previousTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
-
-				// if(sleepTime > 0)
-				// {
-				// try
-				// {
-				// Thread.sleep(sleepTime);
-				// }
-				// catch(Exception e)
-				// {
-				// e.printStackTrace();
-				// }
-				// }
 			}
 		};
 	}
@@ -579,38 +566,14 @@ public class LevelController
 
 	private void refreshLiveCounter()
 	{
-		vboxLives.getChildren().clear();
-
-		for(int i = 0; i < MAX_LIVES - game.getLivesRemaining() + 1; i++)
-		{
-			ImageView iv = new ImageView(new Image("de/bricked/resources/textures/bricks/empty.png"));
-			iv.setFitWidth(30);
-			iv.setFitHeight(120 / MAX_LIVES);
-			vboxLives.getChildren().add(iv);
-			if(i > 0)
-			{
-				VBox.setMargin(iv, new Insets(9, 0, 0, 0));
-			}
-		}
+		vboxLives.getChildren().clear();	
 
 		for(int i = 0; i < game.getLivesRemaining() - 1; i++)
 		{
 			ImageView iv = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle-extra-small.png"));
 			iv.setFitWidth(30);
 			iv.setFitHeight(120 / MAX_LIVES);
-			vboxLives.getChildren().add(iv);
-
-			if(game.getLivesRemaining() == MAX_LIVES)
-			{
-				if(i > 0)
-				{
-					VBox.setMargin(iv, new Insets(9, 0, 0, 0));
-				}
-			}
-			else
-			{
-				VBox.setMargin(iv, new Insets(4, 0, 0, 0));
-			}
+			vboxLives.getChildren().add(iv);	
 		}
 	}
 
