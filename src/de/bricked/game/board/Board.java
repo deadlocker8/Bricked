@@ -209,8 +209,11 @@ public class Board
 			}
 
 			points += hittedBrick.getType().getPoints();
-
-			game.getLevelController().showAnimatedPoints(row, col, hittedBrick.getType().getPoints());
+			
+			if(hittedBrick.getType().getPoints() > 0)
+			{
+				game.getLevelController().showAnimatedPoints(row, col, hittedBrick.getType().getPoints());
+			}
 			game.increaseMultiplicator();
 			LevelController.redrawBrick(col, row, bricks.get(row).get(col), true);
 		}
