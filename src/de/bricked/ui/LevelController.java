@@ -92,6 +92,28 @@ public class LevelController
 	private double oldMousePosition;
 	private static ArrayList<Label> brickLabels;
 
+    private void startGame()
+    {
+        anchorPaneGame.heightProperty().removeListener(heightListener);
+        anchorPaneGame.widthProperty().removeListener(widthListener);
+
+        // start random into left or right direction
+        int random = new Random().nextInt(2);
+        if(random == 0)
+        {
+            game.getBall().startBallToRight();
+        }
+        else
+        {
+            game.getBall().startBallToLeft();
+        }
+
+        timer.start();
+        Logger.log(LogLevel.INFO, "ball start");
+
+        gameState = GameState.RUNNING;
+    }
+
 	public void init(Stage stage, LevelSelectController levelSelectController, Game game)
 	{
 		this.stage = stage;
@@ -99,6 +121,17 @@ public class LevelController
 		this.game = game;
 		game.setBoard(new Board(game));
 		game.setLevelController(this);
+
+        anchorPane.setOnMouseClicked(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent event)
+            {
+                startGame();
+                event.consume();
+                anchorPaneGame.requestFocus();
+            }
+        });
 
 		anchorPane.setOnKeyReleased(new EventHandler<KeyEvent>()
 		{
@@ -117,24 +150,7 @@ public class LevelController
 				{
 					if(gameState.equals(GameState.WAITING))
 					{
-						anchorPaneGame.heightProperty().removeListener(heightListener);
-						anchorPaneGame.widthProperty().removeListener(widthListener);
-
-						// start random into left or right direction
-						int random = new Random().nextInt(2);
-						if(random == 0)
-						{
-							game.getBall().startBallToRight();
-						}
-						else
-						{
-							game.getBall().startBallToLeft();
-						}
-
-						timer.start();
-						Logger.log(LogLevel.INFO, "ball start");
-
-						gameState = GameState.RUNNING;
+						startGame();
 					}
 					event.consume();
 
