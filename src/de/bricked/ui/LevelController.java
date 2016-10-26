@@ -717,6 +717,7 @@ public class LevelController
 				{
 					// level done
 					gameState = GameState.STOPPED;
+					resetMultiplicator();
 					timer.stop();
 
 					Platform.runLater(() -> {
