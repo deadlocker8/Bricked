@@ -651,6 +651,7 @@ public class LevelController
 		game.resetMultiplicator();
 		game.resetPointsSinceLastMultiplicatorReset();
 		labelMultiplicator.setText("x0");
+		labelPoints.setText(String.valueOf(game.getTotalPoints()));
 	}
 
 	public void increaseMultiplicator(int points)
