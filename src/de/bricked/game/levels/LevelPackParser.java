@@ -4,27 +4,20 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import de.bricked.game.paddle.PaddleSize;
 import logger.LogLevel;
 import logger.Logger;
-
-import java.io.File;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class LevelPackReader
+public class LevelPackParser
 {
 
-	private String filename;
-	private String directory;
+	private String fileContents;
 
-	public LevelPackReader(String filename)
+	public LevelPackParser(String fileContents)
 	{
-		this.directory = "src/de/bricked/resources/levelpacks/";
-		this.filename = filename;
+		this.fileContents = fileContents;
 	}
 
 	private ArrayList<Level> parseLevels(JsonArray levelPackArray)
@@ -82,8 +75,7 @@ public class LevelPackReader
 	{
 		try
 		{
-            String jsonContent = new String(Files.readAllBytes(FileSystems.getDefault().getPath(directory + filename)));
-			JsonObject root = new JsonParser().parse(jsonContent).getAsJsonObject();
+			JsonObject root = new JsonParser().parse(fileContents).getAsJsonObject();
 			String packageName = root.get("name").getAsString();
 			String packageAuthor = root.get("author").getAsString();
 			String packageVersion = root.get("version").getAsString();

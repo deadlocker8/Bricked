@@ -1,12 +1,18 @@
 package de.bricked.game.levels;
 
-import java.io.File;
+import de.bricked.utils.FileUtils;
+import tools.PathUtils;
+
+import java.io.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 
 public class LevelPackHandler
 {
-    private static String directory = "src/de/bricked/resources/levelpacks/";
+    private static final String directory = "/de/bricked/resources/levelpacks/";
     private static final String DEFAULT_PACKAGE_NAME = "default";
 
     private static ArrayList<LevelPack> sort(ArrayList<LevelPack> levelPackArrayList)
@@ -40,18 +46,60 @@ public class LevelPackHandler
 	public static ArrayList<LevelPack> getAllLevelPacks()
     {
         ArrayList<LevelPack> levelPacks = new ArrayList<>();
-        for(File currentFile : getListOfFiles())
+        for(String currentFileContent : getFileContent())
         {
-            LevelPackReader levelPackReader = new LevelPackReader(currentFile.getName());
-            levelPacks.add(levelPackReader.read());
+            LevelPackParser levelPackParser = new LevelPackParser(currentFileContent);
+            levelPacks.add(levelPackParser.read());
         }
 
         return sort(levelPacks);
     }
 
-    private static File[] getListOfFiles()
+    private static ArrayList<String> getFilesFromJar()
     {
-        File folder = new File(directory);
-        return folder.listFiles();
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        try
+        {
+            String text = FileUtils.getFileContentFromJar(directory+"files.txt");
+            String[] filenamesArray = text.split(" ");
+            for(String filename : filenamesArray)
+            {
+                stringArrayList.add(FileUtils.getFileContentFromJar(directory + filename));
+            }
+
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
+        return stringArrayList;
+    }
+
+    private static ArrayList<String> getFileContentFromUserDir()
+    {
+        ArrayList<String> stringContent = new ArrayList<>();
+        File folder = new File(PathUtils.getOSindependentPath().toFile(), "deadspaghetti/bricked/levelpacks/");
+        ArrayList<File> fileArrayList = new ArrayList<>(Arrays.asList(folder.listFiles()));
+        for(File file : fileArrayList)
+        {
+            try
+            {
+                stringContent.add(new String(Files.readAllBytes(FileSystems.getDefault().getPath(file.getPath()))));
+
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return stringContent;
+    }
+
+    private static ArrayList<String> getFileContent()
+    {
+        ArrayList<String> fileArrayList = new ArrayList<>();
+        fileArrayList.addAll(getFileContentFromUserDir());
+        fileArrayList.addAll(getFilesFromJar());
+        return fileArrayList;
     }
 }
