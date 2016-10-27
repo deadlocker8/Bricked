@@ -1,5 +1,6 @@
 package de.bricked.game.settings;
 import com.google.gson.Gson;
+import de.bricked.game.Config;
 import logger.LogLevel;
 import logger.Logger;
 import tools.PathUtils;
@@ -15,7 +16,6 @@ public class Settings
     private String language; //TODO change this to lanugage class maybe?
     private double volume;
     private boolean muted;
-    private transient final String directory = "/deadspaghetti/bricked/";
     private transient final String filename = "settings.json";
     private transient Gson gson;
     private transient File file;
@@ -23,8 +23,8 @@ public class Settings
     public Settings()
     {
         gson = new Gson();
-        PathUtils.checkFolder(new File(PathUtils.getOSindependentPath() + directory));
-        file = new File(PathUtils.getOSindependentPath() + directory + filename);
+        PathUtils.checkFolder(new File(Config.FILESYSTEM_ROOT_DIR));
+        file = new File(Config.FILESYSTEM_ROOT_DIR + filename);
         initDefaultSettings();
     }
 
@@ -56,7 +56,7 @@ public class Settings
     {
         try
         {
-            String jsonContent = new String(Files.readAllBytes(FileSystems.getDefault().getPath(PathUtils.getOSindependentPath().toAbsolutePath() + directory + filename)));
+            String jsonContent = new String(Files.readAllBytes(FileSystems.getDefault().getPath(Config.FILESYSTEM_ROOT_DIR + filename)));
             System.out.println(jsonContent);
             Settings loadedSettings = gson.fromJson(jsonContent, Settings.class);
             this.gameSize = loadedSettings.gameSize;

@@ -1,5 +1,6 @@
 package de.bricked.game.levels;
 
+import de.bricked.game.Config;
 import de.bricked.utils.FileUtils;
 import tools.PathUtils;
 
@@ -12,7 +13,6 @@ import java.util.Comparator;
 
 public class LevelPackHandler
 {
-    private static final String directory = "/de/bricked/resources/levelpacks/";
     private static final String DEFAULT_PACKAGE_NAME = "default";
 
     private static ArrayList<LevelPack> sort(ArrayList<LevelPack> levelPackArrayList)
@@ -60,11 +60,11 @@ public class LevelPackHandler
         ArrayList<String> stringArrayList = new ArrayList<>();
         try
         {
-            String text = FileUtils.getFileContentFromJar(directory+"files.txt");
+            String text = FileUtils.getFileContentFromJar(Config.JAR_LEVELPACK_SAVEDIR+"files.txt");
             String[] filenamesArray = text.split(" ");
             for(String filename : filenamesArray)
             {
-                stringArrayList.add(FileUtils.getFileContentFromJar(directory + filename));
+                stringArrayList.add(FileUtils.getFileContentFromJar(Config.JAR_LEVELPACK_SAVEDIR + filename));
             }
 
         }
@@ -77,9 +77,9 @@ public class LevelPackHandler
 
     private static ArrayList<String> getFileContentFromUserDir()
     {
-        PathUtils.checkFolder(PathUtils.getOSindependentPath().toFile());
+        File folder = new File(Config.FILESYSTEM_LEVELPACK_SAVEDIR);
+        PathUtils.checkFolder(folder);
         ArrayList<String> stringContent = new ArrayList<>();
-        File folder = new File(PathUtils.getOSindependentPath().toFile(), "deadspaghetti/bricked/levelpacks/");
         File[] files = folder.listFiles();
         if(files == null)
         {

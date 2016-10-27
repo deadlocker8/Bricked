@@ -3,6 +3,7 @@ package de.bricked.game.sound;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
+import de.bricked.game.Config;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import logger.LogLevel;
@@ -25,7 +26,7 @@ public class SoundHandler
         {
             try
             {
-                String path = SoundHandler.class.getResource("/de/bricked/resources/sounds/" + soundID + ".mp3").toURI().toURL().toString();
+                String path = SoundHandler.class.getResource(Config.JAR_SOUND_SAVEDIR + soundID + ".mp3").toURI().toURL().toString();
                 Media sound = new Media(path);
                 MediaPlayer mediaPlayer = new MediaPlayer(sound);
                 mediaPlayer.setVolume(volume);

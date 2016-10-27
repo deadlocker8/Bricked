@@ -4,6 +4,7 @@ package de.bricked.utils;
 import de.bricked.game.levels.LevelPackHandler;
 import logger.LogLevel;
 import logger.Logger;
+import tools.PathUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -13,7 +14,6 @@ import java.net.URL;
 
 public class FileUtils
 {
-
     private static String getContentsFromInputStream(InputStream inputStream) throws Exception
     {
         BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
