@@ -6,6 +6,7 @@ import tools.PathUtils;
 import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -77,9 +78,16 @@ public class LevelPackHandler
 
     private static ArrayList<String> getFileContentFromUserDir()
     {
+        PathUtils.checkFolder(PathUtils.getOSindependentPath().toFile());
         ArrayList<String> stringContent = new ArrayList<>();
         File folder = new File(PathUtils.getOSindependentPath().toFile(), "deadspaghetti/bricked/levelpacks/");
-        ArrayList<File> fileArrayList = new ArrayList<>(Arrays.asList(folder.listFiles()));
+        File[] files = folder.listFiles();
+        if(files == null)
+        {
+            return null;
+        }
+        ArrayList<File> fileArrayList = new ArrayList<>(Arrays.asList(files));
+
         for(File file : fileArrayList)
         {
             try
@@ -98,8 +106,16 @@ public class LevelPackHandler
     private static ArrayList<String> getFileContent()
     {
         ArrayList<String> fileArrayList = new ArrayList<>();
-        fileArrayList.addAll(getFileContentFromUserDir());
-        fileArrayList.addAll(getFilesFromJar());
+        ArrayList<String> userDir = getFileContentFromUserDir();
+        ArrayList<String> jarDir = getFilesFromJar();
+        if(userDir != null)
+        {
+            fileArrayList.addAll(userDir);
+        }
+        if(jarDir != null)
+        {
+            fileArrayList.addAll(getFilesFromJar());
+        }
         return fileArrayList;
     }
 }
