@@ -14,10 +14,12 @@ public class LevelPackParser
 {
 
 	private String fileContents;
+    private LevelPack levelPack;
 
 	public LevelPackParser(String fileContents)
 	{
 		this.fileContents = fileContents;
+        read();
 	}
 
 	private ArrayList<Level> parseLevels(JsonArray levelPackArray)
@@ -71,21 +73,25 @@ public class LevelPackParser
 		return levels;
 	}
 
-	public LevelPack read()
+	private void read()
+    {
+        try
+        {
+            JsonObject root = new JsonParser().parse(fileContents).getAsJsonObject();
+            String packageName = root.get("name").getAsString();
+            String packageAuthor = root.get("author").getAsString();
+            String packageVersion = root.get("version").getAsString();
+            ArrayList<Level> levels = parseLevels(root.get("levelPack").getAsJsonArray());
+            levelPack = new LevelPack(packageName, packageAuthor, packageVersion, levels);
+        }
+        catch(Exception e)
+        {
+            Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+        }
+    }
+
+	public LevelPack getLevelPack()
 	{
-		try
-		{
-			JsonObject root = new JsonParser().parse(fileContents).getAsJsonObject();
-			String packageName = root.get("name").getAsString();
-			String packageAuthor = root.get("author").getAsString();
-			String packageVersion = root.get("version").getAsString();
-			ArrayList<Level> levels = parseLevels(root.get("levelPack").getAsJsonArray());
-			return new LevelPack(packageName, packageAuthor, packageVersion, levels);
-		}
-		catch(Exception e)
-		{
-			Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
-		}
-		return null;
+        return levelPack;
 	}
 }

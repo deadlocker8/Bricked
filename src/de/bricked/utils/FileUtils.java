@@ -44,7 +44,7 @@ public class FileUtils
         return null;
     }
 
-    public static String getURLContentFromJar(String urlString)
+    public static String getURLContent(String urlString)
     {
         try
         {

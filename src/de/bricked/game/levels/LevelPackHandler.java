@@ -6,7 +6,6 @@ import tools.PathUtils;
 import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -50,7 +49,7 @@ public class LevelPackHandler
         for(String currentFileContent : getFileContent())
         {
             LevelPackParser levelPackParser = new LevelPackParser(currentFileContent);
-            levelPacks.add(levelPackParser.read());
+            levelPacks.add(levelPackParser.getLevelPack());
         }
 
         return sort(levelPacks);

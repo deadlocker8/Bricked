@@ -2,23 +2,23 @@ package de.bricked.ui;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import de.bricked.game.Game;
 import de.bricked.game.levels.LevelPack;
 import de.bricked.game.levels.LevelPackHandler;
 import de.bricked.ui.cells.LevelPackCell;
+import de.bricked.utils.Downloader;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -36,6 +36,7 @@ public class LevelPackSelectController
 	@FXML private AnchorPane mainPane;
 	@FXML private ScrollPane pane;
 	@FXML private Label labelLevelPack;
+    @FXML private Button downloadLevelpackButton;
 
 	public Stage stage;
 	public Image icon = new Image("de/bricked/resources/icon.png");
@@ -75,6 +76,24 @@ public class LevelPackSelectController
 				}
 			}
 		});
+
+        downloadLevelpackButton.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle(ActionEvent event)
+            {
+                TextInputDialog textInputDialog = new TextInputDialog();
+                textInputDialog.setHeaderText(null);
+                textInputDialog.setContentText("URL of the raw levelpack");
+                Optional<String> result = textInputDialog.showAndWait();
+                if(result.isPresent())
+                {
+                    new Downloader().download(result.get());
+                    reload();
+                }
+
+            }
+        });
 
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>()
 		{
