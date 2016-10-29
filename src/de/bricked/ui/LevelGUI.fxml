@@ -57,15 +57,10 @@
             </Label>
          </children>
       </HBox>
-      <VBox fx:id="vboxLives" layoutX="745.0" layoutY="603.0" minHeight="71.0" minWidth="40.0" prefHeight="183.0" prefWidth="40.0" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="15.0" />
+      <VBox fx:id="vboxLives" layoutX="745.0" layoutY="603.0" minHeight="71.0" minWidth="40.0" prefHeight="227.0" prefWidth="40.0" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="15.0" />
       <Label fx:id="labelFPS" layoutX="770.0" layoutY="6.0" text="0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0">
          <font>
             <Font name="System Bold" size="16.0" />
-         </font>
-      </Label>
-      <Label fx:id="labelMultiplicator" alignment="CENTER_RIGHT" layoutX="736.0" layoutY="543.0" prefHeight="30.0" prefWidth="49.0" text="x0" textAlignment="JUSTIFY" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="543.0">
-         <font>
-            <Font name="System Bold" size="20.0" />
          </font>
       </Label>
    </children>

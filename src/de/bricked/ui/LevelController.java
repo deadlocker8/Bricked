@@ -70,7 +70,6 @@ public class LevelController
 	@FXML private VBox vboxPowerUps;
 	@FXML private VBox vboxLives;
 	@FXML private Label labelFPS;
-	@FXML private Label labelMultiplicator;
 
 	public Stage stage;
 	public Image icon = new Image("de/bricked/resources/icon.png");
@@ -137,7 +136,7 @@ public class LevelController
 				if(gameState.equals(GameState.WAITING))
 				{
 					startGame();
-				}				
+				}
 				event.consume();
 				anchorPaneGame.requestFocus();
 			}
@@ -501,7 +500,7 @@ public class LevelController
 				}
 
 				// move powerups
-				movePowerUps();			
+				movePowerUps();
 			}
 		};
 	}
@@ -632,7 +631,6 @@ public class LevelController
 		game.applyMultiplicator();
 		game.resetMultiplicator();
 		game.resetPointsSinceLastMultiplicatorReset();
-		labelMultiplicator.setText("x0");
 		labelPoints.setText(String.valueOf(game.getTotalPoints()));
 	}
 
@@ -640,7 +638,46 @@ public class LevelController
 	{
 		game.increaseMultiplicator();
 		game.increasePointsSinceLastMultiplicatorReset(points);
-		labelMultiplicator.setText("x" + game.getMultiplicator());
+		
+		if(game.getMultiplicator() > 1)
+		{
+			double xPosition = (gamePaneWidth / Board.WIDTH) * (7);
+			double yPosition = (gamePaneHeight / Board.HEIGHT) * (20);
+	
+			Label labelNotification = new Label("x" + game.getMultiplicator());
+			labelNotification.setTranslateX(xPosition);
+			labelNotification.setTranslateY(yPosition);
+			labelNotification.setStyle("-fx-font-weight: bold; -fx-font-size: 30; ");
+			labelNotification.setAlignment(Pos.CENTER);
+			labelNotification.setPrefWidth((gamePaneWidth / Board.WIDTH) * 3);
+			labelNotification.setPrefHeight((gamePaneHeight / Board.HEIGHT) * 2);
+			anchorPaneGame.getChildren().add(labelNotification);		
+			
+			FadeTransition fadeTransition = new FadeTransition(Duration.millis(800), labelNotification);
+			fadeTransition.setFromValue(1.0);
+			fadeTransition.setToValue(0.0);
+			fadeTransition.setCycleCount(1);
+			fadeTransition.setAutoReverse(false);
+			TranslateTransition translateTransition = new TranslateTransition(Duration.millis(800), labelNotification);
+			translateTransition.setFromY(yPosition);
+			translateTransition.setToY(yPosition - (gamePaneHeight / Board.HEIGHT) * 3);
+			translateTransition.setCycleCount(1);			
+			translateTransition.setAutoReverse(false);
+	
+			ParallelTransition parallelTransition = new ParallelTransition();
+			parallelTransition.getChildren().addAll(fadeTransition, translateTransition);
+			parallelTransition.setCycleCount(1);		
+			parallelTransition.setOnFinished(new EventHandler<ActionEvent>()
+			{
+				@Override
+				public void handle(ActionEvent event)
+				{
+					anchorPaneGame.getChildren().remove(labelNotification);
+				}
+			});
+	
+			parallelTransition.play();
+		}
 	}
 
 	private void movePaddleLeft()
@@ -789,7 +826,7 @@ public class LevelController
 
 			HitLocation hitLocation = game.collides(labelPosition, paddlePosition, paddle.getWidth(), paddle.getHeight(), true);
 			if(hitLocation != null && (hitLocation.equals(HitLocation.PADDLE) || hitLocation.equals(HitLocation.CORNER)))
-			{					
+			{
 				Logger.log(LogLevel.DEBUG, "Collected PowerUp with ID = " + currentPowerUp.getID());
 				if(!currentPowerUp.isPermanent())
 				{
@@ -809,7 +846,7 @@ public class LevelController
 			}
 		}
 	}
-	
+
 	private void addTimedPowerUp(PowerUp powerUp)
 	{
 		Label labelPowerUp = new Label(String.valueOf(powerUp.getDurationInSeconds()));
@@ -833,8 +870,8 @@ public class LevelController
 		movingPowerUps = new ArrayList<>();
 		timedPowerUps = new ArrayList<>();
 		vboxPowerUps.getChildren().clear();
-	}	
-	
+	}
+
 	public void deactivatePowerUp(Label label)
 	{
 		int counter = 0;
@@ -847,13 +884,13 @@ public class LevelController
 				counter++;
 			}
 		}
-				
-		//if no other power ups of same kind are active
+
+		// if no other power ups of same kind are active
 		if(counter <= 1)
 		{
 			vboxPowerUps.getChildren().remove(label);
 			timedPowerUps.remove(label);
-			powerUp.deactivate(this, game);			
+			powerUp.deactivate(this, game);
 		}
 	}
 
@@ -893,7 +930,7 @@ public class LevelController
 
 		anchorPaneGame.requestFocus();
 	}
-	
+
 	/*
 	 * PowerUP-Functions
 	 */
@@ -903,10 +940,10 @@ public class LevelController
 		double translateY = stackPaneBall.getTranslateY();
 		Point2D direction = game.getBall().getDirection();
 		game.setBall(newBall);
-		
+
 		initBall(game.getBall().getType());
 		stackPaneBall.setTranslateX(translateX);
-		stackPaneBall.setTranslateY(translateY);		
+		stackPaneBall.setTranslateY(translateY);
 		game.getBall().setDirection(game.getNewSpeedDirection(direction, newBall.getType().getSpeedFactor()));
 	}
 }
