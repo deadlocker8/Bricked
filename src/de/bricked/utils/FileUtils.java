@@ -53,7 +53,7 @@ public class FileUtils
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
         }
         return null;
     }
