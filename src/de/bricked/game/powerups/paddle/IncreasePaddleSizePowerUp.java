@@ -16,7 +16,7 @@ public class IncreasePaddleSizePowerUp extends PowerUp
     }
 
     @Override
-    protected void activate()
+    public void activate()
     {
         paddle.setPaddleSize(PaddleSize.getNextBigger(paddle.getPaddleSize()));
     }

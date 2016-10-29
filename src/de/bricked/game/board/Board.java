@@ -6,6 +6,8 @@ import de.bricked.game.Game;
 import de.bricked.game.balls.Ball;
 import de.bricked.game.bricks.Brick;
 import de.bricked.game.bricks.BrickType;
+import de.bricked.game.powerups.ExtraLifePowerUp;
+import de.bricked.game.powerups.PowerUp;
 import de.bricked.ui.LevelController;
 
 public class Board
@@ -20,7 +22,7 @@ public class Board
 	public Board(Game game)
 	{
 		this.game = game;
-		
+
 		init();
 		String boardString = game.getLevel().getBoard();
 		// parse board -> create bricks
@@ -31,13 +33,15 @@ public class Board
 			String brickValue = bricksAndPower.substring(0, 1);
 			int powerUp = Integer.parseInt(bricksAndPower.substring(1));
 			Brick currentBrick = null;
-			// PowerUp currentPowerUp = null;
+			PowerUp currentPowerUp = null;
 			// TODO IMPLEMENT POWERUP
 			switch(powerUp)
 			{
-				case 0: // powerUp = new ExplosiveMegaPowerUp() :D
+				case 0:
+					currentPowerUp = null;
 					break;
 				case 1:
+					currentPowerUp = new ExtraLifePowerUp();
 					break;
 				case 2:
 					break;
@@ -49,35 +53,35 @@ public class Board
 					break;
 				case 6:
 					break;
-				default: //
+				default: 
 					break;
 			}
-
+			
 			switch(brickValue)
 			{
 				case "N":
-					currentBrick = new Brick(BrickType.NORMAL);
+					currentBrick = new Brick(BrickType.NORMAL, currentPowerUp);
 					break;
 				case "A":
-					currentBrick = new Brick(BrickType.AIR);
+					currentBrick = new Brick(BrickType.AIR, currentPowerUp);
 					break;
 				case "S":
-					currentBrick = new Brick(BrickType.SOLID);
+					currentBrick = new Brick(BrickType.SOLID, currentPowerUp);
 					break;
 				case "H":
-					currentBrick = new Brick(BrickType.HARD);
+					currentBrick = new Brick(BrickType.HARD, currentPowerUp);
 					break;
 				case "E":
-					currentBrick = new Brick(BrickType.EXTRA_HARD);
+					currentBrick = new Brick(BrickType.EXTRA_HARD, currentPowerUp);
 					break;
 				case "I":
-					currentBrick = new Brick(BrickType.INVISIBLE);
+					currentBrick = new Brick(BrickType.INVISIBLE, currentPowerUp);
 					break;
 				case "T":
-					currentBrick = new Brick(BrickType.TNT);
+					currentBrick = new Brick(BrickType.TNT, currentPowerUp);
 					break;
 				default:
-					currentBrick = new Brick(BrickType.AIR);
+					currentBrick = new Brick(BrickType.AIR, currentPowerUp);
 					break;
 			}
 
@@ -165,7 +169,8 @@ public class Board
 				Brick currentBrick = bricks.get(row).get(col);
 				if(currentBrick.getPowerUp() != null)
 				{
-					// TODO deploy PowerUp
+					// deploys powerup
+					game.getLevelController().addMovingPowerUp(row, col, currentBrick.getPowerUp());
 				}
 
 				bricks.get(row).set(col, new Brick(BrickType.TNT));
@@ -205,11 +210,12 @@ public class Board
 
 			if(hittedBrick.getPowerUp() != null)
 			{
-				// TODO deploy PowerUp
+				// deploys powerup
+				game.getLevelController().addMovingPowerUp(row, col, hittedBrick.getPowerUp());
 			}
 
 			points += hittedBrick.getType().getPoints();
-			
+
 			if(hittedBrick.getType().getPoints() > 0)
 			{
 				game.getLevelController().showAnimatedPoints(row, col, hittedBrick.getType().getPoints());

@@ -15,7 +15,7 @@ public class IncreaseBallSizePowerUp extends PowerUp
     }
 
     @Override
-    protected void activate()
+    public void activate()
     {
 
     }

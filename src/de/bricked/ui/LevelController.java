@@ -2,6 +2,7 @@ package de.bricked.ui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -15,6 +16,7 @@ import de.bricked.game.board.Board;
 import de.bricked.game.bricks.Brick;
 import de.bricked.game.bricks.BrickType;
 import de.bricked.game.paddle.Paddle;
+import de.bricked.game.powerups.PowerUp;
 import fontAwesome.FontIcon;
 import fontAwesome.FontIconType;
 import javafx.animation.AnimationTimer;
@@ -91,9 +93,10 @@ public class LevelController
 	private ChangeListener<Number> widthListener;
 	private double oldMousePosition;
 	private static ArrayList<Label> brickLabels;
+	private ArrayList<Label> movingPowerUps;
 
     private void startGame()
-    {
+    {   	
         anchorPaneGame.heightProperty().removeListener(heightListener);
         anchorPaneGame.widthProperty().removeListener(widthListener);
 
@@ -120,7 +123,7 @@ public class LevelController
 		this.levelSelectController = levelSelectController;
 		this.game = game;
 		game.setBoard(new Board(game));
-		game.setLevelController(this);
+		game.setLevelController(this);	
 
         anchorPane.setOnMouseClicked(new EventHandler<MouseEvent>()
         {
@@ -310,6 +313,7 @@ public class LevelController
 		labelFPS.setStyle("-fx-text-fill: #FF0000");
 
 		resetMultiplicator();
+		movingPowerUps = new ArrayList<>();
 
 		gameState = GameState.WAITING;
 	}
@@ -481,7 +485,12 @@ public class LevelController
 						}
 					}
 				}
-			}
+				
+				//move powerups
+				movePowerUps();
+				//check timed powerups
+				checkPowerUps();
+			}	
 		};
 	}
 
@@ -737,6 +746,65 @@ public class LevelController
 
 		parallelTransition.play();
 	}
+	
+	public void addMovingPowerUp(int row, int col, PowerUp powerUp)
+	{		
+		Label labelPowerUp = new Label();
+		labelPowerUp.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/powerups/" + powerUp.getID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");
+		labelPowerUp.setAlignment(Pos.CENTER);
+		labelPowerUp.setUserData(powerUp);
+
+		labelPowerUp.setPrefWidth(gamePaneWidth / Board.WIDTH);
+		labelPowerUp.setPrefHeight(gamePaneHeight / Board.HEIGHT);
+		
+		anchorPaneGame.getChildren().add(labelPowerUp);
+		labelPowerUp.setTranslateX(col * (gamePaneWidth/Board.WIDTH));
+		labelPowerUp.setTranslateY(row * (gamePaneHeight/Board.HEIGHT));
+		
+		movingPowerUps.add(labelPowerUp);
+	}
+	
+	private void movePowerUps()
+	{	
+		for(Iterator<Label> iterator = movingPowerUps.iterator(); iterator.hasNext();)
+		{
+			Label currentLabel = iterator.next();
+			PowerUp currentPowerUp = (PowerUp)currentLabel.getUserData();			
+			currentLabel.setTranslateY(currentLabel.getTranslateY() + currentPowerUp.getSpeed());		
+			
+			//check collision with paddle
+			Point2D labelPosition = new Point2D(currentLabel.getTranslateX(), currentLabel.getTranslateY());
+			Point2D paddlePosition = new Point2D(labelPaddle.getLayoutX() + labelPaddle.getTranslateX(), labelPaddle.getLayoutY() + labelPaddle.getTranslateY());
+			
+			HitLocation hitLocation = game.collides(labelPosition, paddlePosition, paddle.getWidth(), paddle.getHeight(), true);					
+			if(hitLocation != null && (hitLocation.equals(HitLocation.PADDLE) || hitLocation.equals(HitLocation.CORNER)))
+			{		
+				//TODO activate method
+				//TODO check if timed
+				Logger.log(LogLevel.DEBUG, "Collected PowerUp with ID = " + currentPowerUp.getID());
+				currentPowerUp.activate();
+				anchorPaneGame.getChildren().remove(currentLabel);
+				iterator.remove();		
+				continue;
+			}			
+			
+			if(currentLabel.getTranslateY() + currentLabel.getHeight() >= gamePaneHeight)
+			{
+				//power up reached bottom wall
+				anchorPaneGame.getChildren().remove(currentLabel);
+				iterator.remove();				
+			}
+		}
+	}
+	
+	private void checkPowerUps()
+	{
+		//TODO check timed powerups
+//		for(Iterator<PowerUp> iterator = game.getActivatedPowerUps().iterator(); iterator.hasNext();)
+//		{
+//			)
+//		}
+	}
 
 	public void showLabelFPS(boolean value)
 	{
@@ -757,7 +825,7 @@ public class LevelController
 	}
 
 	public void back()
-	{
+	{		
 		if(timer != null)
 		{
 			timer.stop();
@@ -768,7 +836,9 @@ public class LevelController
 		game.resetMultiplicator();
 		game.resetPointsSinceLastMultiplicatorReset();
 		game.setBoard(null);
-		game.setLevelController(null);		
+		game.setLevelController(null);	
+		game.setMovingPowerUps(new ArrayList<>());
+		game.setActivatedPowerUps(new ArrayList<>());
 
 		anchorPaneGame.requestFocus();
 	}

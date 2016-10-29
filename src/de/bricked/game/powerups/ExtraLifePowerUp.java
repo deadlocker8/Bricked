@@ -4,13 +4,13 @@ package de.bricked.game.powerups;
 public class ExtraLifePowerUp extends PowerUp
 {
 
-    public ExtraLifePowerUp(int id, int duration)
+    public ExtraLifePowerUp()
     {
-        super(id, duration);
+        super(PowerUpType.valueOf("EXTRA_LIFE").getId(), -1);
     }
 
     @Override
-    protected void activate()
+    public void activate()
     {
 
     }

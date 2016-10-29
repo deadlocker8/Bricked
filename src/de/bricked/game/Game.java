@@ -1,9 +1,12 @@
 package de.bricked.game;
 
+import java.util.ArrayList;
+
 import de.bricked.game.balls.Ball;
 import de.bricked.game.board.Board;
 import de.bricked.game.levels.Level;
 import de.bricked.game.levels.LevelPack;
+import de.bricked.game.powerups.PowerUp;
 import de.bricked.game.settings.Settings;
 import de.bricked.ui.LevelController;
 import javafx.geometry.Point2D;
@@ -25,6 +28,8 @@ public class Game
 	private int pointsSinceLastMultiplicatorReset;
 	private int multiplicator;
 	private LevelController levelController;
+	private ArrayList<PowerUp> movingPowerUps;
+	private ArrayList<PowerUp> activatedPowerUps;
 
 	public Game()
 	{
@@ -38,6 +43,8 @@ public class Game
 		this.multiplicator = 0;
 		this.pointsSinceLastMultiplicatorReset = 0;
 		this.levelController = null;
+		this.movingPowerUps = new ArrayList<>();
+		this.activatedPowerUps = new ArrayList<>();
 	}
 
 	public Settings getSettings()
@@ -154,6 +161,26 @@ public class Game
 	public void setLevelController(LevelController levelController)
 	{
 		this.levelController = levelController;
+	}	
+
+	public ArrayList<PowerUp> getMovingPowerUps()
+	{
+		return movingPowerUps;
+	}
+
+	public void setMovingPowerUps(ArrayList<PowerUp> movingPowerUps)
+	{
+		this.movingPowerUps = movingPowerUps;
+	}
+
+	public ArrayList<PowerUp> getActivatedPowerUps()
+	{
+		return activatedPowerUps;
+	}
+
+	public void setActivatedPowerUps(ArrayList<PowerUp> activatedPowerUps)
+	{
+		this.activatedPowerUps = activatedPowerUps;
 	}
 
 	public Point2D reflectBall(HitLocation hitLocation, Point2D direction)
