@@ -11,7 +11,7 @@ public class NoCollisionBallPowerUp extends PowerUp
 {
     public NoCollisionBallPowerUp()
     {
-        super(PowerUpType.valueOf("NO_COLLISION_BALL").getId(), -1);
+    	  super(PowerUpType.NO_COLLISION_BALL.getId(), PowerUpType.NO_COLLISION_BALL.getDurationInSeconds());
     }
 
     @Override
@@ -22,6 +22,7 @@ public class NoCollisionBallPowerUp extends PowerUp
 
 	@Override
 	public void deactivate(LevelController levelController, Game game)
-	{		
+	{	
+		levelController.changeBall(new Ball(BallType.NORMAL));
 	}
 }

@@ -11,7 +11,7 @@ public class ExplodeBallPowerUp extends PowerUp
 {
     public ExplodeBallPowerUp()
     {
-        super(PowerUpType.valueOf("EXPLODE_BALL").getId(), -1);
+    	  super(PowerUpType.EXPLODE_BALL.getId(), PowerUpType.EXPLODE_BALL.getDurationInSeconds());
     }
 
     @Override
@@ -23,5 +23,6 @@ public class ExplodeBallPowerUp extends PowerUp
 	@Override
 	public void deactivate(LevelController levelController, Game game)
 	{		
+		levelController.changeBall(new Ball(BallType.NORMAL));
 	}
 }

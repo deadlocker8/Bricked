@@ -81,7 +81,7 @@ public class LevelController
 	private AnimationTimer timer;
 	private double gamePaneWidth;
 	private double gamePaneHeight;
-	private final int MAX_LIVES = 7;
+	public final int MAX_LIVES = 7;
 	private final int TARGET_FPS = 60;
 	private final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
 	private final static double BRICK_FADE_DURATION = 300.0;
@@ -134,7 +134,10 @@ public class LevelController
 			@Override
 			public void handle(MouseEvent event)
 			{
-				startGame();
+				if(gameState.equals(GameState.WAITING))
+				{
+					startGame();
+				}				
 				event.consume();
 				anchorPaneGame.requestFocus();
 			}
@@ -498,9 +501,7 @@ public class LevelController
 				}
 
 				// move powerups
-				movePowerUps();
-				// check timed powerups
-				checkPowerUps();
+				movePowerUps();			
 			}
 		};
 	}
@@ -584,7 +585,7 @@ public class LevelController
 		}
 	}
 
-	private void refreshLiveCounter()
+	public void refreshLiveCounter()
 	{
 		vboxLives.getChildren().clear();
 
@@ -788,8 +789,7 @@ public class LevelController
 
 			HitLocation hitLocation = game.collides(labelPosition, paddlePosition, paddle.getWidth(), paddle.getHeight(), true);
 			if(hitLocation != null && (hitLocation.equals(HitLocation.PADDLE) || hitLocation.equals(HitLocation.CORNER)))
-			{
-				// TODO activate method			
+			{					
 				Logger.log(LogLevel.DEBUG, "Collected PowerUp with ID = " + currentPowerUp.getID());
 				if(!currentPowerUp.isPermanent())
 				{
@@ -809,13 +809,12 @@ public class LevelController
 			}
 		}
 	}
-
-	// TODO if there is already one item of this type?
+	
 	private void addTimedPowerUp(PowerUp powerUp)
 	{
 		Label labelPowerUp = new Label(String.valueOf(powerUp.getDurationInSeconds()));
 		labelPowerUp.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/powerups/" + powerUp.getID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: contain;" + "-fx-font-size: 16;" + "-fx-font-weight: bold;"
-				+ "-fx-tect-fill: #cc0000;");
+				+ "-fx-text-fill: #000000;");
 		labelPowerUp.setAlignment(Pos.CENTER);
 		labelPowerUp.setUserData(powerUp);
 
@@ -826,20 +825,7 @@ public class LevelController
 
 		timedPowerUps.add(labelPowerUp);
 
-		new CountdownTimer(powerUp.getDurationInSeconds(), labelPowerUp);
-	}
-
-	private void checkPowerUps()
-	{
-		for(Iterator<Label> iterator = timedPowerUps.iterator(); iterator.hasNext();)
-		{
-			Label currentLabel = iterator.next();
-			if(currentLabel.getText().equals("0"))
-			{
-				vboxPowerUps.getChildren().remove(currentLabel);
-				iterator.remove();
-			}
-		}
+		new CountdownTimer(powerUp.getDurationInSeconds(), labelPowerUp, this);
 	}
 
 	private void resetPowerUps()
@@ -847,19 +833,28 @@ public class LevelController
 		movingPowerUps = new ArrayList<>();
 		timedPowerUps = new ArrayList<>();
 		vboxPowerUps.getChildren().clear();
-	}
+	}	
 	
-	public void changeBall(Ball newBall)
+	public void deactivatePowerUp(Label label)
 	{
-		double translateX = stackPaneBall.getTranslateX();
-		double translateY = stackPaneBall.getTranslateY();
-		Point2D direction = game.getBall().getDirection();
-		game.setBall(newBall);
-		
-		initBall(game.getBall().getType());
-		stackPaneBall.setTranslateX(translateX);
-		stackPaneBall.setTranslateY(translateY);		
-		game.getBall().setDirection(game.getNewSpeedDirection(direction, newBall.getType().getSpeedFactor()));
+		int counter = 0;
+		PowerUp powerUp = (PowerUp)label.getUserData();
+		for(Label currentLabel : timedPowerUps)
+		{
+			PowerUp currentPowerUp = (PowerUp)currentLabel.getUserData();
+			if(currentPowerUp.getID() == powerUp.getID())
+			{
+				counter++;
+			}
+		}
+				
+		//if no other power ups of same kind are active
+		if(counter <= 1)
+		{
+			vboxPowerUps.getChildren().remove(label);
+			timedPowerUps.remove(label);
+			powerUp.deactivate(this, game);			
+		}
 	}
 
 	public void showLabelFPS(boolean value)
@@ -897,5 +892,21 @@ public class LevelController
 		game.setActivatedPowerUps(new ArrayList<>());
 
 		anchorPaneGame.requestFocus();
+	}
+	
+	/*
+	 * PowerUP-Functions
+	 */
+	public void changeBall(Ball newBall)
+	{
+		double translateX = stackPaneBall.getTranslateX();
+		double translateY = stackPaneBall.getTranslateY();
+		Point2D direction = game.getBall().getDirection();
+		game.setBall(newBall);
+		
+		initBall(game.getBall().getType());
+		stackPaneBall.setTranslateX(translateX);
+		stackPaneBall.setTranslateY(translateY);		
+		game.getBall().setDirection(game.getNewSpeedDirection(direction, newBall.getType().getSpeedFactor()));
 	}
 }

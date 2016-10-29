@@ -3,6 +3,7 @@ package de.bricked.utils;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.bricked.ui.LevelController;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 
@@ -10,7 +11,7 @@ public class CountdownTimer
 {
 	private int count;
 
-	public CountdownTimer(int seconds, Label label)
+	public CountdownTimer(int seconds, Label label, LevelController levelController)
 	{
 		this.count = seconds;
 		
@@ -31,10 +32,17 @@ public class CountdownTimer
 					}
 				});			
 				if(count > 0)
+				{
 					count--;
+				}
 
 				if(count == 0)
+				{
+					Platform.runLater(()->{
+						levelController.deactivatePowerUp(label);
+					});
 					timer.cancel();
+				}				
 			}
 		};
 		timer.schedule(task, 0, 1000);
