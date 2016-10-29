@@ -418,4 +418,14 @@ public class Game
 				return null;
 		}
 	}
+	
+	public Point2D getNewSpeedDirection(Point2D oldDirection, double speed)
+	{		
+		double influenceX = 0.5;
+		
+		double newXSpeed = speed * influenceX;
+		double newYSpeed = Math.sqrt(speed * speed - newXSpeed * newXSpeed);
+
+		return new Point2D(-newXSpeed, -newYSpeed);
+	}
 }

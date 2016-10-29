@@ -8,6 +8,8 @@ import de.bricked.game.bricks.Brick;
 import de.bricked.game.bricks.BrickType;
 import de.bricked.game.powerups.ExtraLifePowerUp;
 import de.bricked.game.powerups.PowerUp;
+import de.bricked.game.powerups.ball.ExplodeBallPowerUp;
+import de.bricked.game.powerups.ball.NoCollisionBallPowerUp;
 import de.bricked.ui.LevelController;
 
 public class Board
@@ -48,15 +50,17 @@ public class Board
 				case 3:
 					break;
 				case 4:
+					currentPowerUp = new ExplodeBallPowerUp();
 					break;
 				case 5:
+					currentPowerUp = new NoCollisionBallPowerUp();
 					break;
 				case 6:
 					break;
-				default: 
+				default:
 					break;
 			}
-			
+
 			switch(brickValue)
 			{
 				case "N":

@@ -1,16 +1,14 @@
 package de.bricked.utils;
 
 
-import de.bricked.game.levels.LevelPackHandler;
-import logger.LogLevel;
-import logger.Logger;
-import tools.PathUtils;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+
+import logger.LogLevel;
+import logger.Logger;
 
 public class FileUtils
 {

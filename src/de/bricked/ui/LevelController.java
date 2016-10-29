@@ -17,6 +17,7 @@ import de.bricked.game.bricks.Brick;
 import de.bricked.game.bricks.BrickType;
 import de.bricked.game.paddle.Paddle;
 import de.bricked.game.powerups.PowerUp;
+import de.bricked.utils.CountdownTimer;
 import fontAwesome.FontIcon;
 import fontAwesome.FontIconType;
 import javafx.animation.AnimationTimer;
@@ -94,28 +95,31 @@ public class LevelController
 	private double oldMousePosition;
 	private static ArrayList<Label> brickLabels;
 	private ArrayList<Label> movingPowerUps;
+	private ArrayList<Label> timedPowerUps;
 
-    private void startGame()
-    {   	
-        anchorPaneGame.heightProperty().removeListener(heightListener);
-        anchorPaneGame.widthProperty().removeListener(widthListener);
+	private void startGame()
+	{
+		resetPowerUps();
 
-        // start random into left or right direction
-        int random = new Random().nextInt(2);
-        if(random == 0)
-        {
-            game.getBall().startBallToRight();
-        }
-        else
-        {
-            game.getBall().startBallToLeft();
-        }
+		anchorPaneGame.heightProperty().removeListener(heightListener);
+		anchorPaneGame.widthProperty().removeListener(widthListener);
 
-        timer.start();
-        Logger.log(LogLevel.INFO, "ball start");
+		// start random into left or right direction
+		int random = new Random().nextInt(2);
+		if(random == 0)
+		{
+			game.getBall().startBallToRight();
+		}
+		else
+		{
+			game.getBall().startBallToLeft();
+		}
 
-        gameState = GameState.RUNNING;
-    }
+		timer.start();
+		Logger.log(LogLevel.INFO, "ball start");
+
+		gameState = GameState.RUNNING;
+	}
 
 	public void init(Stage stage, LevelSelectController levelSelectController, Game game)
 	{
@@ -123,18 +127,18 @@ public class LevelController
 		this.levelSelectController = levelSelectController;
 		this.game = game;
 		game.setBoard(new Board(game));
-		game.setLevelController(this);	
+		game.setLevelController(this);
 
-        anchorPane.setOnMouseClicked(new EventHandler<MouseEvent>()
-        {
-            @Override
-            public void handle(MouseEvent event)
-            {
-                startGame();
-                event.consume();
-                anchorPaneGame.requestFocus();
-            }
-        });
+		anchorPane.setOnMouseClicked(new EventHandler<MouseEvent>()
+		{
+			@Override
+			public void handle(MouseEvent event)
+			{
+				startGame();
+				event.consume();
+				anchorPaneGame.requestFocus();
+			}
+		});
 
 		anchorPane.setOnKeyReleased(new EventHandler<KeyEvent>()
 		{
@@ -249,6 +253,9 @@ public class LevelController
 		buttonBack.setGraphic(iconBack);
 
 		vboxPowerUps.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
+		vboxPowerUps.setPadding(new Insets(3));
+		vboxPowerUps.setAlignment(Pos.TOP_CENTER);
+		vboxPowerUps.setSpacing(7);
 		vboxLives.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
 		vboxLives.setPadding(new Insets(3));
 		vboxLives.setAlignment(Pos.BOTTOM_CENTER);
@@ -290,7 +297,8 @@ public class LevelController
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
 			{
-				initBall();
+				initBall(BallType.NORMAL);
+				initTimer();
 				gamePaneHeight = newValue.doubleValue();
 			}
 		};
@@ -313,7 +321,8 @@ public class LevelController
 		labelFPS.setStyle("-fx-text-fill: #FF0000");
 
 		resetMultiplicator();
-		movingPowerUps = new ArrayList<>();
+
+		resetPowerUps();
 
 		gameState = GameState.WAITING;
 	}
@@ -372,7 +381,7 @@ public class LevelController
 				if(hitLocation != null)
 				{
 					resetMultiplicator();
-					
+
 					if(hitLocation.equals(HitLocation.LIFE_LOST))
 					{
 						game.setLivesRemaining(game.getLivesRemaining() - 1);
@@ -382,6 +391,7 @@ public class LevelController
 						{
 							// game over
 
+							resetPowerUps();
 							gameState = GameState.STOPPED;
 							timer.stop();
 
@@ -403,7 +413,8 @@ public class LevelController
 
 							// reset paddle and ball
 							initPaddle();
-							initBall();						
+							initBall(BallType.NORMAL);
+							initTimer();
 						}
 					}
 					else
@@ -451,13 +462,13 @@ public class LevelController
 				// ball doesn't collide with border --> check collision with paddle
 				else
 				{
-					hitLocation = game.collides(ballPosition, paddlePosition, paddle.getWidth(), paddle.getHeight(), true);					
+					hitLocation = game.collides(ballPosition, paddlePosition, paddle.getWidth(), paddle.getHeight(), true);
 					if(hitLocation != null && (hitLocation.equals(HitLocation.PADDLE) || hitLocation.equals(HitLocation.CORNER)))
-					{						
+					{
 						game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth())));
 
 						correctBallPosition(hitLocation, ballPosition, paddlePosition, paddle.getWidth(), paddle.getHeight());
-						
+
 						resetMultiplicator();
 					}
 					// ball doesn't collide with paddle --> check collision with bricks
@@ -485,12 +496,12 @@ public class LevelController
 						}
 					}
 				}
-				
-				//move powerups
+
+				// move powerups
 				movePowerUps();
-				//check timed powerups
+				// check timed powerups
 				checkPowerUps();
-			}	
+			}
 		};
 	}
 
@@ -564,8 +575,8 @@ public class LevelController
 				{
 					labelBrick.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/bricks/" + brick.getCurrentTextureID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");
 				}
-			});			
-			ft.play();	
+			});
+			ft.play();
 		}
 		else
 		{
@@ -575,14 +586,14 @@ public class LevelController
 
 	private void refreshLiveCounter()
 	{
-		vboxLives.getChildren().clear();	
+		vboxLives.getChildren().clear();
 
 		for(int i = 0; i < game.getLivesRemaining() - 1; i++)
 		{
 			ImageView iv = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle-extra-small.png"));
 			iv.setFitWidth(30);
 			iv.setFitHeight(120 / MAX_LIVES);
-			vboxLives.getChildren().add(iv);	
+			vboxLives.getChildren().add(iv);
 		}
 	}
 
@@ -599,11 +610,11 @@ public class LevelController
 		AnchorPane.setBottomAnchor(labelPaddle, paddle.getHeight());
 	}
 
-	private void initBall()
+	private void initBall(BallType ballType)
 	{
 		anchorPaneGame.getChildren().remove(stackPaneBall);
 
-		game.setBall(new Ball(BallType.NORMAL));
+		game.setBall(new Ball(ballType));
 
 		// create circle for ball
 		final Circle circle = new Circle(game.getBall().getBallRadius(), Color.web(game.getBall().getType().getColor()));
@@ -613,8 +624,6 @@ public class LevelController
 		stackPaneBall.setTranslateX(gamePaneWidth / 2 - game.getBall().getBallRadius());
 		stackPaneBall.setTranslateY(anchorPaneGame.getHeight() - paddle.getHeight() * 2 - game.getBall().getBallRadius() * 2);
 		anchorPaneGame.getChildren().add(stackPaneBall);
-
-		initTimer();
 	}
 
 	private void resetMultiplicator()
@@ -627,9 +636,9 @@ public class LevelController
 	}
 
 	public void increaseMultiplicator(int points)
-	{		
-		game.increaseMultiplicator();		
-		game.increasePointsSinceLastMultiplicatorReset(points);	
+	{
+		game.increaseMultiplicator();
+		game.increasePointsSinceLastMultiplicatorReset(points);
 		labelMultiplicator.setText("x" + game.getMultiplicator());
 	}
 
@@ -674,20 +683,21 @@ public class LevelController
 					game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
 
 					correctBallPosition(hitLocation, ballPosition, brickPosition, stackPaneBrick.getWidth(), stackPaneBrick.getHeight());
-				}				
-				
+				}
+
 				int points = game.getBoard().hitBrick(i, k, game.getBall());
-				//brick has been destroyed
+				// brick has been destroyed
 				if(points > 0)
-				{					
+				{
 					game.setTotalPoints(game.getTotalPoints() + points);
 					labelPoints.setText(String.valueOf(game.getTotalPoints()));
 					labelBlocksRemaining.setText(game.getBoard().getNumberOfRemainingBricks() + " Bricks remaining");
-				}				
+				}
 
 				if(game.getBoard().getNumberOfRemainingBricks() == 0)
 				{
 					// level done
+					resetPowerUps();
 					gameState = GameState.STOPPED;
 					resetMultiplicator();
 					timer.stop();
@@ -706,12 +716,12 @@ public class LevelController
 			}
 		}
 	}
-	
+
 	public void showAnimatedPoints(int row, int col, int points)
 	{
 		double xPosition = (gamePaneWidth / Board.WIDTH) * (col);
 		double yPosition = (gamePaneHeight / Board.HEIGHT) * (row);
-		
+
 		Label labelNotification = new Label("+" + points);
 		labelNotification.setTranslateX(xPosition);
 		labelNotification.setTranslateY(yPosition);
@@ -730,25 +740,25 @@ public class LevelController
 		translateTransition.setFromY(yPosition);
 		translateTransition.setToY(yPosition - (gamePaneHeight / Board.HEIGHT));
 		translateTransition.setCycleCount(1);
-		translateTransition.setAutoReverse(false);		
+		translateTransition.setAutoReverse(false);
 
 		ParallelTransition parallelTransition = new ParallelTransition();
 		parallelTransition.getChildren().addAll(fadeTransition, translateTransition);
-		parallelTransition.setCycleCount(1);		
+		parallelTransition.setCycleCount(1);
 		parallelTransition.setOnFinished(new EventHandler<ActionEvent>()
 		{
 			@Override
 			public void handle(ActionEvent event)
 			{
-				anchorPaneGame.getChildren().remove(labelNotification);				
+				anchorPaneGame.getChildren().remove(labelNotification);
 			}
 		});
 
 		parallelTransition.play();
 	}
-	
+
 	public void addMovingPowerUp(int row, int col, PowerUp powerUp)
-	{		
+	{
 		Label labelPowerUp = new Label();
 		labelPowerUp.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/powerups/" + powerUp.getID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: cover");
 		labelPowerUp.setAlignment(Pos.CENTER);
@@ -756,54 +766,100 @@ public class LevelController
 
 		labelPowerUp.setPrefWidth(gamePaneWidth / Board.WIDTH);
 		labelPowerUp.setPrefHeight(gamePaneHeight / Board.HEIGHT);
-		
+
 		anchorPaneGame.getChildren().add(labelPowerUp);
-		labelPowerUp.setTranslateX(col * (gamePaneWidth/Board.WIDTH));
-		labelPowerUp.setTranslateY(row * (gamePaneHeight/Board.HEIGHT));
-		
+		labelPowerUp.setTranslateX(col * (gamePaneWidth / Board.WIDTH));
+		labelPowerUp.setTranslateY(row * (gamePaneHeight / Board.HEIGHT));
+
 		movingPowerUps.add(labelPowerUp);
 	}
-	
+
 	private void movePowerUps()
-	{	
+	{
 		for(Iterator<Label> iterator = movingPowerUps.iterator(); iterator.hasNext();)
 		{
 			Label currentLabel = iterator.next();
-			PowerUp currentPowerUp = (PowerUp)currentLabel.getUserData();			
-			currentLabel.setTranslateY(currentLabel.getTranslateY() + currentPowerUp.getSpeed());		
-			
-			//check collision with paddle
+			PowerUp currentPowerUp = (PowerUp)currentLabel.getUserData();
+			currentLabel.setTranslateY(currentLabel.getTranslateY() + currentPowerUp.getSpeed());
+
+			// check collision with paddle
 			Point2D labelPosition = new Point2D(currentLabel.getTranslateX(), currentLabel.getTranslateY());
 			Point2D paddlePosition = new Point2D(labelPaddle.getLayoutX() + labelPaddle.getTranslateX(), labelPaddle.getLayoutY() + labelPaddle.getTranslateY());
-			
-			HitLocation hitLocation = game.collides(labelPosition, paddlePosition, paddle.getWidth(), paddle.getHeight(), true);					
+
+			HitLocation hitLocation = game.collides(labelPosition, paddlePosition, paddle.getWidth(), paddle.getHeight(), true);
 			if(hitLocation != null && (hitLocation.equals(HitLocation.PADDLE) || hitLocation.equals(HitLocation.CORNER)))
-			{		
-				//TODO activate method
-				//TODO check if timed
+			{
+				// TODO activate method			
 				Logger.log(LogLevel.DEBUG, "Collected PowerUp with ID = " + currentPowerUp.getID());
-				currentPowerUp.activate();
+				if(!currentPowerUp.isPermanent())
+				{
+					addTimedPowerUp(currentPowerUp);
+				}
+				currentPowerUp.activate(this, game);
 				anchorPaneGame.getChildren().remove(currentLabel);
-				iterator.remove();		
+				iterator.remove();
 				continue;
-			}			
-			
+			}
+
 			if(currentLabel.getTranslateY() + currentLabel.getHeight() >= gamePaneHeight)
 			{
-				//power up reached bottom wall
+				// power up reached bottom wall
 				anchorPaneGame.getChildren().remove(currentLabel);
-				iterator.remove();				
+				iterator.remove();
 			}
 		}
 	}
-	
+
+	// TODO if there is already one item of this type?
+	private void addTimedPowerUp(PowerUp powerUp)
+	{
+		Label labelPowerUp = new Label(String.valueOf(powerUp.getDurationInSeconds()));
+		labelPowerUp.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/powerups/" + powerUp.getID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: contain;" + "-fx-font-size: 16;" + "-fx-font-weight: bold;"
+				+ "-fx-tect-fill: #cc0000;");
+		labelPowerUp.setAlignment(Pos.CENTER);
+		labelPowerUp.setUserData(powerUp);
+
+		labelPowerUp.setPrefWidth(35);
+		labelPowerUp.setPrefHeight(20);
+
+		vboxPowerUps.getChildren().add(labelPowerUp);
+
+		timedPowerUps.add(labelPowerUp);
+
+		new CountdownTimer(powerUp.getDurationInSeconds(), labelPowerUp);
+	}
+
 	private void checkPowerUps()
 	{
-		//TODO check timed powerups
-//		for(Iterator<PowerUp> iterator = game.getActivatedPowerUps().iterator(); iterator.hasNext();)
-//		{
-//			)
-//		}
+		for(Iterator<Label> iterator = timedPowerUps.iterator(); iterator.hasNext();)
+		{
+			Label currentLabel = iterator.next();
+			if(currentLabel.getText().equals("0"))
+			{
+				vboxPowerUps.getChildren().remove(currentLabel);
+				iterator.remove();
+			}
+		}
+	}
+
+	private void resetPowerUps()
+	{
+		movingPowerUps = new ArrayList<>();
+		timedPowerUps = new ArrayList<>();
+		vboxPowerUps.getChildren().clear();
+	}
+	
+	public void changeBall(Ball newBall)
+	{
+		double translateX = stackPaneBall.getTranslateX();
+		double translateY = stackPaneBall.getTranslateY();
+		Point2D direction = game.getBall().getDirection();
+		game.setBall(newBall);
+		
+		initBall(game.getBall().getType());
+		stackPaneBall.setTranslateX(translateX);
+		stackPaneBall.setTranslateY(translateY);		
+		game.getBall().setDirection(game.getNewSpeedDirection(direction, newBall.getType().getSpeedFactor()));
 	}
 
 	public void showLabelFPS(boolean value)
@@ -825,7 +881,7 @@ public class LevelController
 	}
 
 	public void back()
-	{		
+	{
 		if(timer != null)
 		{
 			timer.stop();
@@ -836,7 +892,7 @@ public class LevelController
 		game.resetMultiplicator();
 		game.resetPointsSinceLastMultiplicatorReset();
 		game.setBoard(null);
-		game.setLevelController(null);	
+		game.setLevelController(null);
 		game.setMovingPowerUps(new ArrayList<>());
 		game.setActivatedPowerUps(new ArrayList<>());
 

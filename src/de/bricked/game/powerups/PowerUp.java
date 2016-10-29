@@ -1,15 +1,18 @@
 package de.bricked.game.powerups;
 
+import de.bricked.game.Game;
+import de.bricked.ui.LevelController;
+
 public abstract class PowerUp
 {
     protected int id;
-    protected int duration;
+    protected int durationInSeconds;
     protected final double speed = 2.0;  
 
-    public PowerUp(int id, int duration)
+    public PowerUp(int id, int durationInSeconds)
     {
         this.id = id;
-        this.duration = duration;
+        this.durationInSeconds = durationInSeconds;
     }
     
     public int getID()
@@ -19,13 +22,20 @@ public abstract class PowerUp
 
     public boolean isPermanent()
     {
-        return (duration == -1);
-    }    
+        return (durationInSeconds == -1);
+    }
+    
+    public int getDurationInSeconds()
+    {
+    	return durationInSeconds;
+    }
 
     public double getSpeed()
 	{
 		return speed;
 	} 
 
-	public abstract void activate();
+	public abstract void activate(LevelController levelController, Game game);
+	
+	public abstract void deactivate(LevelController levelController, Game game);
 }

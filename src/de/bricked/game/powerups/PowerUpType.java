@@ -7,8 +7,7 @@ public enum PowerUpType
     FASTER_BALL(2),
     SLOWER_BALL(3),
     EXPLODE_BALL(4),
-    THROUGH_BALL(5),
-    SPLIT_BALL(6);
+    NO_COLLISION_BALL(5);   
 
     private int id;
 
