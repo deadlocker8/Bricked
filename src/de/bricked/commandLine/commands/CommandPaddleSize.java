@@ -2,6 +2,9 @@ package de.bricked.commandLine.commands;
 
 import de.bricked.game.paddle.Paddle;
 import de.bricked.game.paddle.PaddleSize;
+import de.bricked.ui.LevelController;
+import logger.LogLevel;
+import logger.Logger;
 
 /**
  * Changes the paddle size
@@ -26,9 +29,17 @@ public class CommandPaddleSize extends Command
 			return;
 		}
 
-        Paddle paddle = bundle.getLevelController().getPaddle();
-		bundle.getLevelController().getPaddle().setPaddleSize(PaddleSize.getPaddleSize(Double.parseDouble(command[1])));
-        bundle.getLevelController().getLabelPaddle().setFitWidth(paddle.getWidth());
+        LevelController levelController = bundle.getLevelController();
+        if(levelController != null)
+        {
+            Paddle paddle = levelController.getPaddle();
+            bundle.getLevelController().getPaddle().setPaddleSize(PaddleSize.getPaddleSize(Double.parseDouble(command[1])));
+            bundle.getLevelController().getLabelPaddle().setFitWidth(paddle.getWidth());
+        }
+        else
+        {
+            bundle.getController().print("Can't change paddleSize without a paddle");
+        }
 		//implement your code here
 	}
 }
