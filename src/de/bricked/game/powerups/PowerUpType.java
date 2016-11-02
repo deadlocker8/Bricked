@@ -1,6 +1,9 @@
 package de.bricked.game.powerups;
 
 
+import de.bricked.game.powerups.ball.ExplodeBallPowerUp;
+import de.bricked.game.powerups.ball.NoCollisionBallPowerUp;
+
 public enum PowerUpType
 {
     NONE(0, -1),
@@ -28,5 +31,18 @@ public enum PowerUpType
     public int getDurationInSeconds()
     {
         return durationInSeconds;
+    }
+
+    public static PowerUp getInstance(PowerUpType powerUpType)
+    {
+        switch (powerUpType)
+        {
+            case EXTRA_LIFE: return new ExtraLifePowerUp();
+            case FASTER_BALL: return null;
+            case SLOWER_BALL: return null;
+            case EXPLODE_BALL: return new ExplodeBallPowerUp();
+            case NO_COLLISION_BALL: return new NoCollisionBallPowerUp();
+            default: return null;
+        }
     }
 }
