@@ -149,8 +149,11 @@ public class Game
 	
 	public void applyMultiplicator()
 	{
-		totalPoints += pointsSinceLastMultiplicatorReset * multiplicator;
-		Logger.log(LogLevel.DEBUG, "Applied multiplicator: " + pointsSinceLastMultiplicatorReset + " x" + multiplicator + "  =  " + totalPoints);		
+		if(multiplicator > 1)
+		{
+			totalPoints += pointsSinceLastMultiplicatorReset * multiplicator;
+			Logger.log(LogLevel.DEBUG, "Applied multiplicator: " + pointsSinceLastMultiplicatorReset + " x" + multiplicator + "  =  " + totalPoints);
+		}
 	}
 
 	public LevelController getLevelController()

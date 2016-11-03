@@ -2,32 +2,34 @@ package de.bricked.game.paddle;
 
 public enum PaddleSize
 {
-	SMALL(0.1, "paddle-small"),
-	MEDIUM(0.2, "paddle-medium"),
-	LARGE(0.3, "paddle-large"),
-	EXTRA_LARGE(0.4, "paddle-large");
+	SMALL(1, 0.1, "paddle-small"),
+	MEDIUM(2, 0.2, "paddle-medium"),
+	LARGE(3, 0.3, "paddle-large"),
+	EXTRA_LARGE(4, 0.4, "paddle-large");
 
+	private int ID;
 	private double sizeFactor;
 	private String textureID;
     private static PaddleSize[] paddleSizes = PaddleSize.values();
 		
-    PaddleSize(double sizeFactor, String textureID)
-	{				
+    PaddleSize(int ID, double sizeFactor, String textureID)
+	{		
+    	this.ID = ID;
 		this.sizeFactor = sizeFactor;
 		this.textureID = textureID;
 	}
 
-	public static PaddleSize getPaddleSize(double size)
+	public static PaddleSize getPaddleSize(int size)
     {
         for(PaddleSize paddleSize : paddleSizes)
         {
-            if(paddleSize.getSizeFactor() == size)
+            if(paddleSize.ID == size)
             {
                 return paddleSize;
             }
         }
         return PaddleSize.EXTRA_LARGE;
-    }
+    }	
 	
 	public double getSizeFactor()
 	{

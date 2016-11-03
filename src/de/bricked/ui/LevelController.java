@@ -16,6 +16,7 @@ import de.bricked.game.board.Board;
 import de.bricked.game.bricks.Brick;
 import de.bricked.game.bricks.BrickType;
 import de.bricked.game.paddle.Paddle;
+import de.bricked.game.paddle.PaddleSize;
 import de.bricked.game.powerups.PowerUp;
 import de.bricked.utils.CountdownTimer;
 import fontAwesome.FontIcon;
@@ -291,7 +292,7 @@ public class LevelController
 
 		refreshLiveCounter();
 
-		initPaddle();
+		initPaddle(game.getLevel().getInitPadSize());
 		oldMousePosition = labelPaddle.getScene().getX() - paddle.getWidth() / 2;
 
 		heightListener = new ChangeListener<Number>()
@@ -414,7 +415,7 @@ public class LevelController
 							timer.stop();
 
 							// reset paddle and ball
-							initPaddle();
+							initPaddle(game.getLevel().getInitPadSize());
 							initBall(BallType.NORMAL);
 							initTimer();
 						}
@@ -597,11 +598,11 @@ public class LevelController
 		}
 	}
 
-	private void initPaddle()
+	public void initPaddle(PaddleSize paddleSize)
 	{
 		anchorPaneGame.getChildren().remove(labelPaddle);
 
-		paddle = new Paddle(game.getLevel().getInitPadSize(), gamePaneHeight / Board.HEIGHT, gamePaneWidth);
+		paddle = new Paddle(paddleSize, gamePaneHeight / Board.HEIGHT, gamePaneWidth);
 		labelPaddle = new ImageView(new Image("de/bricked/resources/textures/paddle/" + paddle.getPaddleSize().getTextureID() + ".png"));
 		labelPaddle.setFitWidth(paddle.getWidth());
 		labelPaddle.setFitHeight(paddle.getHeight());
