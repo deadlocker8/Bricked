@@ -12,7 +12,7 @@
    <children>
       <AnchorPane fx:id="anchorPaneGame" layoutX="22.0" layoutY="125.0" minHeight="650.0" minWidth="700.0" prefHeight="650.0" prefWidth="700.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="78.0" AnchorPane.topAnchor="125.0">
          <children>
-            <Label fx:id="labelMultiplicator" alignment="CENTER" contentDisplay="CENTER" layoutX="301.0" layoutY="502.0" prefHeight="45.0" prefWidth="99.0" textAlignment="CENTER">
+            <Label fx:id="labelMultiplicator" alignment="CENTER" contentDisplay="CENTER" layoutX="301.0" layoutY="502.0" prefHeight="45.0" prefWidth="100.0" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="30.0" />
                </font>

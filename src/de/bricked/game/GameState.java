@@ -2,5 +2,5 @@ package de.bricked.game;
 
 public enum GameState
 {
-	WAITING, RUNNING, STOPPED
+	WAITING, RUNNING, PAUSED, STOPPED
 }
