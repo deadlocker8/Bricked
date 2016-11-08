@@ -222,7 +222,7 @@ public class Board
 
 			if(hittedBrick.getType().getPoints() > 0)
 			{
-				game.getLevelController().showAnimatedPoints(row, col, hittedBrick.getType().getPoints());
+				game.getLevelController().showAnimatedPoints(row, col, hittedBrick.getType().getPoints(), 15, false);
 			}
 			game.getLevelController().increaseMultiplicator(hittedBrick.getType().getPoints());
 			LevelController.redrawBrick(col, row, bricks.get(row).get(col), true);
@@ -231,7 +231,6 @@ public class Board
 		{
 			LevelController.redrawBrick(col, row, bricks.get(row).get(col), false);
 		}
-
 	}
 
 	private void explodeBrick(int row, int col)

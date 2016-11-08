@@ -34,6 +34,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -51,6 +53,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -66,6 +70,7 @@ public class LevelController
 	@FXML private Label labelLevelPack;
 	@FXML private Label labelPoints;
 	@FXML private Label labelBlocksRemaining;
+	@FXML private Label labelMultiplicator;
 	@FXML private AnchorPane anchorPaneGame;
 	@FXML private Button buttonBack;
 	@FXML private VBox vboxPowerUps;
@@ -102,7 +107,13 @@ public class LevelController
 		resetPowerUps();
 
 		anchorPaneGame.heightProperty().removeListener(heightListener);
-		anchorPaneGame.widthProperty().removeListener(widthListener);
+		anchorPaneGame.widthProperty().removeListener(widthListener);	
+		
+		double yPosition = (gamePaneHeight / Board.HEIGHT) * (20);	
+		labelMultiplicator.setLayoutX(0);	
+		labelMultiplicator.setLayoutY(0);	
+		labelMultiplicator.setTranslateX((gamePaneWidth - 100) / 2);
+		labelMultiplicator.setTranslateY(yPosition);	
 
 		// start random into left or right direction
 		int random = new Random().nextInt(2);
@@ -629,10 +640,15 @@ public class LevelController
 
 	private void resetMultiplicator()
 	{
-		game.applyMultiplicator();
-		game.resetMultiplicator();
-		game.resetPointsSinceLastMultiplicatorReset();
+		game.applyMultiplicator();		
 		labelPoints.setText(String.valueOf(game.getTotalPoints()));
+		labelMultiplicator.setText("");
+		if(game.getMultiplicator() > 1)
+		{
+			showAnimatedPoints(20, 8, game.getPointsSinceLastMultiplicatorReset() * game.getMultiplicator(), 25, true);
+		}
+		game.resetPointsSinceLastMultiplicatorReset();
+		game.resetMultiplicator();		
 	}
 
 	public void increaseMultiplicator(int points)
@@ -641,43 +657,8 @@ public class LevelController
 		game.increasePointsSinceLastMultiplicatorReset(points);
 		
 		if(game.getMultiplicator() > 1)
-		{
-			double xPosition = (gamePaneWidth / Board.WIDTH) * (7);
-			double yPosition = (gamePaneHeight / Board.HEIGHT) * (20);
-	
-			Label labelNotification = new Label("x" + game.getMultiplicator());
-			labelNotification.setTranslateX(xPosition);
-			labelNotification.setTranslateY(yPosition);
-			labelNotification.setStyle("-fx-font-weight: bold; -fx-font-size: 30; ");
-			labelNotification.setAlignment(Pos.CENTER);
-			labelNotification.setPrefWidth((gamePaneWidth / Board.WIDTH) * 3);
-			labelNotification.setPrefHeight((gamePaneHeight / Board.HEIGHT) * 2);
-			anchorPaneGame.getChildren().add(labelNotification);		
-			
-			FadeTransition fadeTransition = new FadeTransition(Duration.millis(800), labelNotification);
-			fadeTransition.setFromValue(1.0);
-			fadeTransition.setToValue(0.0);
-			fadeTransition.setCycleCount(1);
-			fadeTransition.setAutoReverse(false);
-			TranslateTransition translateTransition = new TranslateTransition(Duration.millis(800), labelNotification);
-			translateTransition.setFromY(yPosition);
-			translateTransition.setToY(yPosition - (gamePaneHeight / Board.HEIGHT) * 3);
-			translateTransition.setCycleCount(1);			
-			translateTransition.setAutoReverse(false);
-	
-			ParallelTransition parallelTransition = new ParallelTransition();
-			parallelTransition.getChildren().addAll(fadeTransition, translateTransition);
-			parallelTransition.setCycleCount(1);		
-			parallelTransition.setOnFinished(new EventHandler<ActionEvent>()
-			{
-				@Override
-				public void handle(ActionEvent event)
-				{
-					anchorPaneGame.getChildren().remove(labelNotification);
-				}
-			});
-	
-			parallelTransition.play();
+		{		
+			labelMultiplicator.setText("x" + game.getMultiplicator());
 		}
 	}
 
@@ -756,17 +737,29 @@ public class LevelController
 		}
 	}
 
-	public void showAnimatedPoints(int row, int col, int points)
-	{
+	public void showAnimatedPoints(int row, int col, int points, double fontSize, boolean centerInPane)
+	{		
+		Text t = new Text("+" + points);	
+		t.setFont(new Font(fontSize));		
+		new Scene(new Group(t));
+		t.applyCss();		
+		
 		double xPosition = (gamePaneWidth / Board.WIDTH) * (col);
+		if(centerInPane)
+		{
+			xPosition = (gamePaneWidth - t.getLayoutBounds().getWidth() + 10) / 2;
+		}
 		double yPosition = (gamePaneHeight / Board.HEIGHT) * (row);
 
 		Label labelNotification = new Label("+" + points);
 		labelNotification.setTranslateX(xPosition);
 		labelNotification.setTranslateY(yPosition);
-		labelNotification.setStyle("-fx-font-weight: bold; -fx-font-size: 15; ");
+		labelNotification.setStyle("-fx-font-weight: bold; -fx-font-size: " + fontSize + "; ");
 		labelNotification.setAlignment(Pos.CENTER);
-		labelNotification.setPrefWidth(gamePaneWidth / Board.WIDTH);
+		
+	
+		
+		labelNotification.setPrefWidth(t.getLayoutBounds().getWidth() + 10);
 		labelNotification.setPrefHeight(gamePaneHeight / Board.HEIGHT);
 		anchorPaneGame.getChildren().add(labelNotification);
 
