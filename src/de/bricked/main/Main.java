@@ -37,7 +37,7 @@ public class Main extends Application
 			stage.setTitle(bundle.getString("app.name"));
 			stage.setScene(scene);
 			stage.setResizable(true);
-
+			
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>()
 			{
 				public void handle(WindowEvent we)

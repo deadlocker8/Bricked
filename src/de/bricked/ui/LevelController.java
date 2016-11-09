@@ -34,6 +34,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -141,6 +142,8 @@ public class LevelController
 		this.game = game;
 		game.setBoard(new Board(game));
 		game.setLevelController(this);
+		
+		anchorPaneGame.setCursor(Cursor.NONE);
 
 		anchorPaneGame.setOnMouseClicked(new EventHandler<MouseEvent>()
 		{
