@@ -424,11 +424,11 @@ public class Game
 	
 	public Point2D getNewSpeedDirection(Point2D oldDirection, double speed)
 	{		
-		double influenceX = 0.5;
+		double oldSpeed =  Math.sqrt(oldDirection.getX() * oldDirection.getX()+ oldDirection.getY() * oldDirection.getY());		
 		
-		double newXSpeed = speed * influenceX;
-		double newYSpeed = Math.sqrt(speed * speed - newXSpeed * newXSpeed);
+		double newXSpeed = oldDirection.getX() * speed / oldSpeed;
+		double newYSpeed = oldDirection.getY() * speed / oldSpeed;
 
-		return new Point2D(-newXSpeed, -newYSpeed);
+		return new Point2D(newXSpeed, newYSpeed);
 	}
 }
