@@ -20,7 +20,8 @@ public class CountdownTimer
 	public CountdownTimer(int seconds, HBox hbox, LevelController levelController)
 	{
 		this.count = seconds;
-		this.hbox = hbox;		
+		this.hbox = hbox;	
+		this.levelController = levelController;
 		self = this;
 		
 		start();

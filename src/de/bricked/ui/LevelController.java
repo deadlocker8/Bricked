@@ -672,8 +672,8 @@ public class LevelController
 
 		for(int i = 0; i < game.getLivesRemaining() - 1; i++)
 		{
-			ImageView iv = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle-extra-small.png"));
-			iv.setFitWidth(30);
+			ImageView iv = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle-small.png"));
+			iv.setFitWidth(70);
 			iv.setFitHeight(120 / MAX_LIVES);
 			vboxLives.getChildren().add(iv);
 		}
