@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.bricked.ui.LevelController">
+<AnchorPane fx:id="anchorPane" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.bricked.ui.LevelController">
    <children>
-      <AnchorPane fx:id="anchorPaneGame" layoutX="22.0" layoutY="125.0" minHeight="650.0" minWidth="700.0" prefHeight="650.0" prefWidth="700.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="78.0" AnchorPane.topAnchor="125.0">
+      <AnchorPane fx:id="anchorPaneGame" layoutX="14.0" layoutY="125.0" minHeight="650.0" minWidth="670.0" prefHeight="650.0" prefWidth="670.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="116.0" AnchorPane.topAnchor="125.0">
          <children>
             <Label fx:id="labelMultiplicator" alignment="CENTER" contentDisplay="CENTER" layoutX="301.0" layoutY="502.0" prefHeight="45.0" prefWidth="100.0" textAlignment="CENTER">
                <font>
@@ -18,7 +18,7 @@
                </font>
             </Label>
          </children></AnchorPane>
-      <VBox fx:id="vboxPowerUps" layoutX="745.0" layoutY="125.0" minHeight="338.0" minWidth="40.0" prefHeight="402.0" prefWidth="40.0" AnchorPane.bottomAnchor="273.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="125.0" />
+      <VBox fx:id="vboxPowerUps" layoutX="745.0" layoutY="125.0" maxHeight="490.0" minHeight="338.0" minWidth="40.0" prefHeight="490.0" prefWidth="90.0" AnchorPane.bottomAnchor="185.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="125.0" />
       <HBox alignment="CENTER" layoutX="34.0" layoutY="23.0" prefHeight="100.0" prefWidth="275.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
          <children>
             <Button fx:id="buttonBack" mnemonicParsing="false" onAction="#back" text="Back" />
@@ -64,7 +64,7 @@
             </Label>
          </children>
       </HBox>
-      <VBox fx:id="vboxLives" layoutX="745.0" layoutY="603.0" minHeight="71.0" minWidth="40.0" prefHeight="227.0" prefWidth="40.0" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="15.0" />
+      <VBox fx:id="vboxLives" layoutX="745.0" layoutY="603.0" minHeight="71.0" minWidth="40.0" prefHeight="160.0" prefWidth="90.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
       <Label fx:id="labelFPS" layoutX="770.0" layoutY="6.0" text="0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0">
          <font>
             <Font name="System Bold" size="16.0" />

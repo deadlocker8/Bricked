@@ -11,7 +11,7 @@ public class NoCollisionBallPowerUp extends PowerUp
 {
     public NoCollisionBallPowerUp()
     {
-    	  super(PowerUpType.NO_COLLISION_BALL.getId(), PowerUpType.NO_COLLISION_BALL.getDurationInSeconds());
+    	  super(PowerUpType.NO_COLLISION_BALL.getID(), PowerUpType.NO_COLLISION_BALL.getDurationInSeconds());
     }
 
     @Override

@@ -1,39 +1,51 @@
 package de.bricked.game.powerups;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import de.bricked.game.powerups.ball.ExplodeBallPowerUp;
 import de.bricked.game.powerups.ball.NoCollisionBallPowerUp;
 
+
 public enum PowerUpType
 {
-    NONE(0, -1),
-    EXTRA_LIFE(1, -1),
-    FASTER_BALL(2, 10),
-    SLOWER_BALL(3, 10),
-    EXPLODE_BALL(4, 10),
-    NO_COLLISION_BALL(5, 10);
+    NONE(0, -1, null),
+    EXTRA_LIFE(1, -1, null),
+    FASTER_BALL(2, 10, Arrays.asList(3)),
+    SLOWER_BALL(3, 10, Arrays.asList(2, 4, 5)),
+    EXPLODE_BALL(4, 10, Arrays.asList(2, 3, 5)),
+    NO_COLLISION_BALL(5, 10, Arrays.asList(2, 3, 4));
 
-    private int id;
+    private int ID;
     private int durationInSeconds;
+    private List<Integer> deactivatesPowerUpIDs;
     public static PowerUpType[] types = PowerUpType.values();
 
-    PowerUpType(int id, int durationInSeconds)
+    PowerUpType(int ID, int durationInSeconds, List<Integer> deactivatesPowerUpdIDs)
     {
-        this.id = id;
+        this.ID = ID;
         this.durationInSeconds = durationInSeconds;
+        this.deactivatesPowerUpIDs = deactivatesPowerUpdIDs;
     }
 
-    public int getId()
+    public int getID()
     {
-        return id;
+        return ID;
     }
 
     public int getDurationInSeconds()
     {
         return durationInSeconds;
-    }
+    }    
 
-    public static PowerUp getInstance(PowerUpType powerUpType)
+    public ArrayList<Integer> getDeactivatesPowerUpIDs()
+	{
+		return new ArrayList<>(deactivatesPowerUpIDs);
+	}
+
+	public static PowerUp getInstance(PowerUpType powerUpType)
     {
         switch (powerUpType)
         {
@@ -45,4 +57,16 @@ public enum PowerUpType
             default: return null;
         }
     }
+	
+	public static PowerUpType valueOf(int ID)
+	{
+		for(PowerUpType currentType : PowerUpType.values())
+		{
+			if(ID == currentType.getID())
+			{
+				return currentType;
+			}
+		}
+		return PowerUpType.NONE;
+	}
 }
