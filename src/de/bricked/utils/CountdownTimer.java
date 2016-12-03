@@ -12,17 +12,33 @@ public class CountdownTimer
 {
 	private int count;	
 	private HBox hbox;	
+	private LevelController levelController;
 	private Timer timer;
+	private TimerTask task;
+	private CountdownTimer self;
 
 	public CountdownTimer(int seconds, HBox hbox, LevelController levelController)
 	{
 		this.count = seconds;
-		this.hbox = hbox;
+		this.hbox = hbox;		
+		self = this;
 		
-		CountdownTimer self = this;
-		
-		timer = new Timer();
-		TimerTask task = new TimerTask()
+		start();
+	}
+	
+	public void addSecondsToTimer(int seconds)
+	{
+		this.count += seconds;
+	}	
+	
+	public HBox getHBox()
+	{
+		return hbox;
+	}	
+	
+	public void start()
+	{
+		task = new TimerTask()
 		{
 			@Override
 			public void run()
@@ -52,22 +68,13 @@ public class CountdownTimer
 				}				
 			}
 		};
+		timer = new Timer();		
 		timer.schedule(task, 0, 1000);
 	}
 	
-	public void addSecondsToTimer(int seconds)
-	{
-		this.count += seconds;
-	}	
-	
-	public HBox getHBox()
-	{
-		return hbox;
-	}	
-	
 	public void stop()
 	{
-		timer.cancel();
+		timer.cancel();		
 		timer.purge();
 	}
 }

@@ -561,7 +561,13 @@ public class LevelController
 		labelPause.setTranslateX(((gamePaneWidth - t.getLayoutBounds().getWidth() + 10) / 2) + 22);
 		labelPause.setTranslateY(((gamePaneHeight - t.getLayoutBounds().getHeight()) / 2) + 125); 		
 		
-		anchorPane.getChildren().add(labelPause);		
+		anchorPane.getChildren().add(labelPause);
+		
+		//pause all timedPowerUps
+		for(CountdownTimer currentTimer : timedPowerUps)
+		{
+			currentTimer.stop();
+		}
 	}
 	
 	private void restart()
@@ -571,6 +577,13 @@ public class LevelController
 		fps = 0;
 		anchorPaneGame.setOpacity(1.0);
 		anchorPane.getChildren().remove(anchorPane.getChildren().size() - 1);
+		
+		//restart all timedPowerUps
+		for(CountdownTimer currentTimer : timedPowerUps)
+		{
+			currentTimer.start();
+		}
+				
 		timer.start();			
 	}
 
