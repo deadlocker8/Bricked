@@ -8,9 +8,9 @@ import java.util.ResourceBundle;
 
 import de.bricked.game.bricks.Brick;
 import de.bricked.game.bricks.BrickType;
+import de.bricked.game.paddle.PaddleSize;
 import de.bricked.game.powerups.PowerUpType;
 import de.brickedleveleditor.game.levels.LevelPackWriter;
-import de.bricked.game.paddle.PaddleSize;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,9 +21,18 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -99,7 +108,7 @@ public class Controller
         powerupTextures.add(null);
         for (int i=1; i < PowerUpType.types.length; i++)
         {
-            File powerupPath = new File(rootPath + PowerUpType.types[i].getId() + fileExt);
+            File powerupPath = new File(rootPath + PowerUpType.types[i].getID() + fileExt);
             try
             {
                 Image image = new Image(powerupPath.getPath());
