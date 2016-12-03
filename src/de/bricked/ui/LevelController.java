@@ -381,6 +381,10 @@ public class LevelController
 
 	private void initTimer()
 	{
+		previousTime = 0;
+		secondsElapsedSinceLastFpsUpdate = 0f;
+		fps = 0;
+		
 		timer = new AnimationTimer()
 		{			
 			@Override
