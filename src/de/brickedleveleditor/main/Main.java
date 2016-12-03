@@ -28,10 +28,7 @@ public class Main extends Application
 			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("de/brickedleveleditor/ui/fxml/main_controller.fxml"));
 			Parent root = (Parent)loader.load();
 
-			Scene scene = new Scene(root, 800, 600);		
-
-			((MainController)loader.getController()).init(stage, null);
-
+			Scene scene = new Scene(root, 800, 600);
 			stage.setTitle(bundle.getString("app.name"));
 			stage.setScene(scene);
 			stage.setResizable(true);
@@ -44,8 +41,8 @@ public class Main extends Application
 					System.exit(0);
 				}
 			});
-
 			stage.show();
+            ((MainController)loader.getController()).init(stage, null);
 		}
 		catch(Exception e)
 		{

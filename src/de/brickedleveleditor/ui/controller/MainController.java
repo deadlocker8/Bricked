@@ -50,8 +50,6 @@ public class MainController extends AbstractController
     private Image currentlySelectedPowerupImage;
     private final int WIDTH = 18;
     private final int HEIGHT = 18;
-
-    public Stage stage;
     public final ResourceBundle bundle = ResourceBundle.getBundle("de/brickedleveleditor/main/", Locale.GERMANY);
     private HashMap<BrickType, Image> bricksTextures;
     private ArrayList<Image> powerupTextures;
