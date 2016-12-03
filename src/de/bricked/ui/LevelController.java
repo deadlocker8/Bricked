@@ -18,6 +18,7 @@ import de.bricked.game.bricks.BrickType;
 import de.bricked.game.paddle.Paddle;
 import de.bricked.game.paddle.PaddleSize;
 import de.bricked.game.powerups.PowerUp;
+import de.bricked.game.powerups.PowerUpType;
 import de.bricked.utils.CountdownTimer;
 import fontAwesome.FontIcon;
 import fontAwesome.FontIconType;
@@ -49,6 +50,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -86,8 +89,7 @@ public class LevelController
 	private static GridPane grid;
 	private AnimationTimer timer;
 	private double gamePaneWidth;
-	private double gamePaneHeight;
-	public final int MAX_LIVES = 7;
+	private double gamePaneHeight;	
 	private final int TARGET_FPS = 60;
 	private final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
 	private final static double BRICK_FADE_DURATION = 300.0;
@@ -101,7 +103,7 @@ public class LevelController
 	private double oldMousePosition;
 	private static ArrayList<Label> brickLabels;
 	private ArrayList<Label> movingPowerUps;
-	private ArrayList<Label> timedPowerUps;
+	private ArrayList<CountdownTimer> timedPowerUps;
 	private long previousTime = 0;
 	private float secondsElapsedSinceLastFpsUpdate = 0f;
 
@@ -378,6 +380,10 @@ public class LevelController
 
 	private void initTimer()
 	{
+		previousTime = 0;
+		secondsElapsedSinceLastFpsUpdate = 0f;
+		fps = 0;
+		
 		timer = new AnimationTimer()
 		{			
 			@Override
@@ -554,7 +560,13 @@ public class LevelController
 		labelPause.setTranslateX(((gamePaneWidth - t.getLayoutBounds().getWidth() + 10) / 2) + 22);
 		labelPause.setTranslateY(((gamePaneHeight - t.getLayoutBounds().getHeight()) / 2) + 125); 		
 		
-		anchorPane.getChildren().add(labelPause);		
+		anchorPane.getChildren().add(labelPause);
+		
+		//pause all timedPowerUps
+		for(CountdownTimer currentTimer : timedPowerUps)
+		{
+			currentTimer.stop();
+		}
 	}
 	
 	private void restart()
@@ -564,6 +576,13 @@ public class LevelController
 		fps = 0;
 		anchorPaneGame.setOpacity(1.0);
 		anchorPane.getChildren().remove(anchorPane.getChildren().size() - 1);
+		
+		//restart all timedPowerUps
+		for(CountdownTimer currentTimer : timedPowerUps)
+		{
+			currentTimer.start();
+		}
+				
 		timer.start();			
 	}
 
@@ -652,9 +671,9 @@ public class LevelController
 
 		for(int i = 0; i < game.getLivesRemaining() - 1; i++)
 		{
-			ImageView iv = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle-extra-small.png"));
-			iv.setFitWidth(30);
-			iv.setFitHeight(120 / MAX_LIVES);
+			ImageView iv = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle-small.png"));
+			iv.setFitWidth(70);
+			iv.setFitHeight(120 / game.getMaxLives());
 			vboxLives.getChildren().add(iv);
 		}
 	}
@@ -902,22 +921,45 @@ public class LevelController
 
 	private void addTimedPowerUp(PowerUp powerUp)
 	{
-		Label labelPowerUp = new Label(String.valueOf(powerUp.getDurationInSeconds()));
-		labelPowerUp.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/powerups/" + powerUp.getID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: contain;" + "-fx-font-size: 16;" + "-fx-font-weight: bold;"
-				+ "-fx-text-fill: #000000;");
-		labelPowerUp.setAlignment(Pos.CENTER);
-		labelPowerUp.setUserData(powerUp);
-
-		labelPowerUp.setPrefWidth(35);
-		labelPowerUp.setPrefHeight(20);
-
-		vboxPowerUps.getChildren().add(labelPowerUp);
-
-		timedPowerUps.add(labelPowerUp);
-
-		new CountdownTimer(powerUp.getDurationInSeconds(), labelPowerUp, this);
-	}
-
+		boolean alreadyActivated = false;
+		
+		for(CountdownTimer currentTimer : timedPowerUps)
+		{
+			PowerUp currentPowerUp = (PowerUp)currentTimer.getHBox().getUserData();
+			if(currentPowerUp.getID() == powerUp.getID())
+			{				
+				alreadyActivated = true;
+				currentTimer.addSecondsToTimer(powerUp.getDurationInSeconds());
+				break;
+			}
+		}	
+		
+		if(!alreadyActivated)
+		{
+			deactivateAllContraryPowerUps(powerUp);
+			
+			HBox hbox = new HBox();			
+			Label labelIcon = new Label();
+			labelIcon.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/powerups/" + powerUp.getID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: contain;");				
+			labelIcon.setPrefWidth(35);
+			labelIcon.setPrefHeight(20);
+			
+			Label labelSeconds = new Label(String.valueOf(powerUp.getDurationInSeconds()));
+			labelSeconds.setStyle("-fx-font-size: 16;" + "-fx-font-weight: bold;");
+			
+			hbox.getChildren().add(labelIcon);
+			hbox.getChildren().add(labelSeconds);
+			HBox.setHgrow(labelSeconds, Priority.ALWAYS);
+			HBox.setMargin(labelSeconds, new Insets(0, 0, 0, 7));
+			hbox.setAlignment(Pos.CENTER_LEFT);
+						
+			hbox.setUserData(powerUp);	
+			vboxPowerUps.getChildren().add(hbox);
+	
+			timedPowerUps.add(new CountdownTimer(powerUp.getDurationInSeconds(), hbox, this));
+		}	
+	}	
+	
 	private void resetPowerUps()
 	{
 		clearMovingPowerUps();
@@ -925,27 +967,34 @@ public class LevelController
 		timedPowerUps = new ArrayList<>();
 		vboxPowerUps.getChildren().clear();
 	}
-
-	public void deactivatePowerUp(Label label)
+	
+	public void deactivateAllContraryPowerUps(PowerUp powerUp)
 	{
-		int counter = 0;
-		PowerUp powerUp = (PowerUp)label.getUserData();
-		for(Label currentLabel : timedPowerUps)
+		ArrayList<Integer> deactiveIDs = PowerUpType.valueOf(powerUp.getID()).getDeactivatesPowerUpIDs();
+		if(deactiveIDs != null)
 		{
-			PowerUp currentPowerUp = (PowerUp)currentLabel.getUserData();
-			if(currentPowerUp.getID() == powerUp.getID())
+			for(int currentInt : deactiveIDs)
 			{
-				counter++;
-			}
+				for(CountdownTimer currentTimer : timedPowerUps)
+				{
+					PowerUp currentPowerUp = (PowerUp)currentTimer.getHBox().getUserData();
+					if(currentPowerUp.getID() == currentInt)
+					{
+						currentTimer.stop();
+						deactivatePowerUp(currentTimer, currentTimer.getHBox());
+						break;
+					}
+				}
+			}			
 		}
+	}
 
-		// if no other power ups of same kind are active
-		if(counter <= 1)
-		{
-			vboxPowerUps.getChildren().remove(label);
-			timedPowerUps.remove(label);
-			powerUp.deactivate(this, game);
-		}
+	public void deactivatePowerUp(CountdownTimer timer, HBox hbox)
+	{		
+		PowerUp powerUp = (PowerUp)hbox.getUserData();		
+		vboxPowerUps.getChildren().remove(hbox);
+		timedPowerUps.remove(timer);
+		powerUp.deactivate(this, game);		
 	}
 
 	public void showLabelFPS(boolean value)
@@ -979,8 +1028,7 @@ public class LevelController
 		game.resetPointsSinceLastMultiplicatorReset();
 		game.setBoard(null);
 		game.setLevelController(null);
-		game.setMovingPowerUps(new ArrayList<>());
-		game.setActivatedPowerUps(new ArrayList<>());
+		game.setMovingPowerUps(new ArrayList<>());		
 
 		anchorPaneGame.requestFocus();
 	}

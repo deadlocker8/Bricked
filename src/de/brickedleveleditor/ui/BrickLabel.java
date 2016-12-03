@@ -17,7 +17,7 @@ public class BrickLabel extends Label
 
     public BrickLabel(BrickType brickType, PowerUpType powerUpType)
     {
-        super(brickType.getID() + powerUpType.getId());
+        super(brickType.getID() + powerUpType.getID());
         this.brickType = brickType;
         this.powerUpType = powerUpType;
 
@@ -36,7 +36,7 @@ public class BrickLabel extends Label
     public void setBrickType(BrickType brickType)
     {
         this.brickType = brickType;
-        setText(this.brickType.getID()+this.powerUpType.getId());
+        setText(this.brickType.getID()+this.powerUpType.getID());
     }
 
     public PowerUpType getPowerUpType()
@@ -47,6 +47,6 @@ public class BrickLabel extends Label
     public void setPowerUpType(PowerUpType powerUpType)
     {
         this.powerUpType = powerUpType;
-        setText(this.brickType.getID()+this.powerUpType.getId());
+        setText(this.brickType.getID()+this.powerUpType.getID());
     }
 }

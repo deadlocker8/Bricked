@@ -7,13 +7,13 @@ public class ExtraLifePowerUp extends PowerUp
 {
     public ExtraLifePowerUp()
     {
-        super(PowerUpType.EXTRA_LIFE.getId(), PowerUpType.EXTRA_LIFE.getDurationInSeconds());
+        super(PowerUpType.EXTRA_LIFE.getID(), PowerUpType.EXTRA_LIFE.getDurationInSeconds());
     }
 
 	@Override
 	public void activate(LevelController levelController, Game game)
 	{		
-		if(game.getLivesRemaining() - 1 < levelController.MAX_LIVES)
+		if(game.getLivesRemaining() - 1 < game.getMaxLives())
 		{
 			game.setLivesRemaining(game.getLivesRemaining() + 1);			
 			levelController.refreshLiveCounter();

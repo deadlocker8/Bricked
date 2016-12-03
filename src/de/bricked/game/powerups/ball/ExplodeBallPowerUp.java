@@ -11,7 +11,7 @@ public class ExplodeBallPowerUp extends PowerUp
 {
     public ExplodeBallPowerUp()
     {
-    	  super(PowerUpType.EXPLODE_BALL.getId(), PowerUpType.EXPLODE_BALL.getDurationInSeconds());
+    	  super(PowerUpType.EXPLODE_BALL.getID(), PowerUpType.EXPLODE_BALL.getDurationInSeconds());
     }
 
     @Override
