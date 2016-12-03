@@ -18,6 +18,7 @@ import de.bricked.game.bricks.BrickType;
 import de.bricked.game.paddle.Paddle;
 import de.bricked.game.paddle.PaddleSize;
 import de.bricked.game.powerups.PowerUp;
+import de.bricked.game.powerups.PowerUpType;
 import de.bricked.utils.CountdownTimer;
 import fontAwesome.FontIcon;
 import fontAwesome.FontIconType;
@@ -919,6 +920,8 @@ public class LevelController
 		
 		if(!alreadyActivated)
 		{
+			deactivateAllContraryPowerUps(powerUp);
+			
 			HBox hbox = new HBox();			
 			Label labelIcon = new Label();
 			labelIcon.setStyle("-fx-background-image: url(\"de/bricked/resources/textures/powerups/" + powerUp.getID() + ".png\");" + "-fx-background-position: center center;" + "-fx-background-repeat: no-repeat;" + "-fx-background-size: contain;");				
@@ -939,7 +942,7 @@ public class LevelController
 	
 			timedPowerUps.add(new CountdownTimer(powerUp.getDurationInSeconds(), hbox, this));
 		}	
-	}
+	}	
 	
 	private void resetPowerUps()
 	{
@@ -947,6 +950,27 @@ public class LevelController
 		movingPowerUps = new ArrayList<>();
 		timedPowerUps = new ArrayList<>();
 		vboxPowerUps.getChildren().clear();
+	}
+	
+	public void deactivateAllContraryPowerUps(PowerUp powerUp)
+	{
+		ArrayList<Integer> deactiveIDs = PowerUpType.valueOf(powerUp.getID()).getDeactivatesPowerUpIDs();
+		if(deactiveIDs != null)
+		{
+			for(int currentInt : deactiveIDs)
+			{
+				for(CountdownTimer currentTimer : timedPowerUps)
+				{
+					PowerUp currentPowerUp = (PowerUp)currentTimer.getHBox().getUserData();
+					if(currentPowerUp.getID() == currentInt)
+					{
+						currentTimer.stop();
+						deactivatePowerUp(currentTimer, currentTimer.getHBox());
+						break;
+					}
+				}
+			}			
+		}
 	}
 
 	public void deactivatePowerUp(CountdownTimer timer, HBox hbox)

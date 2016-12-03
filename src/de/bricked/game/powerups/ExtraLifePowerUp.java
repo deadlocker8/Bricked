@@ -7,7 +7,7 @@ public class ExtraLifePowerUp extends PowerUp
 {
     public ExtraLifePowerUp()
     {
-        super(PowerUpType.EXTRA_LIFE.getId(), PowerUpType.EXTRA_LIFE.getDurationInSeconds());
+        super(PowerUpType.EXTRA_LIFE.getID(), PowerUpType.EXTRA_LIFE.getDurationInSeconds());
     }
 
 	@Override

@@ -12,6 +12,7 @@ public class CountdownTimer
 {
 	private int count;	
 	private HBox hbox;	
+	private Timer timer;
 
 	public CountdownTimer(int seconds, HBox hbox, LevelController levelController)
 	{
@@ -20,7 +21,7 @@ public class CountdownTimer
 		
 		CountdownTimer self = this;
 		
-		Timer timer = new Timer();
+		timer = new Timer();
 		TimerTask task = new TimerTask()
 		{
 			@Override
@@ -63,4 +64,10 @@ public class CountdownTimer
 	{
 		return hbox;
 	}	
+	
+	public void stop()
+	{
+		timer.cancel();
+		timer.purge();
+	}
 }
