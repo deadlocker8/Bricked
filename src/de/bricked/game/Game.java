@@ -15,6 +15,7 @@ import logger.Logger;
 
 public class Game
 {
+	private final int MAX_LIVES = 7;
 	private Settings settings;
 	private LevelPack levelPack;
 	private Level level;
@@ -28,8 +29,7 @@ public class Game
 	private int pointsSinceLastMultiplicatorReset;
 	private int multiplicator;
 	private LevelController levelController;
-	private ArrayList<PowerUp> movingPowerUps;
-	private ArrayList<PowerUp> activatedPowerUps;
+	private ArrayList<PowerUp> movingPowerUps;	
 
 	public Game()
 	{
@@ -43,10 +43,13 @@ public class Game
 		this.multiplicator = 0;
 		this.pointsSinceLastMultiplicatorReset = 0;
 		this.levelController = null;
-		this.movingPowerUps = new ArrayList<>();
-		this.activatedPowerUps = new ArrayList<>();
-	}
+		this.movingPowerUps = new ArrayList<>();	
+	}		
 
+	public int getMaxLives()
+	{
+		return MAX_LIVES;
+	}
 	public Settings getSettings()
 	{
 		return settings;
@@ -174,16 +177,6 @@ public class Game
 	public void setMovingPowerUps(ArrayList<PowerUp> movingPowerUps)
 	{
 		this.movingPowerUps = movingPowerUps;
-	}
-
-	public ArrayList<PowerUp> getActivatedPowerUps()
-	{
-		return activatedPowerUps;
-	}
-
-	public void setActivatedPowerUps(ArrayList<PowerUp> activatedPowerUps)
-	{
-		this.activatedPowerUps = activatedPowerUps;
 	}
 
 	public Point2D reflectBall(HitLocation hitLocation, Point2D direction)

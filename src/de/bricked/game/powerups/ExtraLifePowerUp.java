@@ -13,7 +13,7 @@ public class ExtraLifePowerUp extends PowerUp
 	@Override
 	public void activate(LevelController levelController, Game game)
 	{		
-		if(game.getLivesRemaining() - 1 < levelController.MAX_LIVES)
+		if(game.getLivesRemaining() - 1 < game.getMaxLives())
 		{
 			game.setLivesRemaining(game.getLivesRemaining() + 1);			
 			levelController.refreshLiveCounter();

@@ -89,8 +89,7 @@ public class LevelController
 	private static GridPane grid;
 	private AnimationTimer timer;
 	private double gamePaneWidth;
-	private double gamePaneHeight;
-	public final int MAX_LIVES = 7;
+	private double gamePaneHeight;	
 	private final int TARGET_FPS = 60;
 	private final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
 	private final static double BRICK_FADE_DURATION = 300.0;
@@ -674,7 +673,7 @@ public class LevelController
 		{
 			ImageView iv = new ImageView(new Image("de/bricked/resources/textures/paddle/paddle-small.png"));
 			iv.setFitWidth(70);
-			iv.setFitHeight(120 / MAX_LIVES);
+			iv.setFitHeight(120 / game.getMaxLives());
 			vboxLives.getChildren().add(iv);
 		}
 	}
@@ -1029,8 +1028,7 @@ public class LevelController
 		game.resetPointsSinceLastMultiplicatorReset();
 		game.setBoard(null);
 		game.setLevelController(null);
-		game.setMovingPowerUps(new ArrayList<>());
-		game.setActivatedPowerUps(new ArrayList<>());
+		game.setMovingPowerUps(new ArrayList<>());		
 
 		anchorPaneGame.requestFocus();
 	}
