@@ -9,17 +9,17 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.brickedleveleditor.ui.Controller">
+<AnchorPane fx:id="anchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.brickedleveleditor.ui.controller.MainController">
    <children>
       <MenuBar layoutX="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
             <Menu mnemonicParsing="false" text="File">
               <items>
-                <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" text="Save" />
+                <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#onSaveMenuItemClicked" text="Save" />
                   <MenuItem mnemonicParsing="false" text="Unspecified Action" />
               </items>
             </Menu>
-          <Menu mnemonicParsing="false" text="Hilfe">
+          <Menu mnemonicParsing="false" text="Help">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#about" text="Über" />
             </items>
