@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import de.brickedleveleditor.ui.Controller;
+import de.brickedleveleditor.ui.controller.MainController;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -25,13 +25,10 @@ public class Main extends Application
 	{
 		try
 		{
-			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("de/brickedleveleditor/ui/GUI.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("de/brickedleveleditor/ui/fxml/main_controller.fxml"));
 			Parent root = (Parent)loader.load();
 
-			Scene scene = new Scene(root, 800, 600);		
-
-			((Controller)loader.getController()).init(stage);
-
+			Scene scene = new Scene(root, 800, 600);
 			stage.setTitle(bundle.getString("app.name"));
 			stage.setScene(scene);
 			stage.setResizable(true);
@@ -44,8 +41,8 @@ public class Main extends Application
 					System.exit(0);
 				}
 			});
-
 			stage.show();
+            ((MainController)loader.getController()).init(stage, null);
 		}
 		catch(Exception e)
 		{

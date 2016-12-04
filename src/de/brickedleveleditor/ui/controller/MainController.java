@@ -1,38 +1,24 @@
-package de.brickedleveleditor.ui;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.ResourceBundle;
+package de.brickedleveleditor.ui.controller;
 
 import de.bricked.game.bricks.Brick;
 import de.bricked.game.bricks.BrickType;
-import de.bricked.game.paddle.PaddleSize;
 import de.bricked.game.powerups.PowerUpType;
 import de.brickedleveleditor.game.levels.LevelPackWriter;
-import javafx.event.ActionEvent;
+import de.brickedleveleditor.ui.BrickLabel;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -40,7 +26,13 @@ import logger.LogLevel;
 import logger.Logger;
 import tools.Worker;
 
-public class Controller
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+public class MainController extends AbstractController
 {
     @FXML
     private AnchorPane anchorPane;
@@ -48,25 +40,24 @@ public class Controller
     private VBox sidebarVBox;
     @FXML
     private GridPane gridPane;
-    @FXML private MenuItem saveMenuItem;
+    @FXML
+    private MenuItem saveMenuItem;
     private BrickType[] brickTypes = BrickType.values();
     private Image currentlySelectedBrickImage;
     private Image currentlySelectedPowerupImage;
     private final int WIDTH = 18;
     private final int HEIGHT = 18;
-
-    public Stage stage;
     public final ResourceBundle bundle = ResourceBundle.getBundle("de/brickedleveleditor/main/", Locale.GERMANY);
     private HashMap<BrickType, Image> bricksTextures;
     private ArrayList<Image> powerupTextures;
     private LevelPackWriter levelPackWriter;
 
-    public void init(Stage stage)
+    @Override
+    protected void initController()
     {
         powerupTextures = new ArrayList<>();
         levelPackWriter = new LevelPackWriter();
         gridPane.setMaxSize(50, 50);
-        this.stage = stage;
         bricksTextures = new HashMap<>();
         loadPowerupTextures();
         addPowerupsToVBox();
@@ -83,21 +74,30 @@ public class Controller
                 System.exit(0);
             }
         });
+    }
 
-        saveMenuItem.setOnAction(new EventHandler<ActionEvent>()
+    @FXML
+    private void onSaveMenuItemClicked()
+    {
+        try
         {
-            @Override
-            public void handle(ActionEvent event)
-            {
-                String levelName = "";
-                String author = "";
-                int position = 0;
-                int difficulty = 1;
-                int startLives = 1;
-                PaddleSize initPadSize = PaddleSize.EXTRA_LARGE;
-                levelPackWriter.addLevel(levelName, author, position, difficulty, startLives, initPadSize, getBrickArrayList());
-            }
-        });
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("de/brickedleveleditor/ui/fxml/level_pack_dialog_controller.fxml"));
+            Parent root = (Parent) loader.load();
+
+            Scene scene = new Scene(root);
+
+            Stage dialogControllerStage = new Stage();
+
+            dialogControllerStage.setTitle(bundle.getString("level.saver"));
+            dialogControllerStage.setScene(scene);
+            dialogControllerStage.setResizable(true);
+            dialogControllerStage.show();
+            ((LevelPackDialogController) loader.getController()).init(dialogControllerStage,this);
+        }
+        catch (Exception e)
+        {
+            Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+        }
     }
 
     private void loadPowerupTextures()
@@ -106,7 +106,7 @@ public class Controller
         String rootPath = "de/bricked/resources/textures/powerups/";
         //powerup[0] means no powerup --> set to null
         powerupTextures.add(null);
-        for (int i=1; i < PowerUpType.types.length; i++)
+        for (int i = 1; i < PowerUpType.types.length; i++)
         {
             File powerupPath = new File(rootPath + PowerUpType.types[i].getID() + fileExt);
             try
@@ -155,11 +155,11 @@ public class Controller
     {
         ArrayList<Brick> bricks = new ArrayList<>();
         Object[] gridPaneChildren = gridPane.getChildren().toArray();
-        for(int i = 0; i < gridPaneChildren.length; i++)
+        for (int i = 0; i < gridPaneChildren.length; i++)
         {
-            if(gridPaneChildren[i] instanceof BrickLabel)
+            if (gridPaneChildren[i] instanceof BrickLabel)
             {
-                BrickLabel currentLabel = (BrickLabel)gridPaneChildren[i];
+                BrickLabel currentLabel = (BrickLabel) gridPaneChildren[i];
                 Brick brick = new Brick(currentLabel.getBrickType(),
                         PowerUpType.getInstance(currentLabel.getPowerUpType()));
                 bricks.add(brick);
@@ -190,7 +190,7 @@ public class Controller
 
     private void addPowerupsToVBox()
     {
-        for(int i=1; i < powerupTextures.size(); i++)
+        for (int i = 1; i < powerupTextures.size(); i++)
         {
             Image powerupImage = powerupTextures.get(i);
             Label powerupLabel = new Label(PowerUpType.types[i].toString());
@@ -212,8 +212,8 @@ public class Controller
     private Background getBackGroundFromImage(Image image)
     {
         BackgroundImage backgroundImage = new BackgroundImage(image,
-                BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         Background background = new Background(backgroundImage);
         return background;
     }
@@ -269,6 +269,11 @@ public class Controller
                 });
             }
         }
+    }
+
+    public LevelPackWriter getLevelPackWriter()
+    {
+        return levelPackWriter;
     }
 
     public void about()

@@ -49,4 +49,9 @@ public class LevelPackWriter
         Level level = new Level(levelname, author, position, difficulty, startLives, paddleSize, getBoard(bricks));
         levels.add(level);
     }
+
+    public ArrayList<Level> getLevels()
+    {
+        return levels;
+    }
 }
