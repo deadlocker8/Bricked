@@ -29,6 +29,7 @@ public class Controller
 	@FXML private Button buttonLevelSelect;
 	@FXML private Button buttonSettings;
 	@FXML private Button buttonAchievements;
+	@FXML private Button buttonAbout;
 
 	public Stage stage;
 	public Image icon = new Image("de/bricked/resources/icon.png");
@@ -56,6 +57,12 @@ public class Controller
 				}				
 			}
 		});
+		
+		mainPane.setStyle("-fx-base: " + bundle.getString("color.background") + ";");
+		buttonLevelSelect.setStyle("-fx-base: " + bundle.getString("color.button"));
+		buttonSettings.setStyle("-fx-base: " + bundle.getString("color.button"));
+		buttonAchievements.setStyle("-fx-base: " + bundle.getString("color.button"));
+		buttonAbout.setStyle("-fx-base: " + bundle.getString("color.button"));
 		
 		Logger.log(LogLevel.INFO, "successfully started");
 	}	
@@ -123,6 +130,7 @@ public class Controller
 		alert.setHeaderText(bundle.getString("app.name")); 
 		alert.setContentText("Version:     " + bundle.getString("version.name") + "\r\nDate:         " + bundle.getString("version.date") + "\r\nAuthors:     "+ bundle.getString("author") +"\r\n");
 		Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
+		alert.getDialogPane().setStyle("-fx-base: " + bundle.getString("color.background"));
 		dialogStage.getIcons().add(icon);
 		dialogStage.centerOnScreen();
 		alert.showAndWait();

@@ -36,6 +36,7 @@ public class LevelPackSelectController
 	@FXML private AnchorPane mainPane;
 	@FXML private ScrollPane pane;
 	@FXML private Label labelLevelPack;
+	@FXML private Button buttonBack;
     @FXML private Button downloadLevelpackButton;
 
 	public Stage stage;
@@ -105,6 +106,11 @@ public class LevelPackSelectController
 				Platform.exit();
 			}
 		});
+		
+		mainPane.setStyle("-fx-base: " + bundle.getString("color.background") + ";");
+		
+		buttonBack.setStyle("-fx-base: " + bundle.getString("color.button"));
+		downloadLevelpackButton.setStyle("-fx-base: " + bundle.getString("color.button"));
 	}
 
 	public void reload()

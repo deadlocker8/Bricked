@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -37,6 +38,7 @@ public class LevelSelectController
 	@FXML private AnchorPane mainPane;
 	@FXML private ScrollPane pane;
 	@FXML private Label labelLevelPack;
+	@FXML private Button buttonBack; 
 
 	public Stage stage;
 	public Image icon = new Image("de/bricked/resources/icon.png");
@@ -88,6 +90,9 @@ public class LevelSelectController
 				Platform.exit();
 			}
 		});		
+		
+		mainPane.setStyle("-fx-base: " + bundle.getString("color.background") + ";");
+		buttonBack.setStyle("-fx-base: " + bundle.getString("color.button"));
 	}
 
 	public void reload()

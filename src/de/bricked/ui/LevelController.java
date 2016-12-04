@@ -19,7 +19,6 @@ import de.bricked.game.paddle.Paddle;
 import de.bricked.game.paddle.PaddleSize;
 import de.bricked.game.powerups.PowerUp;
 import de.bricked.game.powerups.PowerUpType;
-import de.bricked.game.sound.SoundHandler;
 import de.bricked.utils.CountdownTimer;
 import fontAwesome.FontIcon;
 import fontAwesome.FontIconType;
@@ -146,6 +145,10 @@ public class LevelController
 		game.setBoard(new Board(game));
 		game.setLevelController(this);
 		
+		anchorPane.setStyle("-fx-base: " + bundle.getString("color.background") + ";");
+		buttonBack.setStyle("-fx-base: " + bundle.getString("color.button"));
+		anchorPaneGame.setStyle("-fx-background-color: #F4F4F4");	
+		labelMultiplicator.setStyle("-fx-text-fill: #000000;");	
 		anchorPaneGame.setCursor(Cursor.NONE);
 
 		anchorPaneGame.setOnMouseClicked(new EventHandler<MouseEvent>()
@@ -294,11 +297,11 @@ public class LevelController
 		buttonBack.setText("");
 		buttonBack.setGraphic(iconBack);
 
-		vboxPowerUps.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
+		vboxPowerUps.setStyle("-fx-border-color: #333333; -fx-border-width: 2px; -fx-background-color: #F4F4F4");
 		vboxPowerUps.setPadding(new Insets(3));
 		vboxPowerUps.setAlignment(Pos.TOP_CENTER);
 		vboxPowerUps.setSpacing(7);
-		vboxLives.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
+		vboxLives.setStyle("-fx-border-color: #333333; -fx-border-width: 2px; -fx-background-color: #F4F4F4");
 		vboxLives.setPadding(new Insets(3));
 		vboxLives.setAlignment(Pos.BOTTOM_CENTER);
 		vboxLives.setSpacing(9);
@@ -446,6 +449,7 @@ public class LevelController
 								alert.setHeaderText("");
 								alert.setContentText("You have no lives left");
 								Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
+								alert.getDialogPane().setStyle("-fx-base: " + bundle.getString("color.background"));
 								dialogStage.getIcons().add(icon);
 								dialogStage.centerOnScreen();
 								alert.showAndWait();
@@ -808,6 +812,7 @@ public class LevelController
 						alert.setHeaderText("");
 						alert.setContentText("You finished Level \"" + game.getLevel().getName() + "\" with " + game.getTotalPoints() + " Points");
 						Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
+						alert.getDialogPane().setStyle("-fx-base: " + bundle.getString("color.background"));
 						dialogStage.getIcons().add(icon);
 						dialogStage.centerOnScreen();
 						alert.showAndWait();
@@ -834,7 +839,7 @@ public class LevelController
 		Label labelNotification = new Label("+" + points);
 		labelNotification.setTranslateX(xPosition);
 		labelNotification.setTranslateY(yPosition);
-		labelNotification.setStyle("-fx-font-weight: bold; -fx-font-size: " + fontSize + "; ");
+		labelNotification.setStyle("-fx-font-weight: bold; -fx-font-size: " + fontSize + "; -fx-text-fill: #000000;");
 		labelNotification.setAlignment(Pos.CENTER);	
 		
 		labelNotification.setPrefWidth(t.getLayoutBounds().getWidth() + 10);
@@ -956,7 +961,7 @@ public class LevelController
 			labelIcon.setPrefHeight(20);
 			
 			Label labelSeconds = new Label(String.valueOf(powerUp.getDurationInSeconds()));
-			labelSeconds.setStyle("-fx-font-size: 16;" + "-fx-font-weight: bold;");
+			labelSeconds.setStyle("-fx-font-size: 16;" + "-fx-font-weight: bold; -fx-text-fill: #000000;");
 			
 			hbox.getChildren().add(labelIcon);
 			hbox.getChildren().add(labelSeconds);
