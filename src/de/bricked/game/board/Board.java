@@ -210,6 +210,11 @@ public class Board
 			if(hittedBrick.getType().equals(BrickType.TNT))
 			{
 				explodeBrick(row, col);
+				game.getSoundHandler().play("tnt");
+			}
+			else
+			{
+				game.getSoundHandler().play("destroy_brick");
 			}
 
 			if(hittedBrick.getPowerUp() != null)
@@ -224,11 +229,12 @@ public class Board
 			{
 				game.getLevelController().showAnimatedPoints(row, col, hittedBrick.getType().getPoints(), 15, false);
 			}
-			game.getLevelController().increaseMultiplicator(hittedBrick.getType().getPoints());
+			game.getLevelController().increaseMultiplicator(hittedBrick.getType().getPoints());			
 			LevelController.redrawBrick(col, row, bricks.get(row).get(col), true);
 		}
 		else
 		{
+			game.getSoundHandler().play("hit_brick");
 			LevelController.redrawBrick(col, row, bricks.get(row).get(col), false);
 		}
 	}

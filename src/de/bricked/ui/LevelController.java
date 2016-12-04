@@ -19,6 +19,7 @@ import de.bricked.game.paddle.Paddle;
 import de.bricked.game.paddle.PaddleSize;
 import de.bricked.game.powerups.PowerUp;
 import de.bricked.game.powerups.PowerUpType;
+import de.bricked.game.sound.SoundHandler;
 import de.bricked.utils.CountdownTimer;
 import fontAwesome.FontIcon;
 import fontAwesome.FontIconType;
@@ -425,7 +426,7 @@ public class LevelController
 					resetMultiplicator();
 
 					if(hitLocation.equals(HitLocation.LIFE_LOST))
-					{
+					{						
 						game.setLivesRemaining(game.getLivesRemaining() - 1);
 						Logger.log(LogLevel.DEBUG, "Life lost (" + game.getLivesRemaining() + " lives remaining)");
 						refreshLiveCounter();
@@ -435,9 +436,11 @@ public class LevelController
 							// game over
 							
 							gameState = GameState.STOPPED;
-							timer.stop();
+							timer.stop();		
+							
+							game.getSoundHandler().play("game_over");							
 
-							Platform.runLater(() -> {
+							Platform.runLater(() -> {								
 								Alert alert = new Alert(AlertType.INFORMATION);
 								alert.setTitle("Game Over");
 								alert.setHeaderText("");
@@ -452,6 +455,8 @@ public class LevelController
 						{
 							gameState = GameState.WAITING;
 							timer.stop();
+							
+							game.getSoundHandler().play("life_lost");							
 
 							// reset paddle and ball
 							initPaddle(game.getLevel().getInitPadSize());
@@ -462,6 +467,8 @@ public class LevelController
 					else
 					{
 						game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
+						
+						game.getSoundHandler().play("hit_wall");
 
 						switch(hitLocation)
 						{
@@ -512,6 +519,8 @@ public class LevelController
 						correctBallPosition(hitLocation, ballPosition, paddlePosition, paddle.getWidth(), paddle.getHeight());
 
 						resetMultiplicator();
+						
+						game.getSoundHandler().play("hit_paddle");
 					}
 					// ball doesn't collide with paddle --> check collision with bricks
 					else
@@ -777,7 +786,7 @@ public class LevelController
 				int points = game.getBoard().hitBrick(i, k, game.getBall());
 				// brick has been destroyed
 				if(points > 0)
-				{
+				{				
 					game.setTotalPoints(game.getTotalPoints() + points);
 					labelPoints.setText(String.valueOf(game.getTotalPoints()));
 					labelBlocksRemaining.setText(game.getBoard().getNumberOfRemainingBricks() + " Bricks remaining");
@@ -790,6 +799,8 @@ public class LevelController
 					gameState = GameState.STOPPED;
 					resetMultiplicator();
 					timer.stop();
+					
+					game.getSoundHandler().play("finished_level");		
 
 					Platform.runLater(() -> {
 						Alert alert = new Alert(AlertType.INFORMATION);

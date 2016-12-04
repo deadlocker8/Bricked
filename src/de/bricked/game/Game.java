@@ -8,6 +8,7 @@ import de.bricked.game.levels.Level;
 import de.bricked.game.levels.LevelPack;
 import de.bricked.game.powerups.PowerUp;
 import de.bricked.game.settings.Settings;
+import de.bricked.game.sound.SoundHandler;
 import de.bricked.ui.LevelController;
 import javafx.geometry.Point2D;
 import logger.LogLevel;
@@ -30,10 +31,15 @@ public class Game
 	private int multiplicator;
 	private LevelController levelController;
 	private ArrayList<PowerUp> movingPowerUps;	
+	private SoundHandler soundHandler;
 
 	public Game()
 	{
 		this.settings = new Settings();
+		this.soundHandler = new SoundHandler();
+		//DEBUG
+		soundHandler.setVolume(1.0);
+		soundHandler.setMuted(false);
 		this.levelPack = null;
 		this.level = null;
 		this.livesRemaining = 0;
@@ -177,6 +183,11 @@ public class Game
 	public void setMovingPowerUps(ArrayList<PowerUp> movingPowerUps)
 	{
 		this.movingPowerUps = movingPowerUps;
+	}
+	
+	public SoundHandler getSoundHandler()
+	{
+		return soundHandler;
 	}
 
 	public Point2D reflectBall(HitLocation hitLocation, Point2D direction)

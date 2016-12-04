@@ -36,7 +36,7 @@ public class Main extends Application
 			stage.getIcons().add(new Image("/de/bricked/resources/icon.png"));
 			stage.setTitle(bundle.getString("app.name"));
 			stage.setScene(scene);
-			stage.setResizable(true);
+			stage.setResizable(false);
 			
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>()
 			{

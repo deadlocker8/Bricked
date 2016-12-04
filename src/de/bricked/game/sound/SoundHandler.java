@@ -13,11 +13,13 @@ public class SoundHandler
 {
     private double volume;
     private boolean muted;
-
+    private boolean isPlayingTNT;
+    
     public SoundHandler()
     {
         volume = 0.0;
         muted = false;
+        isPlayingTNT = false;
     }
 
     public void play(String soundID)
@@ -26,16 +28,26 @@ public class SoundHandler
         {
             try
             {
-                String path = SoundHandler.class.getResource(Config.JAR_SOUND_SAVEDIR + soundID + ".mp3").toURI().toURL().toString();
-                Media sound = new Media(path);
-                MediaPlayer mediaPlayer = new MediaPlayer(sound);
-                mediaPlayer.setVolume(volume);
-                mediaPlayer.setAutoPlay(true);
+            	if(!isPlayingTNT)
+            	{
+	            	if(soundID.equalsIgnoreCase("tnt"))
+	            	{
+	            		isPlayingTNT = true;
+	            	}
+	                String path = SoundHandler.class.getResource(Config.JAR_SOUND_SAVEDIR + soundID + ".mp3").toURI().toURL().toString();
+	                Media sound = new Media(path);
+	                MediaPlayer mediaPlayer = new MediaPlayer(sound);	              
+	                mediaPlayer.setVolume(volume);
+	                mediaPlayer.setAutoPlay(true);
+	                mediaPlayer.setOnEndOfMedia(()->{
+	                	isPlayingTNT = false;					
+					});
+            	}
             }
             catch (MalformedURLException | URISyntaxException e)
             {
                 Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
-            }
+            }            
         }
 	}
 
