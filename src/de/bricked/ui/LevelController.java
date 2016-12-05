@@ -146,8 +146,8 @@ public class LevelController
 		game.setLevelController(this);
 		
 		anchorPane.setStyle("-fx-base: " + bundle.getString("color.background") + ";");
-		buttonBack.setStyle("-fx-base: " + bundle.getString("color.button"));
-		anchorPaneGame.setStyle("-fx-background-color: #F4F4F4");	
+		buttonBack.setStyle("-fx-base: " + bundle.getString("color.button.light"));
+		anchorPaneGame.setStyle("-fx-background-color: " + bundle.getString("color.default"));	
 		labelMultiplicator.setStyle("-fx-text-fill: #000000;");	
 		anchorPaneGame.setCursor(Cursor.NONE);
 
@@ -297,11 +297,11 @@ public class LevelController
 		buttonBack.setText("");
 		buttonBack.setGraphic(iconBack);
 
-		vboxPowerUps.setStyle("-fx-border-color: #333333; -fx-border-width: 2px; -fx-background-color: #F4F4F4");
+		vboxPowerUps.setStyle("-fx-border-color: #000000; -fx-border-width: 2px; -fx-background-color: #F4F4F4");
 		vboxPowerUps.setPadding(new Insets(3));
 		vboxPowerUps.setAlignment(Pos.TOP_CENTER);
 		vboxPowerUps.setSpacing(7);
-		vboxLives.setStyle("-fx-border-color: #333333; -fx-border-width: 2px; -fx-background-color: #F4F4F4");
+		vboxLives.setStyle("-fx-border-color: #000000; -fx-border-width: 2px; -fx-background-color: #F4F4F4");
 		vboxLives.setPadding(new Insets(3));
 		vboxLives.setAlignment(Pos.BOTTOM_CENTER);
 		vboxLives.setSpacing(9);
@@ -318,9 +318,9 @@ public class LevelController
 		gamePaneWidth = game.getSettings().getGameSize().getWidth() - 100;
 		gamePaneHeight = game.getSettings().getGameSize().getHeight() - 150;
 
-		grid = new GridPane();
-		grid.setStyle("-fx-border-color: #333333; -fx-border-width: 2px;");
+		grid = new GridPane();	
 		grid.setGridLinesVisible(false);
+		grid.setStyle("-fx-border-color: #000000; -fx-border-width: 2px;");
 		grid.setHgap(0);
 		grid.setVgap(0);
 
