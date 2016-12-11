@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import de.bricked.commandLine.CommandLine;
 import de.bricked.commandLine.commands.CommandBundle;
 import de.bricked.game.Game;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +21,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import kuusisto.tinysound.TinySound;
 import logger.LogLevel;
 import logger.Logger;
 
@@ -55,6 +58,17 @@ public class Controller
 					Logger.log(LogLevel.INFO, "openend debug console");
 					event.consume();
 				}				
+			}
+		});
+		
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>()
+		{
+			@Override
+			public void handle(WindowEvent event)
+			{
+				TinySound.shutdown();
+				Platform.exit();
+				System.exit(0);			
 			}
 		});
 		

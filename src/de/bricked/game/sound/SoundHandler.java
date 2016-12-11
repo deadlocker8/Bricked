@@ -2,72 +2,97 @@ package de.bricked.game.sound;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.HashMap;
 
 import de.bricked.game.Config;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import kuusisto.tinysound.Sound;
+import kuusisto.tinysound.TinySound;
 import logger.LogLevel;
 import logger.Logger;
 
 public class SoundHandler
 {
-    private double volume;
-    private boolean muted;
-    private boolean isPlayingTNT;
-    
-    public SoundHandler()
-    {
-        volume = 0.0;
-        muted = false;
-        isPlayingTNT = false;
-    }
-
-    public void play(String soundID)
+	private double volume;
+	private boolean muted;
+	private HashMap<SoundType, Sound> mediaPlayers;	
+	private int tntCounter;
+	
+	static
 	{
-        if(volume > 0 && !muted)
-        {
-            try
-            {
-            	if(!isPlayingTNT)
-            	{
-	            	if(soundID.equalsIgnoreCase("tnt"))
-	            	{
-	            		isPlayingTNT = true;
-	            	}
-	                String path = SoundHandler.class.getResource(Config.JAR_SOUND_SAVEDIR + soundID + ".mp3").toURI().toURL().toString();
-	                Media sound = new Media(path);
-	                MediaPlayer mediaPlayer = new MediaPlayer(sound);	              
-	                mediaPlayer.setVolume(volume);
-	                mediaPlayer.setAutoPlay(true);
-	                mediaPlayer.setOnEndOfMedia(()->{
-	                	isPlayingTNT = false;					
-					});
-            	}
-            }
-            catch (MalformedURLException | URISyntaxException e)
-            {
-                Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
-            }            
-        }
+		TinySound.init();
 	}
 
-    public double getVolume()
-    {
-        return volume;
-    }
+	public SoundHandler(double volume, boolean muted)
+	{		
+		this.volume = volume;
+		this.muted = muted;
+		this.tntCounter = 0;
+		
+		mediaPlayers = new HashMap<>();			
+		
+		for(SoundType currentType : SoundType.values())
+		{
+			try
+			{
+				URL path = SoundHandler.class.getResource(Config.JAR_SOUND_SAVEDIR + currentType.getFileName() + ".wav").toURI().toURL();
+			
+				Sound sound = TinySound.loadSound(path);
+				mediaPlayers.put(currentType, sound);
+			}
+			catch(MalformedURLException | URISyntaxException e)
+			{
+				Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+			}
+		}
+	}
 
-    public boolean isMuted()
-    {
-        return muted;
-    }
+	public void play(SoundType soundType)
+	{			
+		if(volume > 0 && !muted)
+		{	
+			Sound player = mediaPlayers.get(soundType);		
+			if(soundType.equals(SoundType.TNT))
+			{
+				tntCounter++;			
+			}
+			else
+			{
+				tntCounter = 0;
+			}
+			
+			if(player != null && tntCounter < 2)
+			{		
+				player.play(volume);
+			}
+		}
+	}
 
-    public void setVolume(double volume)
-    {
-        this.volume = volume;
-    }
+	public double getVolume()
+	{
+		return volume;
+	}
 
-    public void setMuted(boolean muted)
-    {
-        this.muted = muted;
-    }
+	public boolean isMuted()
+	{
+		return muted;
+	}
+
+	public void setVolume(double volume)
+	{
+		this.volume = volume;
+	}
+
+	public void setMuted(boolean muted)
+	{
+		this.muted = muted;
+	}
+	
+	public void stopAll()
+	{
+		for(Sound currentSound : mediaPlayers.values())
+		{
+			currentSound.stop();
+		}
+	}
 }

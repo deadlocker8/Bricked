@@ -10,6 +10,7 @@ import de.bricked.game.powerups.ExtraLifePowerUp;
 import de.bricked.game.powerups.PowerUp;
 import de.bricked.game.powerups.ball.ExplodeBallPowerUp;
 import de.bricked.game.powerups.ball.NoCollisionBallPowerUp;
+import de.bricked.game.sound.SoundType;
 import de.bricked.ui.LevelController;
 
 public class Board
@@ -178,22 +179,22 @@ public class Board
 				}
 
 				bricks.get(row).set(col, new Brick(BrickType.TNT));
-				destroyBrick(row, col, false);
+				destroyBrick(row, col, false, false);
 				break;
 
 			case NO_COLLISION:
-				destroyBrick(row, col, true);
+				destroyBrick(row, col, true, true);
 				break;
 
 			default:
-				destroyBrick(row, col, false);
+				destroyBrick(row, col, false, true);
 				break;
 		}
 
 		return points;
 	}
 
-	public void destroyBrick(int row, int col, boolean instantDestroy)
+	public void destroyBrick(int row, int col, boolean instantDestroy, boolean playDestroySound)
 	{
 		Brick hittedBrick = bricks.get(row).get(col);
 
@@ -210,11 +211,14 @@ public class Board
 			if(hittedBrick.getType().equals(BrickType.TNT))
 			{
 				explodeBrick(row, col);
-				game.getSoundHandler().play("tnt");
+				game.getSoundHandler().play(SoundType.TNT);
 			}
 			else
 			{
-				game.getSoundHandler().play("destroy_brick");
+				if(playDestroySound)
+				{
+					game.getSoundHandler().play(SoundType.DESTROY_BRICK);
+				}
 			}
 
 			if(hittedBrick.getPowerUp() != null)
@@ -234,7 +238,7 @@ public class Board
 		}
 		else
 		{
-			game.getSoundHandler().play("hit_brick");
+			game.getSoundHandler().play(SoundType.HIT_BRICK);
 			LevelController.redrawBrick(col, row, bricks.get(row).get(col), false);
 		}
 	}
@@ -252,7 +256,7 @@ public class Board
 				{
 					if(k >= 0 && k < WIDTH)
 					{
-						destroyBrick(i, k, true);
+						destroyBrick(i, k, true, true);
 					}
 				}
 			}

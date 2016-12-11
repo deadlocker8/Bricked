@@ -36,10 +36,8 @@ public class Game
 	public Game()
 	{
 		this.settings = new Settings();
-		this.soundHandler = new SoundHandler();
-		//DEBUG
-		soundHandler.setVolume(1.0);
-		soundHandler.setMuted(false);
+		//DEBUG values in constructor should be loaded from settings
+		this.soundHandler = new SoundHandler(1.0, false);		
 		this.levelPack = null;
 		this.level = null;
 		this.livesRemaining = 0;

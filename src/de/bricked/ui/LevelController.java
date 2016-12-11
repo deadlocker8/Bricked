@@ -19,6 +19,7 @@ import de.bricked.game.paddle.Paddle;
 import de.bricked.game.paddle.PaddleSize;
 import de.bricked.game.powerups.PowerUp;
 import de.bricked.game.powerups.PowerUpType;
+import de.bricked.game.sound.SoundType;
 import de.bricked.utils.CountdownTimer;
 import fontAwesome.FontIcon;
 import fontAwesome.FontIconType;
@@ -62,6 +63,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
+import kuusisto.tinysound.TinySound;
 import logger.LogLevel;
 import logger.Logger;
 import tools.Worker;
@@ -286,6 +288,8 @@ public class LevelController
 				{
 					timer.stop();
 				}
+				
+				TinySound.shutdown();
 				Worker.shutdown();
 				Platform.exit();
 				System.exit(0);
@@ -441,7 +445,7 @@ public class LevelController
 							gameState = GameState.STOPPED;
 							timer.stop();		
 							
-							game.getSoundHandler().play("game_over");							
+							game.getSoundHandler().play(SoundType.GAME_OVER);							
 
 							Platform.runLater(() -> {								
 								Alert alert = new Alert(AlertType.INFORMATION);
@@ -460,7 +464,7 @@ public class LevelController
 							gameState = GameState.WAITING;
 							timer.stop();
 							
-							game.getSoundHandler().play("life_lost");							
+							game.getSoundHandler().play(SoundType.LIFE_LOST);							
 
 							// reset paddle and ball
 							initPaddle(game.getLevel().getInitPadSize());
@@ -472,7 +476,7 @@ public class LevelController
 					{
 						game.getBall().setDirection(game.reflectBall(hitLocation, game.getBall().getDirection()));
 						
-						game.getSoundHandler().play("hit_wall");
+						game.getSoundHandler().play(SoundType.HIT_WALL);
 
 						switch(hitLocation)
 						{
@@ -524,7 +528,7 @@ public class LevelController
 
 						resetMultiplicator();
 						
-						game.getSoundHandler().play("hit_paddle");
+						game.getSoundHandler().play(SoundType.HIT_PADDLE);
 					}
 					// ball doesn't collide with paddle --> check collision with bricks
 					else
@@ -804,7 +808,7 @@ public class LevelController
 					resetMultiplicator();
 					timer.stop();
 					
-					game.getSoundHandler().play("finished_level");		
+					game.getSoundHandler().play(SoundType.FINISHED_LEVEL);		
 
 					Platform.runLater(() -> {
 						Alert alert = new Alert(AlertType.INFORMATION);
@@ -1044,7 +1048,9 @@ public class LevelController
 		game.resetPointsSinceLastMultiplicatorReset();
 		game.setBoard(null);
 		game.setLevelController(null);
-		game.setMovingPowerUps(new ArrayList<>());		
+		game.setMovingPowerUps(new ArrayList<>());	
+		
+		game.getSoundHandler().stopAll();
 
 		anchorPaneGame.requestFocus();
 	}
