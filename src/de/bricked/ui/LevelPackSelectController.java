@@ -151,7 +151,7 @@ public class LevelPackSelectController
 						Stage newStage = new Stage();
 						newStage.setScene(new Scene(root, 650, 800));
 						newStage.getScene().getStylesheets().add("de/bricked/ui/style.css");
-						newStage.setTitle("Level Select");
+						newStage.setTitle(bundle.getString("app.name") + " - Level Select");
 						newStage.initOwner(stage);
 
 						newStage.getIcons().add(icon);

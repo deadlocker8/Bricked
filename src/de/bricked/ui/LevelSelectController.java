@@ -144,7 +144,7 @@ public class LevelSelectController
 							newStage.setScene(new Scene(root, game.getSettings().getGameSize().getWidth(), game.getSettings().getGameSize().getHeight()));
 						}
 
-						newStage.setTitle(game.getLevel().getName());
+						newStage.setTitle(bundle.getString("app.name") + " - " + game.getLevel().getName());
 						newStage.initOwner(stage);
 
 						newStage.getIcons().add(icon);
