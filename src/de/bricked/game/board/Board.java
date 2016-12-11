@@ -179,22 +179,22 @@ public class Board
 				}
 
 				bricks.get(row).set(col, new Brick(BrickType.TNT));
-				destroyBrick(row, col, false);
+				destroyBrick(row, col, false, false);
 				break;
 
 			case NO_COLLISION:
-				destroyBrick(row, col, true);
+				destroyBrick(row, col, true, true);
 				break;
 
 			default:
-				destroyBrick(row, col, false);
+				destroyBrick(row, col, false, true);
 				break;
 		}
 
 		return points;
 	}
 
-	public void destroyBrick(int row, int col, boolean instantDestroy)
+	public void destroyBrick(int row, int col, boolean instantDestroy, boolean playDestroySound)
 	{
 		Brick hittedBrick = bricks.get(row).get(col);
 
@@ -215,7 +215,10 @@ public class Board
 			}
 			else
 			{
-				game.getSoundHandler().play(SoundType.DESTROY_BRICK);
+				if(playDestroySound)
+				{
+					game.getSoundHandler().play(SoundType.DESTROY_BRICK);
+				}
 			}
 
 			if(hittedBrick.getPowerUp() != null)
@@ -253,7 +256,7 @@ public class Board
 				{
 					if(k >= 0 && k < WIDTH)
 					{
-						destroyBrick(i, k, true);
+						destroyBrick(i, k, true, true);
 					}
 				}
 			}

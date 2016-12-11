@@ -30,6 +30,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
+import kuusisto.tinysound.TinySound;
 import logger.LogLevel;
 import logger.Logger;
 
@@ -87,7 +88,9 @@ public class LevelSelectController
 			{
 				// TODO achievementhandling
 
+				TinySound.shutdown();
 				Platform.exit();
+				System.exit(0);
 			}
 		});		
 		

@@ -63,6 +63,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
+import kuusisto.tinysound.TinySound;
 import logger.LogLevel;
 import logger.Logger;
 import tools.Worker;
@@ -287,6 +288,8 @@ public class LevelController
 				{
 					timer.stop();
 				}
+				
+				TinySound.shutdown();
 				Worker.shutdown();
 				Platform.exit();
 				System.exit(0);
@@ -1045,7 +1048,9 @@ public class LevelController
 		game.resetPointsSinceLastMultiplicatorReset();
 		game.setBoard(null);
 		game.setLevelController(null);
-		game.setMovingPowerUps(new ArrayList<>());		
+		game.setMovingPowerUps(new ArrayList<>());	
+		
+		game.getSoundHandler().stopAll();
 
 		anchorPaneGame.requestFocus();
 	}
