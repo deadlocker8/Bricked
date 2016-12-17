@@ -27,8 +27,7 @@ public class Board
 		this.game = game;
 
 		init();
-		String boardString = game.getLevel().getBoard();
-		// parse board -> create bricks
+		String boardString = game.getLevel().getBoard();	
 		String[] bricksAndPowerArray = boardString.split(" ");
 		ArrayList<Brick> loadedBricks = new ArrayList<>();
 		for(String bricksAndPower : bricksAndPowerArray)
@@ -37,7 +36,7 @@ public class Board
 			int powerUp = Integer.parseInt(bricksAndPower.substring(1));
 			Brick currentBrick = null;
 			PowerUp currentPowerUp = null;
-			// TODO IMPLEMENT POWERUP
+			// TODO IMPLEMENT POWERUPS
 			switch(powerUp)
 			{
 				case 0:

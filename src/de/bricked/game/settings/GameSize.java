@@ -10,7 +10,6 @@ public enum GameSize
     BIG(1920, 1080),
     FULL_SCREEN();
 
-
     private int width;
     private int height;
 

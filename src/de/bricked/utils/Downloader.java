@@ -1,6 +1,5 @@
 package de.bricked.utils;
 
-
 import de.bricked.game.Config;
 import de.bricked.game.levels.LevelPack;
 import de.bricked.game.levels.LevelPackParser;
@@ -31,7 +30,6 @@ public class Downloader
                 Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
             }
         }
-
     }
 
     private void save()
@@ -47,7 +45,6 @@ public class Downloader
         {
             e.printStackTrace();
         }
-
     }
 
     private String getPackName()

@@ -12,8 +12,7 @@ public class Paddle
 	{
         this.gameWidth = gameWidth;
         this.paddleSize = size;
-		this.height = initialHeight;
-		//this.MAX_WIDTH = MAX_WIDTH_PERCENTAGE * gameWidth;
+		this.height = initialHeight;		
 		this.speed = SPEED_FACTOR * gameWidth;
 	}
 

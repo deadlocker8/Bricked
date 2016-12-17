@@ -40,7 +40,6 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Lighting;
@@ -66,6 +65,7 @@ import javafx.util.Duration;
 import kuusisto.tinysound.TinySound;
 import logger.LogLevel;
 import logger.Logger;
+import tools.AlertGenerator;
 import tools.Worker;
 
 public class LevelController
@@ -445,18 +445,10 @@ public class LevelController
 							gameState = GameState.STOPPED;
 							timer.stop();		
 							
-							game.getSoundHandler().play(SoundType.GAME_OVER);							
-
-							Platform.runLater(() -> {								
-								Alert alert = new Alert(AlertType.INFORMATION);
-								alert.setTitle("Game Over");
-								alert.setHeaderText("");
-								alert.setContentText("You have no lives left");
-								Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-								alert.getDialogPane().setStyle("-fx-base: " + bundle.getString("color.background"));
-								dialogStage.getIcons().add(icon);
-								dialogStage.centerOnScreen();
-								alert.showAndWait();
+							game.getSoundHandler().play(SoundType.GAME_OVER);								
+							
+							Platform.runLater(() -> {									
+								AlertGenerator.showAlert(Alert.AlertType.INFORMATION, "Game Over", "", "Youe have no lives left", icon, stage, bundle.getString("color.background"), false);
 							});
 						}
 						else
@@ -713,8 +705,7 @@ public class LevelController
 		anchorPaneGame.getChildren().remove(stackPaneBall);
 
 		game.setBall(new Ball(ballType));
-
-		// create circle for ball
+		
 		final Circle circle = new Circle(game.getBall().getBallRadius(), Color.web(game.getBall().getType().getColor()));
 		circle.setEffect(new Lighting());
 		stackPaneBall = new StackPane();
@@ -810,16 +801,8 @@ public class LevelController
 					
 					game.getSoundHandler().play(SoundType.FINISHED_LEVEL);		
 
-					Platform.runLater(() -> {
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setTitle("Congratulations!");
-						alert.setHeaderText("");
-						alert.setContentText("You finished Level \"" + game.getLevel().getName() + "\" with " + game.getTotalPoints() + " Points");
-						Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-						alert.getDialogPane().setStyle("-fx-base: " + bundle.getString("color.background"));
-						dialogStage.getIcons().add(icon);
-						dialogStage.centerOnScreen();
-						alert.showAndWait();
+					Platform.runLater(() -> {						
+						AlertGenerator.showAlert(Alert.AlertType.INFORMATION, "Congratulations!", "", "You finished Level \"" + game.getLevel().getName() + "\" with " + game.getTotalPoints() + " Points", icon, stage, bundle.getString("color.background"), false);
 					});
 				}
 			}

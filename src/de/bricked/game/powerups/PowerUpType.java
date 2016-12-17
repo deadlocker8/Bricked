@@ -1,6 +1,5 @@
 package de.bricked.game.powerups;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

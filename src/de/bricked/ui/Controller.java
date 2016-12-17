@@ -13,8 +13,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -25,6 +23,7 @@ import javafx.stage.WindowEvent;
 import kuusisto.tinysound.TinySound;
 import logger.LogLevel;
 import logger.Logger;
+import tools.AlertGenerator;
 
 public class Controller
 {
@@ -139,14 +138,6 @@ public class Controller
 
 	public void about()
 	{
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("About " + bundle.getString("app.name"));
-		alert.setHeaderText(bundle.getString("app.name")); 
-		alert.setContentText("Version:     " + bundle.getString("version.name") + "\r\nDate:         " + bundle.getString("version.date") + "\r\nAuthors:     "+ bundle.getString("author") +"\r\n");
-		Stage dialogStage = (Stage)alert.getDialogPane().getScene().getWindow();
-		alert.getDialogPane().setStyle("-fx-base: " + bundle.getString("color.background"));
-		dialogStage.getIcons().add(icon);
-		dialogStage.centerOnScreen();
-		alert.showAndWait();
+		AlertGenerator.showAboutAlert(bundle.getString("app.name"), bundle.getString("version.name"), bundle.getString("version.code"), bundle.getString("version.date"), bundle.getString("author"), icon, stage, null, false);	
 	}
 }

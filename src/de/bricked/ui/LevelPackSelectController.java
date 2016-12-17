@@ -111,9 +111,6 @@ public class LevelPackSelectController
 		});
 		
 		mainPane.setStyle("-fx-base: " + bundle.getString("color.background") + ";");
-		
-//		buttonBack.setStyle("-fx-base: " + bundle.getString("color.button"));
-//		downloadLevelpackButton.setStyle("-fx-base: " + bundle.getString("color.button"));
 	}
 
 	public void reload()

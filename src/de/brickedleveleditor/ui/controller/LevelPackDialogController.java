@@ -2,12 +2,12 @@ package de.brickedleveleditor.ui.controller;
 
 
 import de.bricked.game.paddle.PaddleSize;
-import de.brickedleveleditor.utils.AlertGenerator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
+import tools.AlertGenerator;
 
 public class LevelPackDialogController extends AbstractController
 {
