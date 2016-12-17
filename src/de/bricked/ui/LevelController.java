@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -40,7 +41,9 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
@@ -193,25 +196,49 @@ public class LevelController
 				}
 
 				if(event.getCode().toString().equals("ESCAPE"))
-				{
-					back();
-					event.consume();
+				{					
+					if(gameState.equals(GameState.STOPPED))
+					{
+						back();
+						event.consume();
+						return;
+					}			
+					
+					pause();	
+					
+					Alert alert = new Alert(AlertType.CONFIRMATION);
+					alert.setTitle("Close Level?");
+					alert.setHeaderText("");
+					alert.setContentText("Do you really want to go back?");
+                    Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    dialogStage.getIcons().add(icon);
+					dialogStage.initOwner(stage);								
+
+					Optional<ButtonType> result = alert.showAndWait();					
+					if(result.get() == ButtonType.OK)
+					{					
+						back();						
+						event.consume();						
+					}
+					else
+					{							
+						restart();
+						event.consume(); 							
+					}
 				}
 				
 				//pause
 				if(event.getCode().toString().equals("P"))
 				{
 					if(gameState.equals(GameState.RUNNING))
-					{
-						gameState = GameState.PAUSED;
+					{						
 						pause();	
 						event.consume();
 						return;
 					}
 					
 					if(gameState.equals(GameState.PAUSED))
-					{
-						gameState = GameState.RUNNING;
+					{						
 						restart();
 						event.consume(); 
 						return;						
@@ -556,6 +583,7 @@ public class LevelController
 	
 	private void pause()
 	{
+		gameState = GameState.PAUSED;
 		timer.stop();
 		anchorPaneGame.setOpacity(0.5);
 		
@@ -580,6 +608,7 @@ public class LevelController
 	
 	private void restart()
 	{
+		gameState = GameState.RUNNING;
 		previousTime = 0;
 		secondsElapsedSinceLastFpsUpdate = 0f;
 		fps = 0;
