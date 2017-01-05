@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -34,16 +33,16 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
@@ -62,6 +61,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -204,27 +204,49 @@ public class LevelController
 						return;
 					}			
 					
-					pause();	
+					pause();						
 					
-					Alert alert = new Alert(AlertType.CONFIRMATION);
-					alert.setTitle("Close Level?");
-					alert.setHeaderText("");
-					alert.setContentText("Do you really want to go back?");
-                    Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                    dialogStage.getIcons().add(icon);
-					dialogStage.initOwner(stage);								
+					try
+					{
+						FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/bricked/ui/EscapeDialog.fxml"));
 
-					Optional<ButtonType> result = alert.showAndWait();					
-					if(result.get() == ButtonType.OK)
-					{					
-						back();						
-						event.consume();						
+						Parent root = (Parent)fxmlLoader.load();
+						Stage newStage = new Stage();						
+						newStage.setScene(new Scene(root));	
+						newStage.setTitle("Confirmation");
+						newStage.initOwner(stage);
+						newStage.getIcons().add(icon);	
+						EscapeDialogController newController = (EscapeDialogController)fxmlLoader.getController();
+						newController.init(LevelController.this, newStage);
+						newStage.initModality(Modality.APPLICATION_MODAL);
+						newStage.setResizable(false);
+						newStage.show();
 					}
-					else
-					{							
-						restart();
-						event.consume(); 							
+					catch(IOException e1)
+					{
+						Logger.log(LogLevel.ERROR, Logger.exceptionToString(e1));
 					}
+										
+					
+//					Alert alert = new Alert(AlertType.CONFIRMATION);
+//					alert.setTitle("Close Level?");
+//					alert.setHeaderText("");
+//					alert.setContentText("Do you really want to go back?");
+//                    Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();
+//                    dialogStage.getIcons().add(icon);
+//					dialogStage.initOwner(stage);								
+//
+//					Optional<ButtonType> result = alert.showAndWait();					
+//					if(result.get() == ButtonType.OK)
+//					{					
+//						back();						
+//						event.consume();						
+//					}
+//					else
+//					{							
+//						restart();
+//						event.consume(); 							
+//					}
 				}
 				
 				//pause
@@ -606,7 +628,7 @@ public class LevelController
 		}
 	}
 	
-	private void restart()
+	public void restart()
 	{
 		gameState = GameState.RUNNING;
 		previousTime = 0;
