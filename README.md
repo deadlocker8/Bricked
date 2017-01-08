@@ -1,5 +1,5 @@
 # Bricked
 
-Breakout clone in JavaFX
+Breakout implementation in JavaFX
 
 ### Screenshots
