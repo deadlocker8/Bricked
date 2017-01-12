@@ -35,9 +35,8 @@ public class Game
 
 	public Game()
 	{
-		this.settings = new Settings();
-		//DEBUG values in constructor should be loaded from settings
-		this.soundHandler = new SoundHandler(1.0, false);		
+		this.settings = new Settings(true);			
+		this.soundHandler = new SoundHandler(settings.getVolume(), settings.isMuted());			
 		this.levelPack = null;
 		this.level = null;
 		this.livesRemaining = 0;
@@ -186,6 +185,11 @@ public class Game
 	public SoundHandler getSoundHandler()
 	{
 		return soundHandler;
+	}	
+
+	public void refreshSoundHandler()
+	{
+		soundHandler = new SoundHandler(settings.getVolume(), settings.isMuted());
 	}
 
 	public Point2D reflectBall(HitLocation hitLocation, Point2D direction)

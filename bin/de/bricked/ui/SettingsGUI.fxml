@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="mainPane" prefHeight="800.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.bricked.ui.SettingsController">
+   <children>
+      <Label layoutX="249.0" layoutY="24.0" text="Settings">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Label>
+      <VBox prefHeight="649.0" prefWidth="590.0" AnchorPane.bottomAnchor="36.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
+         <children>
+            <HBox prefHeight="643.0" prefWidth="622.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" spacing="50.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="Resolution:">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                        </Label>
+                        <Label text="Language:">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                        </Label>
+                        <Label text="Sound:">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox spacing="50.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <ComboBox fx:id="comboBoxResolution" prefHeight="35.0" prefWidth="290.0" />
+                        <ComboBox fx:id="comboBoxLanguage" prefHeight="35.0" prefWidth="290.0" />
+                        <CheckBox fx:id="checkBoxSound" mnemonicParsing="false" prefHeight="35.0" text="Activated">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </CheckBox>
+                        <Slider fx:id="sliderVolume" maxWidth="290.0" minorTickCount="4" prefHeight="35.0" prefWidth="290.0" showTickLabels="true" showTickMarks="true">
+                           <VBox.margin>
+                              <Insets top="-30.0" />
+                           </VBox.margin>
+                        </Slider>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <padding>
+                        <Insets right="25.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="buttonBack" minHeight="42.0" minWidth="154.0" mnemonicParsing="false" onAction="#back" prefHeight="42.0" prefWidth="150.0" text="Back">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="buttonSave" minHeight="42.0" minWidth="141.0" mnemonicParsing="false" onAction="#save" prefHeight="42.0" prefWidth="150.0" text="Save" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

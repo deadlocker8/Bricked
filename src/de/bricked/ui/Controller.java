@@ -110,7 +110,29 @@ public class Controller
 	
 	public void showSettings()
 	{
+		try
+		{
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/bricked/ui/SettingsGUI.fxml"));
 
+			Parent root = (Parent)fxmlLoader.load();
+			Stage newStage = new Stage();
+			newStage.setScene(new Scene(root, 650, 800));		
+			newStage.setTitle(bundle.getString("app.name") + " - Settings");
+			newStage.initOwner(stage);
+
+			newStage.getIcons().add(icon);			
+			SettingsController newController = fxmlLoader.getController();
+			newController.init(newStage, this, game);		
+
+			newStage.initModality(Modality.NONE);
+			newStage.setResizable(false);
+			stage.hide();
+			newStage.show();
+		}
+		catch(IOException e1)
+		{
+			e1.printStackTrace();
+		}
 	}
 	
 	public void showAchievements()
