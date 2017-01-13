@@ -4,7 +4,6 @@ import java.util.ResourceBundle;
 
 import de.bricked.commandLine.CommandLineController;
 import de.bricked.game.Game;
-import de.bricked.game.levels.Level;
 import de.bricked.ui.LevelController;
 
 /**
@@ -17,8 +16,7 @@ public class CommandBundle
 {
 	private CommandLineController controller;
 	private ResourceBundle languageBundle;	
-	private Game game;
-	private Level currentLevel;	
+	private Game game;	
 	private boolean showFPS = false;
 	private LevelController levelController;
 
@@ -55,16 +53,6 @@ public class CommandBundle
 	public void setGame(Game game)
 	{
 		this.game = game;
-	}
-
-	public Level getCurrentLevel()
-	{
-		return currentLevel;
-	}
-
-	public void setCurrentLevel(Level currentLevel)
-	{
-		this.currentLevel = currentLevel;
 	}
 
 	public boolean isShowFPS()

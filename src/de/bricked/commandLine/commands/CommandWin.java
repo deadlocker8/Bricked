@@ -1,7 +1,7 @@
 package de.bricked.commandLine.commands;
 
 /**
- * Finish current level with 3 stars
+ * Finish current level
  * @author deadlocker8
  *
  */
@@ -17,19 +17,15 @@ public class CommandWin extends Command
 	@Override
 	public void execute(String[] command, CommandBundle bundle)
 	{		
-		//TODO
-//		if(bundle.getCurrentLevel() != null)
-//		{			
-//			Level currentLevel = bundle.getCurrentLevel();
-//			LevelHandler levelHandler = bundle.getGame().getLevelHandler();
-//			int moves = levelHandler.get(currentLevel.getId() - 1).getRating().getPerfectMoveCount();
-//			levelHandler.finish(currentLevel.getId() - 1, moves);
-//		
-//			bundle.getController().print(bundle.getLanguageBundle().getString("success.win"));
-//		}
-//		else
-//		{
-//			bundle.getController().print(bundle.getLanguageBundle().getString("error.win"));
-//		}
+		if(bundle.getLevelController() != null)
+		{			
+			bundle.getLevelController().win();
+		
+			bundle.getController().print(bundle.getLanguageBundle().getString("success.win"));
+		}
+		else
+		{
+			bundle.getController().print(bundle.getLanguageBundle().getString("error.no.level"));
+		}
 	}
 }

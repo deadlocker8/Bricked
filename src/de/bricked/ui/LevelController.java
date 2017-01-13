@@ -226,27 +226,6 @@ public class LevelController
 					{
 						Logger.log(LogLevel.ERROR, Logger.exceptionToString(e1));
 					}
-										
-					
-//					Alert alert = new Alert(AlertType.CONFIRMATION);
-//					alert.setTitle("Close Level?");
-//					alert.setHeaderText("");
-//					alert.setContentText("Do you really want to go back?");
-//                    Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();
-//                    dialogStage.getIcons().add(icon);
-//					dialogStage.initOwner(stage);								
-//
-//					Optional<ButtonType> result = alert.showAndWait();					
-//					if(result.get() == ButtonType.OK)
-//					{					
-//						back();						
-//						event.consume();						
-//					}
-//					else
-//					{							
-//						restart();
-//						event.consume(); 							
-//					}
 				}
 				
 				//pause
@@ -845,16 +824,7 @@ public class LevelController
 				if(game.getBoard().getNumberOfRemainingBricks() == 0)
 				{
 					// level done
-					resetPowerUps();
-					gameState = GameState.STOPPED;
-					resetMultiplicator();
-					timer.stop();
-					
-					game.getSoundHandler().play(SoundType.FINISHED_LEVEL);		
-
-					Platform.runLater(() -> {						
-						AlertGenerator.showAlert(Alert.AlertType.INFORMATION, "Congratulations!", "", "You finished Level \"" + game.getLevel().getName() + "\" with " + game.getTotalPoints() + " Points", icon, stage, bundle.getString("color.background"), false);
-					});
+					win();
 				}
 			}
 		}
@@ -1088,7 +1058,26 @@ public class LevelController
 
 		anchorPaneGame.requestFocus();
 	}
+	
+	public void win()
+	{
+		resetPowerUps();
+		gameState = GameState.STOPPED;
+		resetMultiplicator();
+		timer.stop();
+		
+		game.getSoundHandler().play(SoundType.FINISHED_LEVEL);		
 
+		Platform.runLater(() -> {						
+			AlertGenerator.showAlert(Alert.AlertType.INFORMATION, "Congratulations!", "", "You finished Level \"" + game.getLevel().getName() + "\" with " + game.getTotalPoints() + " Points", icon, stage, bundle.getString("color.background"), false);
+		});
+	}
+
+	public LevelSelectController restartLevel()
+	{
+		back();
+		return levelSelectController;
+	}
 	/*
 	 * PowerUP-Functions
 	 */

@@ -128,43 +128,7 @@ public class LevelSelectController
 					listView.getSelectionModel().clearSelection();
 					game.setLevel(selectedLevel);
 
-					try
-					{
-						FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/bricked/ui/LevelGUI.fxml"));
-
-						Parent root = (Parent)fxmlLoader.load();
-						Stage newStage = new Stage();
-
-						// set stage size						
-						if(game.getSettings().getGameSize().equals(GameSize.FULL_SCREEN))
-						{
-							newStage.setScene(new Scene(root));
-							newStage.setFullScreen(true);
-							newStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-						}
-						else
-						{
-							newStage.setScene(new Scene(root, game.getSettings().getGameSize().getWidth(), game.getSettings().getGameSize().getHeight()));
-						}
-
-						newStage.setTitle(bundle.getString("app.name") + " - " + game.getLevel().getName());
-						newStage.initOwner(stage);
-
-						newStage.getIcons().add(icon);
-						LevelController newController = fxmlLoader.getController();
-						newController.init(newStage, getController(), game);
-						
-						controller.controller.getCommandLine().getBundle().setLevelController(newController);
-
-						newStage.initModality(Modality.NONE);
-						newStage.setResizable(false);
-						stage.hide();
-						newStage.show();
-					}
-					catch(IOException e1)
-					{
-						Logger.log(LogLevel.ERROR, Logger.exceptionToString(e1));
-					}
+					startLevel();
 				}
 			}
 		});
@@ -175,6 +139,47 @@ public class LevelSelectController
 	private LevelSelectController getController()
 	{
 		return this;
+	}
+	
+	public void startLevel()
+	{
+		try
+		{
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/de/bricked/ui/LevelGUI.fxml"));
+
+			Parent root = (Parent)fxmlLoader.load();
+			Stage newStage = new Stage();
+
+			// set stage size						
+			if(game.getSettings().getGameSize().equals(GameSize.FULL_SCREEN))
+			{
+				newStage.setScene(new Scene(root));
+				newStage.setFullScreen(true);
+				newStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+			}
+			else
+			{
+				newStage.setScene(new Scene(root, game.getSettings().getGameSize().getWidth(), game.getSettings().getGameSize().getHeight()));
+			}
+
+			newStage.setTitle(bundle.getString("app.name") + " - " + game.getLevel().getName());
+			newStage.initOwner(stage);
+
+			newStage.getIcons().add(icon);
+			LevelController newController = fxmlLoader.getController();
+			newController.init(newStage, getController(), game);
+			
+			controller.controller.getCommandLine().getBundle().setLevelController(newController);
+
+			newStage.initModality(Modality.NONE);
+			newStage.setResizable(false);
+			stage.hide();
+			newStage.show();
+		}
+		catch(IOException e1)
+		{
+			Logger.log(LogLevel.ERROR, Logger.exceptionToString(e1));
+		}
 	}
 
 	public void back()
