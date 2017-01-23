@@ -917,7 +917,9 @@ public class LevelController
 			HitLocation hitLocation = game.collides(labelPosition, paddlePosition, paddle.getWidth(), paddle.getHeight(), true);
 			if(hitLocation != null && (hitLocation.equals(HitLocation.PADDLE) || hitLocation.equals(HitLocation.CORNER)))
 			{
-				Logger.log(LogLevel.DEBUG, "Collected PowerUp with ID = " + currentPowerUp.getID());
+				Logger.log(LogLevel.DEBUG, "Collected PowerUp with ID = " + currentPowerUp.getID());				
+				game.getSoundHandler().play(SoundType.POWERUP_ACTIVATED);
+				
 				if(!currentPowerUp.isPermanent())
 				{
 					addTimedPowerUp(currentPowerUp);

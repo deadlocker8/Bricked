@@ -9,6 +9,7 @@ import de.bricked.game.levels.LevelPack;
 import de.bricked.game.powerups.PowerUp;
 import de.bricked.game.settings.Settings;
 import de.bricked.game.sound.SoundHandler;
+import de.bricked.game.sound.SoundType;
 import de.bricked.ui.LevelController;
 import javafx.geometry.Point2D;
 import logger.LogLevel;
@@ -159,6 +160,7 @@ public class Game
 		{
 			totalPoints += pointsSinceLastMultiplicatorReset * multiplicator;
 			Logger.log(LogLevel.DEBUG, "Applied multiplicator: " + pointsSinceLastMultiplicatorReset + " x" + multiplicator + "  =  " + totalPoints);
+			soundHandler.play(SoundType.MULTIPLICATOR);
 		}
 	}
 

@@ -10,7 +10,9 @@ public enum SoundType
 	LIFE_LOST("life_lost"),
 	GAME_OVER("game_over"),
 	FINISHED_LEVEL("finished_level"),
-	UNLOCKED("unlocked");
+	UNLOCKED("unlocked"),
+	POWERUP_ACTIVATED("powerup_activated"),
+	MULTIPLICATOR("multiplicator");
 	
 	private String fileName;
 	
