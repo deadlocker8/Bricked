@@ -17,12 +17,12 @@ public class ExplodeBallPowerUp extends PowerUp
     @Override
     public void activate(LevelController levelController, Game game)
     {
-    	levelController.changeBall(new Ball(BallType.EXPLOSIVE));
+    	levelController.changeBall(new Ball(BallType.EXPLOSIVE, levelController.getGamePaneHeight()));
     }
 
 	@Override
 	public void deactivate(LevelController levelController, Game game)
 	{		
-		levelController.changeBall(new Ball(BallType.NORMAL));
+		levelController.changeBall(new Ball(BallType.NORMAL, levelController.getGamePaneHeight()));
 	}
 }

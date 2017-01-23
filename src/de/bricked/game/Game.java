@@ -216,16 +216,16 @@ public class Game
 		}
 	}
 
-	public Point2D reflectOnPaddle(Point2D direction, double factor)
+	public Point2D reflectOnPaddle(Point2D direction, double factor, double gameHeight)
 	{
 		double influenceX = 0.75;		
 
 		double totalSpeed = Math.sqrt(direction.getX() * direction.getX() + direction.getY() * direction.getY());
 		totalSpeed = totalSpeed * speedIncreasePerPaddleHitFactor;
-		if(totalSpeed > ball.getType().getMaxTotalSpeed())
+		if(totalSpeed > (gameHeight * ball.getType().getMaxTotalSpeed()))
 		{
 			
-			totalSpeed = ball.getType().getMaxTotalSpeed();
+			totalSpeed = (gameHeight * ball.getType().getMaxTotalSpeed());
 		}
 		double newXSpeed = totalSpeed * factor * influenceX;
 		double newYSpeed = Math.sqrt(totalSpeed * totalSpeed - newXSpeed * newXSpeed);

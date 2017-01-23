@@ -413,6 +413,11 @@ public class LevelController
 	{
 		return labelPaddle;
 	}
+	
+	public double getGamePaneHeight()
+	{
+		return gamePaneHeight;
+	}
 
 	private void initTimer()
 	{
@@ -542,7 +547,7 @@ public class LevelController
 					hitLocation = game.collides(ballPosition, paddlePosition, paddle.getWidth(), paddle.getHeight(), true);
 					if(hitLocation != null && (hitLocation.equals(HitLocation.PADDLE) || hitLocation.equals(HitLocation.CORNER)))
 					{
-						game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth())));
+						game.getBall().setDirection(game.reflectOnPaddle(game.getBall().getDirection(), game.getDistanceToPaddleCenter(ballPosition, paddlePosition, paddle.getWidth()), gamePaneHeight));
 
 						correctBallPosition(hitLocation, ballPosition, paddlePosition, paddle.getWidth(), paddle.getHeight());
 
@@ -734,7 +739,7 @@ public class LevelController
 	{
 		anchorPaneGame.getChildren().remove(stackPaneBall);
 
-		game.setBall(new Ball(ballType));
+		game.setBall(new Ball(ballType, gamePaneHeight));
 		
 		final Circle circle = new Circle(game.getBall().getBallRadius(), Color.web(game.getBall().getType().getColor()));
 		circle.setEffect(new Lighting());

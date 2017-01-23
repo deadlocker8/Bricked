@@ -17,12 +17,12 @@ public class NoCollisionBallPowerUp extends PowerUp
     @Override
     public void activate(LevelController levelController, Game game)
     {
-    	levelController.changeBall(new Ball(BallType.NO_COLLISION));
+    	levelController.changeBall(new Ball(BallType.NO_COLLISION, levelController.getGamePaneHeight()));
     }
 
 	@Override
 	public void deactivate(LevelController levelController, Game game)
 	{	
-		levelController.changeBall(new Ball(BallType.NORMAL));
+		levelController.changeBall(new Ball(BallType.NORMAL, levelController.getGamePaneHeight()));
 	}
 }

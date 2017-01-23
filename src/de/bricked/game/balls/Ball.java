@@ -1,29 +1,33 @@
 package de.bricked.game.balls;
 
 import javafx.geometry.Point2D;
+import logger.LogLevel;
+import logger.Logger;
 
 public class Ball
 {		
 	private BallType type;
+	private double gameHeight;
 	private double ballRadius;
 	private Point2D direction;
 	private final double START_ANGLE = 40;
 	
-	public Ball(BallType type)
+	public Ball(BallType type, double gameHeight)
 	{	
 		this.type = type;
-		this.ballRadius = type.getRadius();
+		this.gameHeight = gameHeight;
+		this.ballRadius = (gameHeight * type.getSizeFactor()) / 2;		
 		this.direction = new Point2D(0, 0);
 	}
 	
 	public void startBallToRight()
 	{
-		direction = new Point2D(type.getSpeedFactor() * Math.cos(START_ANGLE), - (type.getSpeedFactor() * Math.sin(START_ANGLE)));
+		direction = new Point2D((gameHeight * type.getSpeedFactor()) * Math.cos(START_ANGLE), - ((gameHeight *  type.getSpeedFactor()) * Math.sin(START_ANGLE)));
 	}
 	
 	public void startBallToLeft()
 	{
-		direction = new Point2D(- (type.getSpeedFactor() * Math.cos(START_ANGLE)), - (type.getSpeedFactor() * Math.sin(START_ANGLE)));
+		direction = new Point2D(- ((gameHeight * type.getSpeedFactor()) * Math.cos(START_ANGLE)), - ((gameHeight * type.getSpeedFactor()) * Math.sin(START_ANGLE)));
 	}
 
 	public BallType getType()

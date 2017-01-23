@@ -2,38 +2,31 @@ package de.bricked.game.balls;
 
 public enum BallType
 {
-	NORMAL("N", "#9CD8FF", 10, 4, 7),
-	EXPLOSIVE("A","#CC2E2E", 10, 6, 7),
-	NO_COLLISION("S","#2828CC", 10, 8, 8);	
+	NORMAL("#9CD8FF", 0.03, 0.005, 0.015),
+	EXPLOSIVE("#CC2E2E", 0.03, 0.01, 0.02),
+	NO_COLLISION("#2828CC", 0.03, 0.015, 0.023);	
 
-	private String ID;
 	private String color;	
-	private double radius;
+	private double sizeFactor;
 	private double speedFactor;
 	private double maxTotalSpeed;
 		
-	private BallType(String ID, String color, double radius, double speedFactor, double maxTotalSpeed)
-	{		
-		this.ID = ID;
+	private BallType(String color, double sizeFactor, double speedFactor, double maxTotalSpeed)
+	{	
 		this.color = color;
-		this.radius = radius;
+		this.sizeFactor = sizeFactor;
 		this.speedFactor = speedFactor;
 		this.maxTotalSpeed = maxTotalSpeed;
-	}		
+	}	
 	
-	public String getID()
-	{
-		return ID;
-	}
-
 	public String getColor()
 	{
 		return color;
 	}
 	
-	public double getRadius()
+	public double getSizeFactor()
 	{
-		return radius;
+		return sizeFactor;
 	}
 
 	public double getSpeedFactor()
