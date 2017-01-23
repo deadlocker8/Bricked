@@ -757,7 +757,7 @@ public class LevelController
 		labelMultiplicator.setText("");
 		if(game.getMultiplicator() > 1)
 		{
-			showAnimatedPoints(20, 8, game.getPointsSinceLastMultiplicatorReset() * game.getMultiplicator(), 25, true);
+			showAnimatedPoints(20, 8, game.getPointsSinceLastMultiplicatorReset() * game.getMultiplicator(), gamePaneHeight * 0.05, true);
 		}
 		game.resetPointsSinceLastMultiplicatorReset();
 		game.resetMultiplicator();		
