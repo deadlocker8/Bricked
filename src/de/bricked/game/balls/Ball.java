@@ -1,8 +1,6 @@
 package de.bricked.game.balls;
 
 import javafx.geometry.Point2D;
-import logger.LogLevel;
-import logger.Logger;
 
 public class Ball
 {		

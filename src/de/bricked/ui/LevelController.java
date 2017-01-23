@@ -1096,6 +1096,6 @@ public class LevelController
 		initBall(game.getBall().getType());
 		stackPaneBall.setTranslateX(translateX);
 		stackPaneBall.setTranslateY(translateY);
-		game.getBall().setDirection(game.getNewSpeedDirection(direction, newBall.getType().getSpeedFactor()));
+		game.getBall().setDirection(game.getNewSpeedDirection(direction, (gamePaneHeight * newBall.getType().getSpeedFactor())));
 	}
 }
