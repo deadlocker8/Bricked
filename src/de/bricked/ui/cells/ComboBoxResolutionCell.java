@@ -12,14 +12,7 @@ public class ComboBoxResolutionCell extends ComboBoxListCell<GameSize>
 
 		if( ! empty)
 		{	
-			if(item == GameSize.FULL_SCREEN)
-			{
-				setText("Fullscreen");
-			}
-			else
-			{
-				setText(item.getWidth() + " x " + item.getHeight());
-			}			
+			setText(item.getWidth() + " x " + item.getHeight());					
 		}
 		else
 		{
