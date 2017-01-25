@@ -1,6 +1,7 @@
 package de.bricked.ui;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -8,6 +9,7 @@ import de.bricked.game.Game;
 import de.bricked.game.settings.GameSize;
 import de.bricked.ui.cells.ComboBoxLanguageCell;
 import de.bricked.ui.cells.ComboBoxResolutionCell;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -18,6 +20,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -35,6 +40,7 @@ public class SettingsController
 	@FXML private ComboBox<LanguageType> comboBoxLanguage;
 	@FXML private CheckBox checkBoxSound;
 	@FXML private Slider sliderVolume;
+	@FXML private TableView<Control> tableViewControls;
 
 	public Stage stage;
 	public Image icon = new Image("de/bricked/resources/icon.png");
@@ -49,7 +55,7 @@ public class SettingsController
 		this.game = game;
 
 		comboBoxResolution.setCellFactory(new Callback<ListView<GameSize>, ListCell<GameSize>>()
-		{			
+		{
 			@Override
 			public ListCell<GameSize> call(ListView<GameSize> param)
 			{
@@ -58,9 +64,9 @@ public class SettingsController
 		});
 		comboBoxResolution.setButtonCell(new ComboBoxResolutionCell());
 		comboBoxResolution.getItems().addAll(GameSize.values());
-		
+
 		comboBoxLanguage.setCellFactory(new Callback<ListView<LanguageType>, ListCell<LanguageType>>()
-		{			
+		{
 			@Override
 			public ListCell<LanguageType> call(ListView<LanguageType> param)
 			{
@@ -68,8 +74,8 @@ public class SettingsController
 			}
 		});
 		comboBoxLanguage.setButtonCell(new ComboBoxLanguageCell());
-		comboBoxLanguage.getItems().addAll(LanguageType.values());	
-		
+		comboBoxLanguage.getItems().addAll(LanguageType.values());
+
 		checkBoxSound.selectedProperty().addListener(new ChangeListener<Boolean>()
 		{
 			@Override
@@ -82,11 +88,11 @@ public class SettingsController
 				else
 				{
 					sliderVolume.setDisable(true);
-				}				
+				}
 			}
 		});
-		
-		//preselect
+
+		// preselect
 		comboBoxResolution.setValue(game.getSettings().getGameSize());
 		comboBoxLanguage.setValue(game.getSettings().getLanguage());
 		if(game.getSettings().isMuted())
@@ -100,7 +106,9 @@ public class SettingsController
 			sliderVolume.setDisable(false);
 		}
 		sliderVolume.setValue(game.getSettings().getVolume() * 100);
-		
+
+		initTableViewControls();
+
 		mainPane.setStyle("-fx-base: " + bundle.getString("color.background") + ";");
 	}
 
@@ -111,18 +119,59 @@ public class SettingsController
 		game.getSettings().setMuted(!checkBoxSound.isSelected());
 		game.getSettings().setVolume(sliderVolume.getValue() / 100.0);
 		game.getSettings().save();
-		
+
 		game.refreshSoundHandler();
 		stage.close();
 		controller.stage.show();
-		
-		//TODO load correct language file
+
+		// TODO load correct language file
 	}
 
 	public void back()
 	{
 		stage.close();
 		controller.stage.show();
+	}
+
+	private void initTableViewControls()
+	{
+		ArrayList<Control> controls = new ArrayList<>();
+		controls.add(new Control("Start Ball", "Space / Left Mouse Button"));
+		controls.add(new Control("Move Paddle", "Arrow Keys / Mouse"));
+		controls.add(new Control("Pause", "P"));
+		controls.add(new Control("Exit Level / Back", "Esc"));
+
+		TableColumn<Control, String> columnAction = new TableColumn<>("Action");
+		columnAction.setCellValueFactory(new Callback<CellDataFeatures<Control, String>, ObservableValue<String>>()
+		{
+			public ObservableValue<String> call(CellDataFeatures<Control, String> param)
+			{
+				Control control = (Control)param.getValue();
+				return new SimpleStringProperty(control.getAction());
+			}
+		});
+		tableViewControls.getColumns().add(columnAction);
+		columnAction.setStyle( "-fx-alignment: CENTER; -fx-font-weight: bold;");
+		columnAction.prefWidthProperty().bind(tableViewControls.widthProperty().divide(2).subtract(2));
+		columnAction.setResizable(false);		
+		columnAction.setSortable(false);
+		
+		TableColumn<Control, String> columnKey = new TableColumn<>("Key");
+		columnKey.setCellValueFactory(new Callback<CellDataFeatures<Control, String>, ObservableValue<String>>()
+		{
+			public ObservableValue<String> call(CellDataFeatures<Control, String> param)
+			{
+				Control control = (Control)param.getValue();
+				return new SimpleStringProperty(control.getKey());
+			}
+		});
+		tableViewControls.getColumns().add(columnKey);
+		columnKey.setStyle( "-fx-alignment: CENTER; -fx-font-weight: bold;");
+		columnKey.prefWidthProperty().bind(tableViewControls.widthProperty().divide(2).subtract(2));
+		columnKey.setResizable(false);	
+		columnKey.setSortable(false);
+		
+		tableViewControls.getItems().addAll(controls);
 	}
 
 	public void showCommandLine()

@@ -5,7 +5,9 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -20,7 +22,7 @@
       </Label>
       <VBox prefHeight="649.0" prefWidth="590.0" AnchorPane.bottomAnchor="36.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
          <children>
-            <HBox prefHeight="643.0" prefWidth="622.0">
+            <HBox prefHeight="296.0" prefWidth="590.0">
                <children>
                   <VBox alignment="TOP_CENTER" spacing="50.0" HBox.hgrow="ALWAYS">
                      <children>
@@ -65,6 +67,20 @@
                   </VBox>
                </children>
             </HBox>
+            <Separator prefWidth="200.0" />
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Controls">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
+            </Label>
+            <TableView fx:id="tableViewControls" prefHeight="200.0" prefWidth="200.0">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </TableView>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Button fx:id="buttonBack" minHeight="42.0" minWidth="154.0" mnemonicParsing="false" onAction="#back" prefHeight="42.0" prefWidth="150.0" text="Back">
