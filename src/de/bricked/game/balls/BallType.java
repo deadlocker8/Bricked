@@ -2,7 +2,7 @@ package de.bricked.game.balls;
 
 public enum BallType
 {
-	NORMAL("#9CD8FF", 0.03, 0.005, 0.015),
+	NORMAL("#9CD8FF", 0.03, 0.005, 0.012),
 	EXPLOSIVE("#CC2E2E", 0.03, 0.01, 0.02),
 	NO_COLLISION("#2828CC", 0.03, 0.015, 0.023);	
 

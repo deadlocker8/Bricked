@@ -86,6 +86,9 @@ public class LevelPackSelectController
             {
                 TextInputDialog textInputDialog = new TextInputDialog();
                 textInputDialog.setHeaderText(null);
+            	Stage dialogStage = (Stage)textInputDialog.getDialogPane().getScene().getWindow();
+        		dialogStage.getIcons().add(icon);
+        		dialogStage.initOwner(stage);
                 textInputDialog.setContentText("URL of the raw levelpack");
                 Optional<String> result = textInputDialog.showAndWait();
                 if(result.isPresent())
