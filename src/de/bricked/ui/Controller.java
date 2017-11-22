@@ -76,6 +76,9 @@ public class Controller
 		buttonAchievements.setStyle("-fx-base: " + bundle.getString("color.button"));
 		buttonAbout.setStyle("-fx-base: " + bundle.getString("color.button"));
 		
+		//TODO
+		buttonAchievements.setDisable(true);
+		
 		Logger.info("successfully started");
 	}	
 	
@@ -136,7 +139,7 @@ public class Controller
 	
 	public void showAchievements()
 	{
-
+		
 	}	
 	
 	public void showCommandLine()
