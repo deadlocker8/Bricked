@@ -44,6 +44,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -70,7 +71,7 @@ import logger.Logger;
 import tools.AlertGenerator;
 import tools.Worker;
 
-public class LevelController
+public class LevelController implements CommandLineAvailabale
 {
 	@FXML private AnchorPane anchorPane;
 	@FXML private Label labelLevelName;
@@ -1032,6 +1033,7 @@ public class LevelController
 		labelFPS.setVisible(value);
 	}
 
+	@Override
 	public void showCommandLine()
 	{
 		try
@@ -1040,7 +1042,7 @@ public class LevelController
 		}
 		catch(IOException e)
 		{
-			// TODO: errorhandling
+			AlertGenerator.showAlert(AlertType.ERROR, "Error", "", "An error occurred while opening the debug console.\n\nDetails:\n" + e.getMessage(), icon, stage, null, false);
 			Logger.error(e);
 		}
 	}

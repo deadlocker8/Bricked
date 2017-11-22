@@ -9,9 +9,10 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import tools.AlertGenerator;
 
+@SuppressWarnings("all")
 public class LevelPackDialogController extends AbstractController
 {
-    @FXML private Spinner difficultySpinner;
+	@FXML private Spinner difficultySpinner;
     @FXML private ComboBox paddleSizeComboBox;
     @FXML private Spinner startLivesSpinner;
     @FXML private TextField authorTextField;

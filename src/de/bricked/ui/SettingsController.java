@@ -23,13 +23,15 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import logger.Logger;
+import tools.AlertGenerator;
 
-public class SettingsController
+public class SettingsController implements CommandLineAvailabale
 {
 	@FXML private AnchorPane mainPane;
 	@FXML private Label labelLevelPack;
@@ -173,6 +175,7 @@ public class SettingsController
 		tableViewControls.getItems().addAll(controls);
 	}
 
+	@Override
 	public void showCommandLine()
 	{
 		try
@@ -181,7 +184,7 @@ public class SettingsController
 		}
 		catch(IOException e)
 		{
-			// TODO: errorhandling
+			AlertGenerator.showAlert(AlertType.ERROR, "Error", "", "An error occurred while opening the debug console.\n\nDetails:\n" + e.getMessage(), icon, stage, null, false);
 			Logger.error(e);
 		}
 	}

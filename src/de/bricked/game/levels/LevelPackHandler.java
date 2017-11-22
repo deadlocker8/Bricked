@@ -2,6 +2,7 @@ package de.bricked.game.levels;
 
 import de.bricked.game.Config;
 import de.bricked.utils.FileUtils;
+import logger.Logger;
 import tools.PathUtils;
 
 import java.io.*;
@@ -96,7 +97,7 @@ public class LevelPackHandler
             }
             catch (IOException e)
             {
-                e.printStackTrace();
+                Logger.error(e);
             }
         }
         return stringContent;

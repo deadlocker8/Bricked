@@ -19,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -30,8 +31,9 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import kuusisto.tinysound.TinySound;
 import logger.Logger;
+import tools.AlertGenerator;
 
-public class LevelSelectController
+public class LevelSelectController implements CommandLineAvailabale
 {
 	@FXML private AnchorPane mainPane;
 	@FXML private ScrollPane pane;
@@ -173,6 +175,7 @@ public class LevelSelectController
 		controller.stage.show();
 	}
 
+	@Override
 	public void showCommandLine()
 	{
 		try
@@ -181,7 +184,7 @@ public class LevelSelectController
 		}
 		catch(IOException e)
 		{
-			// TODO: errorhandling
+			AlertGenerator.showAlert(AlertType.ERROR, "Error", "", "An error occurred while opening the debug console.\n\nDetails:\n" + e.getMessage(), icon, stage, null, false);
 			Logger.error(e);
 		}
 	}

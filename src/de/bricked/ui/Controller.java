@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -24,7 +25,7 @@ import kuusisto.tinysound.TinySound;
 import logger.Logger;
 import tools.AlertGenerator;
 
-public class Controller
+public class Controller implements CommandLineAvailabale
 {
 	@FXML private AnchorPane mainPane;
 	@FXML private Button buttonLevelSelect;
@@ -76,7 +77,7 @@ public class Controller
 		buttonAchievements.setStyle("-fx-base: " + bundle.getString("color.button"));
 		buttonAbout.setStyle("-fx-base: " + bundle.getString("color.button"));
 		
-		//TODO
+		//TODO re-activate
 		buttonAchievements.setDisable(true);
 		
 		Logger.info("successfully started");
@@ -106,7 +107,7 @@ public class Controller
 		}
 		catch(IOException e1)
 		{
-			e1.printStackTrace();
+			Logger.error(e1);
 		}
 	}
 	
@@ -133,7 +134,7 @@ public class Controller
 		}
 		catch(IOException e1)
 		{
-			e1.printStackTrace();
+			Logger.error(e1);
 		}
 	}
 	
@@ -142,6 +143,7 @@ public class Controller
 		
 	}	
 	
+	@Override
 	public void showCommandLine()
 	{		
 		try
@@ -150,8 +152,8 @@ public class Controller
 		}
 		catch(IOException e)
 		{
-	        //TODO: errorhandling
-			Logger.error(e);;
+			AlertGenerator.showAlert(AlertType.ERROR, "Error", "", "An error occurred while opening the debug console.\n\nDetails:\n" + e.getMessage(), icon, stage, null, false);
+			Logger.error(e);
 		}
 	}
 	
