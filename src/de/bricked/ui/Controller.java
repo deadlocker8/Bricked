@@ -21,7 +21,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import kuusisto.tinysound.TinySound;
-import logger.LogLevel;
 import logger.Logger;
 import tools.AlertGenerator;
 
@@ -54,7 +53,7 @@ public class Controller
 				if(event.getCode().toString().equals(bundle.getObject("shortcut.debug.console")))				
 				{					
 					showCommandLine();
-					Logger.log(LogLevel.INFO, "openend debug console");
+					Logger.info("opened debug console");
 					event.consume();
 				}				
 			}
@@ -77,7 +76,7 @@ public class Controller
 		buttonAchievements.setStyle("-fx-base: " + bundle.getString("color.button"));
 		buttonAbout.setStyle("-fx-base: " + bundle.getString("color.button"));
 		
-		Logger.log(LogLevel.INFO, "successfully started");
+		Logger.info("successfully started");
 	}	
 	
 	public void showLevelSelect()
@@ -149,7 +148,7 @@ public class Controller
 		catch(IOException e)
 		{
 	        //TODO: errorhandling
-	       Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+			Logger.error(e);;
 		}
 	}
 	

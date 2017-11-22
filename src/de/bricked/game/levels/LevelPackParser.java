@@ -1,14 +1,15 @@
 package de.bricked.game.levels;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import de.bricked.game.paddle.PaddleSize;
-import logger.LogLevel;
 import logger.Logger;
-import java.util.ArrayList;
-import java.util.Comparator;
 
 public class LevelPackParser
 {
@@ -86,7 +87,7 @@ public class LevelPackParser
         }
         catch(Exception e)
         {
-            Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+        	Logger.error(e);
         }
     }
 

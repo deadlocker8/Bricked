@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-import logger.LogLevel;
 import logger.Logger;
 
 public class FileUtils
@@ -37,7 +36,7 @@ public class FileUtils
         }
         catch (Exception e)
         {
-            Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+        	Logger.error(e);
         }
         return null;
     }
@@ -51,7 +50,7 @@ public class FileUtils
         }
         catch (Exception e)
         {
-            Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+        	Logger.error(e);
         }
         return null;
     }

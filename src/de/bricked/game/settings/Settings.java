@@ -1,16 +1,16 @@
 package de.bricked.game.settings;
 
-import com.google.gson.Gson;
-import de.bricked.game.Config;
-import de.bricked.ui.LanguageType;
-import logger.LogLevel;
-import logger.Logger;
-import tools.PathUtils;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+
+import com.google.gson.Gson;
+
+import de.bricked.game.Config;
+import de.bricked.ui.LanguageType;
+import logger.Logger;
+import tools.PathUtils;
 
 public class Settings
 {
@@ -64,7 +64,7 @@ public class Settings
 		}
 		catch(Exception e)
 		{
-			Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+			Logger.error(e);
 		}
 	}
 
@@ -82,7 +82,7 @@ public class Settings
 		}
 		catch(Exception e)
 		{
-			Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+			Logger.error(e);
 		}
 	}
 

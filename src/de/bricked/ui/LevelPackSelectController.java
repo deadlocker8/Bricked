@@ -18,8 +18,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -29,7 +34,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import kuusisto.tinysound.TinySound;
-import logger.LogLevel;
 import logger.Logger;
 
 public class LevelPackSelectController
@@ -67,7 +71,7 @@ public class LevelPackSelectController
 				if(event.getCode().toString().equals(controller.bundle.getObject("shortcut.debug.console")))
 				{
 					showCommandLine();
-					Logger.log(LogLevel.INFO, "openend debug console");
+					Logger.info("openend debug console");
 					event.consume();
 				}
 				
@@ -168,7 +172,7 @@ public class LevelPackSelectController
 					}
 					catch(IOException e1)
 					{
-						Logger.log(LogLevel.ERROR, Logger.exceptionToString(e1));
+						Logger.error(e1);
 					}
 				}
 			}
@@ -197,7 +201,7 @@ public class LevelPackSelectController
 		catch(IOException e)
 		{
 			// TODO: errorhandling
-			Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+			Logger.error(e);
 		}
 	}
 }

@@ -29,7 +29,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import kuusisto.tinysound.TinySound;
-import logger.LogLevel;
 import logger.Logger;
 
 public class LevelSelectController
@@ -67,7 +66,7 @@ public class LevelSelectController
 				if(event.getCode().toString().equals(controller.bundle.getObject("shortcut.debug.console")))
 				{
 					showCommandLine();
-					Logger.log(LogLevel.INFO, "openend debug console");
+					Logger.info("openend debug console");
 					event.consume();
 				}
 
@@ -164,7 +163,7 @@ public class LevelSelectController
 		}
 		catch(IOException e1)
 		{
-			Logger.log(LogLevel.ERROR, Logger.exceptionToString(e1));
+			Logger.error(e1);
 		}
 	}
 
@@ -183,7 +182,7 @@ public class LevelSelectController
 		catch(IOException e)
 		{
 			// TODO: errorhandling
-			Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+			Logger.error(e);
 		}
 	}
 }

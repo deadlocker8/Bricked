@@ -66,7 +66,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import kuusisto.tinysound.TinySound;
-import logger.LogLevel;
 import logger.Logger;
 import tools.AlertGenerator;
 import tools.Worker;
@@ -137,7 +136,7 @@ public class LevelController
 		}
 
 		timer.start();
-		Logger.log(LogLevel.INFO, "ball start");
+		Logger.info("ball start");
 
 		gameState = GameState.RUNNING;
 	}
@@ -178,7 +177,7 @@ public class LevelController
 				if(event.getCode().toString().equals(bundle.getString("shortcut.debug.console")))
 				{
 					showCommandLine();
-					Logger.log(LogLevel.INFO, "openend debug console");
+					Logger.info("openend debug console");
 					event.consume();
 					return;
 				}
@@ -224,7 +223,7 @@ public class LevelController
 					}
 					catch(IOException e1)
 					{
-						Logger.log(LogLevel.ERROR, Logger.exceptionToString(e1));
+						Logger.error(e1);
 					}
 				}
 				
@@ -446,7 +445,7 @@ public class LevelController
 				if(secondsElapsedSinceLastFpsUpdate >= 1000000000)
 				{
 					labelFPS.setText(String.valueOf(fps));
-					Logger.log(LogLevel.DEBUG, "current FPS: " + fps);
+					Logger.debug("current FPS: " + fps);
 					secondsElapsedSinceLastFpsUpdate = 0;
 					fps = 0;
 				}
@@ -468,7 +467,7 @@ public class LevelController
 					if(hitLocation.equals(HitLocation.LIFE_LOST))
 					{						
 						game.setLivesRemaining(game.getLivesRemaining() - 1);
-						Logger.log(LogLevel.DEBUG, "Life lost (" + game.getLivesRemaining() + " lives remaining)");
+						Logger.debug("Life lost (" + game.getLivesRemaining() + " lives remaining)");
 						refreshLiveCounter();
 						resetPowerUps();
 						if(game.getLivesRemaining() <= 0)
@@ -917,7 +916,7 @@ public class LevelController
 			HitLocation hitLocation = game.collides(labelPosition, paddlePosition, paddle.getWidth(), paddle.getHeight(), true);
 			if(hitLocation != null && (hitLocation.equals(HitLocation.PADDLE) || hitLocation.equals(HitLocation.CORNER)))
 			{
-				Logger.log(LogLevel.DEBUG, "Collected PowerUp with ID = " + currentPowerUp.getID());				
+				Logger.debug("Collected PowerUp with ID = " + currentPowerUp.getID());				
 				game.getSoundHandler().play(SoundType.POWERUP_ACTIVATED);
 				
 				if(!currentPowerUp.isPermanent())
@@ -1042,7 +1041,7 @@ public class LevelController
 		catch(IOException e)
 		{
 			// TODO: errorhandling
-			Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+			Logger.error(e);
 		}
 	}
 

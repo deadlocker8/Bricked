@@ -1,12 +1,11 @@
 package de.bricked.utils;
 
+import java.io.FileWriter;
+
 import de.bricked.game.Config;
 import de.bricked.game.levels.LevelPack;
 import de.bricked.game.levels.LevelPackParser;
-import logger.LogLevel;
 import logger.Logger;
-
-import java.io.FileWriter;
 
 public class Downloader
 {
@@ -27,7 +26,7 @@ public class Downloader
             }
             catch (Exception e)
             {
-                Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+            	Logger.error(e);
             }
         }
     }
@@ -43,7 +42,7 @@ public class Downloader
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+        	Logger.error(e);
         }
     }
 

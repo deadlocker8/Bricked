@@ -46,7 +46,7 @@ public class Main extends Application
 		}
 		catch(Exception e)
 		{
-			Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+			Logger.error(e);
 		}
 	}
 
@@ -55,8 +55,8 @@ public class Main extends Application
 		if(Arrays.asList(args).contains("debug"))
 		{
 			Logger.setLevel(LogLevel.ALL);
-			Logger.log(LogLevel.INFO, "Running in Debug Mode");
-			Logger.log(LogLevel.INFO, bundle.getString("app.name") + " - v" + bundle.getString("version.name") + " - (versioncode: " + bundle.getString("version.code") + ") from " + bundle.getString("version.date"));
+			Logger.info("Running in Debug Mode");
+			Logger.info(bundle.getString("app.name") + " - v" + bundle.getString("version.name") + " - (versioncode: " + bundle.getString("version.code") + ") from " + bundle.getString("version.date"));
 		}
 		else
 		{

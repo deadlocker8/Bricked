@@ -12,7 +12,6 @@ import de.bricked.game.sound.SoundHandler;
 import de.bricked.game.sound.SoundType;
 import de.bricked.ui.LevelController;
 import javafx.geometry.Point2D;
-import logger.LogLevel;
 import logger.Logger;
 
 public class Game
@@ -159,7 +158,7 @@ public class Game
 		if(multiplicator > 1)
 		{
 			totalPoints += pointsSinceLastMultiplicatorReset * multiplicator;
-			Logger.log(LogLevel.DEBUG, "Applied multiplicator: " + pointsSinceLastMultiplicatorReset + " x" + multiplicator + "  =  " + totalPoints);
+			Logger.debug("Applied multiplicator: " + pointsSinceLastMultiplicatorReset + " x" + multiplicator + "  =  " + totalPoints);
 			soundHandler.play(SoundType.MULTIPLICATOR);
 		}
 	}
@@ -247,7 +246,7 @@ public class Game
 		if((ballLayoutX + ballTranslateX + ball.getBallRadius() * 2) >= gamePaneWidth && (ballLayoutY + ballTranslateY) <= 0)
 		{
 			wallCollision = true;
-			Logger.log(LogLevel.DEBUG, "TOP-RIGHT-CORNER");
+			Logger.debug("TOP-RIGHT-CORNER");
 			return HitLocation.CORNER;
 		}
 
@@ -255,7 +254,7 @@ public class Game
 		if((ballLayoutX + ballTranslateX) <= 0 && (ballLayoutY + ballTranslateY) <= 0)
 		{
 			wallCollision = true;
-			Logger.log(LogLevel.DEBUG, "TOP-LEFT-CORNER");
+			Logger.debug("TOP-LEFT-CORNER");
 			return HitLocation.CORNER;
 		}
 
@@ -263,7 +262,7 @@ public class Game
 		if((ballLayoutX + ballTranslateX + ball.getBallRadius() * 2) >= gamePaneWidth)
 		{
 			wallCollision = true;
-			Logger.log(LogLevel.DEBUG, "RIGHT-WALL");
+			Logger.debug("RIGHT-WALL");
 			return HitLocation.LEFT;
 		}
 
@@ -271,7 +270,7 @@ public class Game
 		if((ballLayoutX + ballTranslateX) <= 0)
 		{
 			wallCollision = true;
-			Logger.log(LogLevel.DEBUG, "LEFT-WALL");
+			Logger.debug("LEFT-WALL");
 			return HitLocation.RIGHT;
 		}
 
@@ -279,7 +278,7 @@ public class Game
 		if((ballLayoutY + ballTranslateY + ball.getBallRadius() * 2) >= gamePaneHeight)
 		{
 			wallCollision = true;
-			Logger.log(LogLevel.DEBUG, "BOTTOM-WALL");			
+			Logger.debug("BOTTOM-WALL");
 			return HitLocation.LIFE_LOST;
 		}
 
@@ -287,7 +286,7 @@ public class Game
 		if((ballLayoutY + ballTranslateY) <= 0)
 		{
 			wallCollision = true;
-			Logger.log(LogLevel.DEBUG, "TOP-WALL");
+			Logger.debug("TOP-WALL");
 			return HitLocation.BOTTOM;
 		}
 
@@ -317,19 +316,19 @@ public class Game
 			{
 				if(crossWidth > (-crossHeight))
 				{
-					Logger.log(LogLevel.DEBUG, "BOTTOM");
+					Logger.debug("BOTTOM");
 					return HitLocation.BOTTOM;
 				}
 				else
 				{
 					if(isPaddle)
 					{
-						Logger.log(LogLevel.DEBUG, "PADDLE-LEFT");
+						Logger.debug("PADDLE-LEFT");
 						return HitLocation.CORNER;
 					}
 					else
 					{
-						Logger.log(LogLevel.DEBUG, "LEFT");
+						Logger.debug("LEFT");
 						return HitLocation.LEFT;
 					}
 				}
@@ -340,12 +339,12 @@ public class Game
 				{
 					if(isPaddle)
 					{
-						Logger.log(LogLevel.DEBUG, "PADDLE-RIGHT");
+						Logger.debug("PADDLE-RIGHT");
 						return HitLocation.CORNER;
 					}
 					else
 					{
-						Logger.log(LogLevel.DEBUG, "RIGHT");
+						Logger.debug("RIGHT");
 						return HitLocation.RIGHT;
 					}
 				}
@@ -353,12 +352,12 @@ public class Game
 				{
 					if(isPaddle)
 					{
-						Logger.log(LogLevel.DEBUG, "PADDLE");
+						Logger.debug("PADDLE");
 						return HitLocation.PADDLE;
 					}
 					else
 					{
-						Logger.log(LogLevel.DEBUG, "TOP");
+						Logger.debug("TOP");
 						return HitLocation.TOP;
 					}
 				}

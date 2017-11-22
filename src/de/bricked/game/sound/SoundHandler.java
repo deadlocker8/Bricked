@@ -8,7 +8,6 @@ import java.util.HashMap;
 import de.bricked.game.Config;
 import kuusisto.tinysound.Sound;
 import kuusisto.tinysound.TinySound;
-import logger.LogLevel;
 import logger.Logger;
 
 public class SoundHandler
@@ -42,7 +41,7 @@ public class SoundHandler
 			}
 			catch(MalformedURLException | URISyntaxException e)
 			{
-				Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+				Logger.error(e);
 			}
 		}
 	}

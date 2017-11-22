@@ -1,5 +1,11 @@
 package de.brickedleveleditor.ui.controller;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import de.bricked.game.bricks.Brick;
 import de.bricked.game.bricks.BrickType;
 import de.bricked.game.powerups.PowerUpType;
@@ -18,19 +24,22 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import logger.LogLevel;
 import logger.Logger;
 import tools.Worker;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class MainController extends AbstractController
 {
@@ -96,7 +105,7 @@ public class MainController extends AbstractController
         }
         catch (Exception e)
         {
-            Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+        	Logger.error(e);
         }
     }
 
@@ -116,7 +125,7 @@ public class MainController extends AbstractController
             }
             catch (Exception e)
             {
-                Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+            	Logger.error(e);
             }
         }
     }
@@ -136,7 +145,7 @@ public class MainController extends AbstractController
             }
             catch (Exception e)
             {
-                Logger.log(LogLevel.ERROR, Logger.exceptionToString(e));
+            	Logger.error(e);
             }
         }
     }
@@ -180,7 +189,7 @@ public class MainController extends AbstractController
                 public void handle(MouseEvent event)
                 {
                     currentlySelectedBrickImage = bricksTextures.get(brickType);
-                    Logger.log(LogLevel.DEBUG, brickType.toString() + " selected");
+                    Logger.debug(brickType.toString() + " selected");
                 }
             });
             HBox brickHBox = new HBox(brickLabel);
