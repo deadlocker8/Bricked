@@ -1,6 +1,7 @@
 package de.bricked.ui;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -141,7 +142,7 @@ public class Controller implements CommandLineAvailabale
 	
 	public void showAchievements()
 	{
-		
+		//TODO add achievement ui
 	}	
 	
 	@Override
@@ -165,6 +166,12 @@ public class Controller implements CommandLineAvailabale
 
 	public void about()
 	{
-		AlertGenerator.showAboutAlert(bundle.getString("app.name"), bundle.getString("version.name"), bundle.getString("version.code"), bundle.getString("version.date"), bundle.getString("author"), icon, stage, null, false);	
+		ArrayList<String> creditLines = new ArrayList<>();
+		for(String currentLine : bundle.getString("credits").split("\n"))
+		{
+			creditLines.add(currentLine);
+		}
+		
+		AlertGenerator.showAboutAlertWithCredits(bundle.getString("app.name"), bundle.getString("version.name"), bundle.getString("version.code"), bundle.getString("version.date"), bundle.getString("author"), creditLines, icon, stage, null, false);	
 	}
 }
