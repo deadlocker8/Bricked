@@ -20,6 +20,7 @@ import de.bricked.game.paddle.PaddleSize;
 import de.bricked.game.powerups.PowerUp;
 import de.bricked.game.powerups.PowerUpType;
 import de.bricked.game.sound.SoundType;
+import de.bricked.utils.Colors;
 import de.bricked.utils.CountdownTimer;
 import fontAwesome.FontIcon;
 import fontAwesome.FontIconType;
@@ -150,9 +151,9 @@ public class LevelController implements CommandLineAvailabale
 		game.setBoard(new Board(game));
 		game.setLevelController(this);
 		
-		anchorPane.setStyle("-fx-base: " + bundle.getString("color.background") + ";");
-		buttonBack.setStyle("-fx-base: " + bundle.getString("color.button.light"));
-		anchorPaneGame.setStyle("-fx-background-color: " + bundle.getString("color.default"));	
+		anchorPane.setStyle("-fx-base: " + Colors.BACKGROUND + ";");
+		buttonBack.setStyle("-fx-base: " + Colors.BUTTON_LIGHT);
+		anchorPaneGame.setStyle("-fx-background-color: " + Colors.DEFAULT);	
 		labelMultiplicator.setStyle("-fx-text-fill: #000000;");	
 		anchorPaneGame.setCursor(Cursor.NONE);
 
@@ -481,7 +482,7 @@ public class LevelController implements CommandLineAvailabale
 							game.getSoundHandler().play(SoundType.GAME_OVER);								
 							
 							Platform.runLater(() -> {									
-								AlertGenerator.showAlert(Alert.AlertType.INFORMATION, "Game Over", "", "Youe have no lives left", icon, stage, bundle.getString("color.background"), false);
+								AlertGenerator.showAlert(Alert.AlertType.INFORMATION, "Game Over", "", "Youe have no lives left", icon, stage, Colors.BACKGROUND, false);
 							});
 						}
 						else
@@ -1077,7 +1078,7 @@ public class LevelController implements CommandLineAvailabale
 		game.getSoundHandler().play(SoundType.FINISHED_LEVEL);		
 
 		Platform.runLater(() -> {						
-			AlertGenerator.showAlert(Alert.AlertType.INFORMATION, "Congratulations!", "", "You finished Level \"" + game.getLevel().getName() + "\" with " + game.getTotalPoints() + " Points", icon, stage, bundle.getString("color.background"), false);
+			AlertGenerator.showAlert(Alert.AlertType.INFORMATION, "Congratulations!", "", "You finished Level \"" + game.getLevel().getName() + "\" with " + game.getTotalPoints() + " Points", icon, stage, Colors.BACKGROUND, false);
 		});
 	}
 

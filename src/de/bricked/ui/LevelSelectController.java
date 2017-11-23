@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import de.bricked.game.Game;
 import de.bricked.game.levels.Level;
 import de.bricked.ui.cells.LevelCell;
+import de.bricked.utils.Colors;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
@@ -93,8 +94,8 @@ public class LevelSelectController implements CommandLineAvailabale
 			}
 		});		
 		
-		mainPane.setStyle("-fx-base: " + bundle.getString("color.background") + ";");
-		buttonBack.setStyle("-fx-base: " + bundle.getString("color.button"));
+		mainPane.setStyle("-fx-base: " + Colors.BACKGROUND);
+		buttonBack.setStyle("-fx-base: " + Colors.BUTTON);
 	}
 
 	public void reload()

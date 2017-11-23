@@ -9,6 +9,7 @@ import de.bricked.game.Game;
 import de.bricked.game.settings.GameSize;
 import de.bricked.ui.cells.ComboBoxLanguageCell;
 import de.bricked.ui.cells.ComboBoxResolutionCell;
+import de.bricked.utils.Colors;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -110,7 +111,7 @@ public class SettingsController implements CommandLineAvailabale
 
 		initTableViewControls();
 
-		mainPane.setStyle("-fx-base: " + bundle.getString("color.background") + ";");
+		mainPane.setStyle("-fx-base: " + Colors.BACKGROUND);
 	}
 
 	public void save()

@@ -9,6 +9,7 @@ import de.bricked.game.Game;
 import de.bricked.game.levels.LevelPack;
 import de.bricked.game.levels.LevelPackHandler;
 import de.bricked.ui.cells.LevelPackCell;
+import de.bricked.utils.Colors;
 import de.bricked.utils.Downloader;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -119,7 +120,7 @@ public class LevelPackSelectController implements CommandLineAvailabale
 			}
 		});
 		
-		mainPane.setStyle("-fx-base: " + bundle.getString("color.background") + ";");
+		mainPane.setStyle("-fx-base: " + Colors.BACKGROUND);
 	}
 
 	public void reload()

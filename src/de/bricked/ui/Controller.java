@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import de.bricked.commandLine.CommandLine;
 import de.bricked.commandLine.commands.CommandBundle;
 import de.bricked.game.Game;
+import de.bricked.utils.Colors;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -71,11 +72,11 @@ public class Controller implements CommandLineAvailabale
 			}
 		});
 		
-		mainPane.setStyle("-fx-base: " + bundle.getString("color.background") + ";");
-		buttonLevelSelect.setStyle("-fx-base: " + bundle.getString("color.button"));
-		buttonSettings.setStyle("-fx-base: " + bundle.getString("color.button"));
-		buttonAchievements.setStyle("-fx-base: " + bundle.getString("color.button"));
-		buttonAbout.setStyle("-fx-base: " + bundle.getString("color.button"));
+		mainPane.setStyle("-fx-base: " + Colors.BACKGROUND + ";");
+		buttonLevelSelect.setStyle("-fx-base: " +  Colors.BUTTON);
+		buttonSettings.setStyle("-fx-base: " + Colors.BUTTON);
+		buttonAchievements.setStyle("-fx-base: " + Colors.BUTTON);
+		buttonAbout.setStyle("-fx-base: " + Colors.BUTTON);
 		
 		//TODO re-activate
 		buttonAchievements.setDisable(true);

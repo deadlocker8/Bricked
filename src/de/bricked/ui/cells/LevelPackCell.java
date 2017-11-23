@@ -1,9 +1,7 @@
 package de.bricked.ui.cells;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 import de.bricked.game.levels.LevelPack;
+import de.bricked.utils.Colors;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -14,7 +12,6 @@ import javafx.scene.layout.Region;
 
 public class LevelPackCell extends ListCell<LevelPack>
 {
-	private final ResourceBundle bundle = ResourceBundle.getBundle("de/bricked/main/", Locale.GERMANY);
 	private double maxWidth;
 	
 	public LevelPackCell(double maxWidth)
@@ -57,7 +54,7 @@ public class LevelPackCell extends ListCell<LevelPack>
 			HBox.setMargin(labelAuthor, new Insets(0, 0, 0, 10));
 		
 			hbox.setAlignment(Pos.CENTER);
-			hbox.setStyle("-fx-background-color: " + bundle.getString("color.select.levelpack") + ";");
+			hbox.setStyle("-fx-background-color: " + Colors.SELECT_LEVELPACK);
 			hbox.setPadding(new Insets(15));
 			
 			hbox.setMaxWidth(maxWidth);
